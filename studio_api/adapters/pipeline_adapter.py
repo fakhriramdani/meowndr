@@ -800,6 +800,43 @@ ATURAN WAJIB:
                 return float(match.group(1))
         return None
 
+    def _sync_episode_json_scenes(self, ep_dir: Path) -> None:
+        """Ensure papercut/episode.json scene line IDs match narration/script.json beat IDs."""
+        ep_json_path = ep_dir / "papercut" / "episode.json"
+        script_path = ep_dir / "narration" / "script.json"
+        if not ep_json_path.exists() or not script_path.exists():
+            return
+        try:
+            script_raw = json.loads(script_path.read_text(encoding="utf-8"))
+            beats = script_raw if isinstance(script_raw, list) else script_raw.get("beats", [])
+            beat_ids = [str(b.get("id")) for b in beats if isinstance(b, dict) and b.get("id")]
+            if not beat_ids:
+                return
+            ep_data = json.loads(ep_json_path.read_text(encoding="utf-8"))
+            scenes = ep_data.get("scenes")
+            if not isinstance(scenes, list) or not scenes:
+                return
+            beat_set = set(beat_ids)
+            updated = False
+            new_scenes: list[Any] = []
+            for idx, entry in enumerate(scenes):
+                fallback_id = beat_ids[-1] if idx == len(scenes) - 1 else beat_ids[min(idx, len(beat_ids) - 1)]
+                if isinstance(entry, list) and len(entry) >= 2:
+                    if str(entry[1]) not in beat_set:
+                        entry = [entry[0], fallback_id, *entry[2:]]
+                        updated = True
+                elif isinstance(entry, dict):
+                    lid = str(entry.get("script_line_id") or entry.get("line_id") or "")
+                    if lid not in beat_set:
+                        entry = {**entry, "script_line_id": fallback_id}
+                        updated = True
+                new_scenes.append(entry)
+            if updated:
+                ep_data["scenes"] = new_scenes
+                ep_json_path.write_text(json.dumps(ep_data, indent=2, ensure_ascii=False), encoding="utf-8")
+        except Exception as exc:
+            _log.warn("adapter.sync_episode_json", "Could not sync episode.json scenes", error=str(exc))
+
     def execute_render_pipeline(
         self, slug: str, stages: list[int], emit: StageEmitter
     ) -> dict[str, Any]:
@@ -822,11 +859,13 @@ ATURAN WAJIB:
                         [sys.executable, str(scaffold_cli), slug, ep.title, "--niche", ep.niche, "--force"],
                         st,
                     )
+                self._sync_episode_json_scenes(ep_dir)
             elif st == 8:
                 asset_plan_path = ep_dir / "assets" / "asset_plan.json"
                 if not asset_plan_path.exists():
                     engine.run_stage_8_asset_planning()
             elif st == 9:
+                self._sync_episode_json_scenes(ep_dir)
                 self._run_tool([sys.executable, str(narration_cli), slug], st)
                 measured = self._measure_audio_duration_sec(ep_dir)
                 if measured is not None and measured > 50.0:
