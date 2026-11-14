@@ -87,16 +87,18 @@ class GDriveUploader:
             if self.remote_name not in remotes:
                 return False, f"Remote '{self.remote_name}:' is not configured in rclone. Configured remotes: {remotes}. Run 'rclone config' to set up Google Drive."
 
-            # Test connectivity to remote root
+            # Test connectivity to remote root (about is a single fast API call)
             test_target = f"{self.remote_name}:"
-            conn_res = subprocess.run([rclone_bin, "lsd", test_target], capture_output=True, text=True, timeout=15)
+            conn_res = subprocess.run([rclone_bin, "about", test_target], capture_output=True, text=True, timeout=30)
+            if conn_res.returncode != 0:
+                conn_res = subprocess.run([rclone_bin, "lsd", test_target], capture_output=True, text=True, timeout=30)
             if conn_res.returncode != 0:
                 err_msg = conn_res.stderr.strip() or conn_res.stdout.strip()
                 return False, f"Cannot connect to remote '{test_target}': {err_msg}"
 
             return True, f"Remote '{self.remote_name}:' is accessible."
         except subprocess.TimeoutExpired:
-            return False, f"Connection to '{self.remote_name}:' timed out after 15 seconds."
+            return False, f"Connection to '{self.remote_name}:' timed out after 30 seconds."
         except Exception as e:
             return False, f"Error checking remote '{self.remote_name}:': {e}"
 
