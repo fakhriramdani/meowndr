@@ -19,7 +19,7 @@ SCENE_SLOTS: List[Tuple[str, str, str, str]] = [
     ("S01Hook", "beat_1", "curious", "science-laboratory"),
     ("S02Shockwave", "beat_2", "surprised", "science-laboratory"),
     ("S03Domino", "beat_3", "explaining", "science-laboratory"),
-    ("S04ModernReset", "beat_4", "aha", "city-park"),
+    ("S04ModernReset", "beat_4", "excited", "city-park"),
     ("S05RealityAnchor", "beat_5", "explaining", "science-laboratory"),
     ("S06Outro", "beat_6", "curious", "cozy-bedroom"),
 ]
@@ -111,6 +111,12 @@ def _sanitize_tsx(code: str, scene_id: str, default_env: str) -> str:
         raise ValueError(f"Missing export const {scene_id}")
     code = code.replace('environment="science-lab"', f'environment="{default_env}"')
     code = code.replace("environment='science-lab'", f"environment='{default_env}'")
+    code = code.replace("type: 'point'", "type: 'point_at'")
+    code = code.replace('type: "point"', 'type: "point_at"')
+    code = code.replace("state: 'aha'", "state: 'excited'")
+    code = code.replace('state: "aha"', 'state: "excited"')
+    if "durationInFrames" not in code:
+        code = code.replace("<PapercraftSceneShell", "<PapercraftSceneShell\n      durationInFrames={dur}", 1)
     return code + "\n"
 
 
@@ -304,7 +310,7 @@ export const {scene_id}: React.FC = () => {{
         easing: 'easeOut',
       }}}}
       interaction={{{{
-        type: 'point',
+        type: 'point_at',
         target: {{x: {target_x}, y: 740}},
         startFrame: 24,
         duration: 95,
@@ -386,10 +392,11 @@ def _generate_scenes_with_llm(
             "   import {durOf, wordsOf} from '../scene';\n"
             "2. Gunakan `const ID = '<scene_id>';`, `const dur = durOf(ID);`, `const words = wordsOf(ID);`.\n"
             "3. Pada `<PapercraftSceneShell>`, WAJIB sertakan:\n"
+            "   - `id={ID}` dan `durationInFrames={dur}`\n"
             "   - `camera={{yaw: 7, push: 1.07, origin: [target_x, 750]}}`\n"
             "   - `presenter={{x: presenter_x, state: presenter_state, face: presenter_face}}`\n"
             "   - `movement={{type: 'walk', startX: presenter_x - 100, endX: presenter_x, startFrame: 0, duration: 22, easing: 'easeOut'}}`\n"
-            "   - `interaction={{type: 'point', target: {x: target_x, y: 740}, startFrame: 24, duration: 90}}`\n"
+            "   - `interaction={{type: 'point_at', target: {x: target_x, y: 740}, startFrame: 24, duration: 90}}`\n"
             "   - `dialogue={{words, mode: 'audio_driven', speakerId: 'cat_scientist', style: 'excited'}}`\n"
             "   - `badges={[]}`\n"
             "4. Di dalam children, render `<svg width={1080} height={1920} viewBox=\"0 0 1080 1920\" style={{position: 'absolute', inset: 0, pointerEvents: 'none'}}>` berisi ilustrasi papercraft bertumpuk (`<feDropShadow>`) yang dianimasikan dengan `spring()` dan `interpolate(..., {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'})` di sekitar x=target_x, y=460..1120.\n"
