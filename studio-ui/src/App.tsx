@@ -9,6 +9,7 @@ import { Gate3FinalVideo } from "./components/Gate3FinalVideo";
 import { LoginView } from "./components/LoginView";
 import { PipelineTracker } from "./components/PipelineTracker";
 import { StudioLauncher } from "./components/StudioLauncher";
+import { ThemeSwitch } from "./components/ThemeSwitch";
 
 type ActiveView = "launcher" | "gate1" | "gate2" | "tracker" | "gate3";
 
@@ -149,9 +150,7 @@ export const App: React.FC = () => {
           </div>
 
           <div className="topbar-actions">
-            <button type="button" className="btn btn-secondary" onClick={toggleTheme}>
-              {theme === "light" ? "Dark Mode" : "Light Mode"}
-            </button>
+            <ThemeSwitch theme={theme} onToggle={toggleTheme} />
             <button
               type="button"
               className="btn btn-secondary"

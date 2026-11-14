@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import type { AuthSessionState } from "../api/types";
 import { StudioClient } from "../api/studioClient";
 import { CatMascot } from "./CatMascot";
+import { ThemeSwitch } from "./ThemeSwitch";
 
 interface LoginViewProps {
   client: StudioClient;
@@ -45,14 +46,7 @@ export const LoginView: React.FC<LoginViewProps> = ({
   return (
     <div className="login-wrap" data-enter>
       <div style={{ position: "fixed", top: 16, right: 20 }}>
-        <button
-          type="button"
-          className="btn btn-secondary"
-          onClick={onToggleTheme}
-          aria-label="Toggle Light or Dark Mode"
-        >
-          {theme === "light" ? "Dark Mode" : "Light Mode"}
-        </button>
+        <ThemeSwitch theme={theme} onToggle={onToggleTheme} />
       </div>
 
       <main className="login-card" aria-labelledby="login-heading">

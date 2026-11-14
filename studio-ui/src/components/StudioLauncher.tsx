@@ -215,10 +215,10 @@ export const StudioLauncher: React.FC<StudioLauncherProps> = ({
           </div>
         )}
 
-        <div>
+        <div className="form-actions">
           <button
             type="button"
-            className="btn btn-primary"
+            className="btn btn-primary btn-launch"
             disabled={inFlight}
             onClick={handleLaunch}
           >

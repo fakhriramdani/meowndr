@@ -606,6 +606,82 @@ textarea:focus-visible {
   gap: 16px;
 }
 
+/* Theme Switch (Sun / Moon) */
+.theme-switch {
+  display: inline-flex;
+  align-items: center;
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  min-height: 44px;
+}
+
+.theme-switch:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: var(--radius-pill);
+}
+
+.theme-switch-track {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  width: 68px;
+  height: 36px;
+  padding: 3px;
+  border-radius: var(--radius-pill);
+  border: 1.5px solid var(--border-strong);
+  background: var(--pastel-blue, #E0F2FE);
+  box-shadow: inset 0 1px 3px rgba(30, 27, 46, 0.08);
+  transition: background 220ms ease-out, border-color 220ms ease-out;
+}
+
+.theme-switch.is-dark .theme-switch-track {
+  background: var(--pastel-lavender);
+  border-color: var(--pastel-lavender-strong);
+}
+
+.theme-switch-thumb {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--surface-card);
+  color: #F59E0B;
+  box-shadow: 0 2px 6px rgba(30, 27, 46, 0.14);
+  transform: translateX(0);
+  transition: transform 220ms cubic-bezier(0.22, 1, 0.36, 1), color 220ms ease-out, background 220ms ease-out;
+}
+
+.theme-switch.is-dark .theme-switch-thumb {
+  transform: translateX(30px);
+  color: var(--accent);
+}
+
+.theme-switch:hover .theme-switch-thumb {
+  scale: 1.06;
+}
+
+/* Primary Form Action Separator (Create Episode) */
+.form-actions {
+  margin-top: 12px;
+  padding-top: 20px;
+  border-top: 1.5px dashed var(--border-strong);
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 12px;
+}
+
+.btn-launch {
+  padding: 12px 28px;
+  font-size: 0.9375rem;
+  letter-spacing: 0.01em;
+}
+
 /* Responsive Breakpoints: 1024px, 768px, 390px */
 @media (max-width: 1024px) {
   .studio-shell {
