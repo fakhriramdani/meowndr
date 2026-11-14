@@ -92,6 +92,15 @@ export const Gate3FinalVideo: React.FC<Gate3FinalVideoProps> = ({
             poster={episode.thumbnailUrl ?? undefined}
             src={episode.videoUrl ?? undefined}
           />
+          {episode.videoUrl && (
+            <a
+              className="btn btn-secondary"
+              href={episode.videoUrl}
+              download={`${episode.episodeSlug}.mp4`}
+            >
+              Download Video (.mp4)
+            </a>
+          )}
           {episode.qualityAudit && (
             <div className="pill-group">
               {(["visual", "audio", "technical", "factual"] as const).map((dim) => {
