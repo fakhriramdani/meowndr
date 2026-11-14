@@ -92,23 +92,23 @@ Teks Cover: \"{input_data.cover_title}\"
    Jangan pernah memakai tagar spam seperti #fyp, #foryou, #viral, #trending. Gunakan tagar spesifik topik.
 
 === ATURAN SPESIFIK PLATFORM ===
-1. INSTAGRAM REELS (Target 320 - 450 karakter):
-   - Caption berstruktur 3 bagian naratif:
-     * Paragraf 1: Narasi penjelasan inti video (alur dramatis skenario yang disimulasikan di video).
-     * Paragraf 2: Informasi tambahan mendalam (fakta ilmiah/sejarah lanjutan dari data riset yang melengkapi video).
+1. INSTAGRAM REELS (Target 500 - 900 karakter, naratif mendalam):
+   - Caption berstruktur 3 bagian naratif yang mengalir seperti esai mini edukasi yang hidup dan berbobot:
+     * Paragraf 1: Narasi pembuka yang memikat dan menjelaskan inti skenario di video beserta mekanisme pemicu awalnya.
+     * Paragraf 2: Penjelasan informatif lanjutan (dampak berantai, mekanisme fisika/biologi/sejarah, serta angka kuantitatif dari data riset yang memperkaya pemahaman audiens).
      * Paragraf 3: Pertanyaan pemantik refleksi/diskusi audiens + Call-to-Action Simpan & Share ("💡 Simpan postingan ini biar nggak lupa & share ke temanmu!").
      * 3 sampai 5 hashtag spesifik relevan.
    - DILARANG menggunakan bullet points (•).
    - alternative_caption: 1 varian naratif alternatif dengan sudut pandang fokus yang berbeda.
 
-2. TIKTOK (Target 120 - 160 karakter):
-   - Narasi singkat padat yang memadukan inti skenario video + sentuhan fakta ilmiah tambahannya + ajakan komentar ("Komen di bawah ya! 👇") + 2 sampai 3 hashtag bertarget.
+2. TIKTOK (Target 150 - 220 karakter, ringkas namun naratif & informatif):
+   - Narasi mengalir yang memadukan inti skenario video + 1 insight/fakta ilmiah spesifik yang mengejutkan + ajakan komentar ("Komen di bawah ya! 👇") + 2 sampai 3 hashtag bertarget.
    - DILARANG menggunakan emoji tidur/mengantuk (😴).
    - alternative_caption: 1 varian alternatif TikTok yang juga memuat narasi ringkas informatif.
 
 3. YOUTUBE SHORTS:
    - Titles: Buat 3 opsi judul mandiri bernilai CTR tinggi (45 - 75 karakter per judul, kalimat lengkap, TANPA kurung terpotong seperti "(...)").
-   - Description (200 - 380 karakter): Paragraf naratif utuh yang merangkum peristiwa inti di video sekaligus mengelaborasi informasi ilmiah/sejarah tambahannya + Ajakan Subscribe ("🔔 Subscribe {input_data.channel_name} untuk fakta sains & sejarah seru setiap minggu!") + hashtag #Shorts dan 2 hashtag topik.
+   - Description (380 - 650 karakter): Paragraf naratif utuh yang menceritakan skenario video secara jelas sekaligus mengelaborasi mekanisme ilmiah/sejarah tambahannya secara informatif + Ajakan Subscribe ("🔔 Subscribe {input_data.channel_name} untuk fakta sains & sejarah seru setiap minggu!") + hashtag #Shorts dan 2 hashtag topik.
    - Pinned Comment: Pertanyaan pemantik debat/diskusi audiens di kolom komentar yang berakar pada fenomena tersebut.
    - Search Keywords: 8 sampai 12 kata kunci SEO pencarian YouTube dalam bahasa Indonesia.
 

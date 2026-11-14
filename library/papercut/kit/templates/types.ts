@@ -2,7 +2,7 @@ import React from 'react';
 import type {
   MovementConfig,
   InteractionConfig,
-  ReactionConfig,
+  InteractiveActionConfig,
   VisualizationConfig,
   TextElementConfig,
 } from '../types/episode';
@@ -38,7 +38,7 @@ export interface BaseTemplateProps {
   };
   movement?: MovementConfig;
   interaction?: InteractionConfig;
-  reaction?: ReactionConfig;
+  interactiveAction?: InteractiveActionConfig;
   dialogue?: DialogueConfig;
   visualization?: VisualizationConfig;
   visualizationBounds?: {x: number; y: number; width: number; height: number};

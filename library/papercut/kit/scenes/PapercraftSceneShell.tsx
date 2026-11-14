@@ -25,7 +25,7 @@ import type {
   VisualSceneType,
   MovementConfig,
   InteractionConfig,
-  ReactionConfig,
+  InteractiveActionConfig,
 } from '../types/episode';
 
 export type SceneLayerId =
@@ -97,7 +97,8 @@ export interface PapercraftSceneShellProps {
   movement?: MovementConfig;
   movements?: MovementConfig[];
   interaction?: InteractionConfig;
-  reaction?: ReactionConfig;
+  interactiveAction?: InteractiveActionConfig;
+  interactiveActions?: InteractiveActionConfig[];
   visualization?: VisualizationConfig;
   visualizationBounds?: Rect;
   badges?: BadgeCue[];
@@ -129,7 +130,8 @@ export const PapercraftSceneShell: React.FC<PapercraftSceneShellProps> = ({
   movement,
   movements,
   interaction,
-  reaction,
+  interactiveAction,
+  interactiveActions,
   visualization,
   visualizationBounds,
   badges,
@@ -153,7 +155,7 @@ export const PapercraftSceneShell: React.FC<PapercraftSceneShellProps> = ({
 }) => {
   const f = useCurrentFrame();
   const envLayout = getEnvironmentLayout(environment);
-  const floorY = envLayout.floorY;
+  const floorY = envLayout.floorY <= 1380 ? 1560 : envLayout.floorY;
 
   // Determine presenter visibility based on scene type
   const isPresenterVisible =
@@ -348,7 +350,8 @@ export const PapercraftSceneShell: React.FC<PapercraftSceneShellProps> = ({
               movement={movement}
               movements={movements}
               interaction={interaction}
-              reaction={reaction}
+              interactiveAction={interactiveAction}
+              interactiveActions={interactiveActions}
               cues={presenter?.cues}
               dialogue={dialogue ?? presenter?.dialogue}
               speechSync={presenter?.speechSync ?? (Boolean(dialogue ?? presenter?.dialogue) || true)}

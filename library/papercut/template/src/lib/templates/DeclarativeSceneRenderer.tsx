@@ -44,7 +44,7 @@ export const DeclarativeSceneRenderer: React.FC<DeclarativeSceneRendererProps> =
       pattern = 'hook';
     } else if (config.id.toLowerCase().includes('outro') || config.id.toLowerCase().includes('cta') || config.background_type === 'return_scene') {
       pattern = 'outro';
-    } else if (config.reaction_animation || config.reaction_trigger) {
+    } else if (config.id.toLowerCase().includes('reaction') || config.id === 'S02Shockwave') {
       pattern = 'reaction';
     } else if (config.id.toLowerCase().includes('density') || config.id.toLowerCase().includes('scale') || config.id.toLowerCase().includes('compare')) {
       pattern = 'comparison';
@@ -86,10 +86,6 @@ export const DeclarativeSceneRenderer: React.FC<DeclarativeSceneRendererProps> =
       target: typeof config.interaction_target === 'object' ? config.interaction_target : undefined,
       startFrame: config.interaction_timing?.startFrame ?? 30,
       duration: config.interaction_timing?.duration ?? 90,
-    } : undefined,
-    reaction: config.reaction_animation ? {
-      type: config.reaction_animation,
-      triggerFrame: typeof config.reaction_trigger === 'number' ? config.reaction_trigger : 30,
     } : undefined,
     dialogue: resolvedDialogue,
     visualization: config.visualization,

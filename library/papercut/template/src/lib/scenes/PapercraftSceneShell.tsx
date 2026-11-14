@@ -155,7 +155,7 @@ export const PapercraftSceneShell: React.FC<PapercraftSceneShellProps> = ({
 }) => {
   const f = useCurrentFrame();
   const envLayout = getEnvironmentLayout(environment);
-  const floorY = envLayout.floorY;
+  const floorY = envLayout.floorY <= 1380 ? 1560 : envLayout.floorY;
 
   // Determine presenter visibility based on scene type
   const isPresenterVisible =

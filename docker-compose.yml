@@ -15,7 +15,61 @@ services:
     volumes:
       - ./episodes:/app/episodes
       - ./out:/app/out
-      # Optional: mount rclone config from host for Google Drive uploads
       - ${HOME}/.config/rclone:/root/.config/rclone:ro
-    # Remotion headless Chromium needs sufficient shared memory
     shm_size: "2gb"
+
+  studio-api:
+    build:
+      context: .
+      dockerfile: studio_api/Dockerfile
+    container_name: meowndr-studio-api
+    env_file:
+      - path: .env
+        required: false
+    environment:
+      - STUDIO_ENV=production
+      - STUDIO_COOKIE_SECURE=${STUDIO_COOKIE_SECURE:-true}
+      - TRUSTED_ORIGINS=${TRUSTED_ORIGINS:-https://reels.ramdanistudio.com}
+      - PAPERCUT_LIB=/app/library
+      - PYTHONUNBUFFERED=1
+    volumes:
+      - ./episodes:/app/episodes
+      - ./library:/app/library
+      - ${HOME}/.config/rclone:/root/.config/rclone:ro
+    healthcheck:
+      test: ["CMD", "curl", "-sf", "http://127.0.0.1:8420/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+    restart: unless-stopped
+
+  studio-ui:
+    build:
+      context: .
+      dockerfile: studio-ui/Dockerfile
+    container_name: meowndr-studio-ui
+    depends_on:
+      studio-api:
+        condition: service_healthy
+    restart: unless-stopped
+
+  caddy:
+    image: caddy:2-alpine
+    container_name: meowndr-caddy
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      - STUDIO_DOMAIN=${STUDIO_DOMAIN:-reels.ramdanistudio.com}
+    volumes:
+      - ./deploy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - studio-api
+      - studio-ui
+    restart: unless-stopped
+
+volumes:
+  caddy_data:
+  caddy_config:

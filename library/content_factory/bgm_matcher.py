@@ -148,8 +148,7 @@ AVAILABLE_BEDS: Dict[str, Dict[str, Any]] = {
         "suitable_niches": ["geography", "mystery", "science"],
         "keywords": [
             "hujan", "rain", "petrichor", "aroma hujan", "bau tanah", "malam",
-            "badai", "awan", "rintik", "air", "laut", "samudra", "kedalaman",
-            "melankolis", "sunyi", "dingin", "cuaca", "petir", "hawa", "tetesan"
+            "badai", "rintik", "melankolis", "sunyi", "tetesan"
         ],
         "description": "Intimate felt piano over real ambient rain on glass, crafted for petrichor, rainy weather science, deep oceans, and quiet mysteries."
     }

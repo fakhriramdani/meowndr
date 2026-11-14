@@ -25,7 +25,7 @@ export const CauseEffectSceneTemplate: React.FC<BaseTemplateProps> = ({
     startFrame: 15,
     duration: 100,
   },
-  reaction,
+  interactiveAction,
   dialogue,
   visualization,
   visualizationBounds = {x: 520, y: 950, width: 350, height: 350},
@@ -51,7 +51,7 @@ export const CauseEffectSceneTemplate: React.FC<BaseTemplateProps> = ({
       }}
       movement={movement}
       interaction={interaction}
-      reaction={reaction}
+      interactiveAction={interactiveAction}
       dialogue={dialogue}
       visualization={visualization}
       visualizationBounds={visualizationBounds}

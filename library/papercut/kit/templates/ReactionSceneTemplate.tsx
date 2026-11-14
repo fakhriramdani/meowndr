@@ -25,11 +25,11 @@ export const ReactionSceneTemplate: React.FC<BaseTemplateProps> = ({
     startFrame: 10,
     duration: 35,
   },
-  reaction = {
-    type: 'recoil_jump',
-    triggerFrame: 45,
+  interactiveAction = {
+    type: 'shield_shockwave',
+    startFrame: 45,
     duration: 26,
-    magnitude: 1.0,
+    intensity: 1.0,
   },
   dialogue,
   visualization,
@@ -56,7 +56,7 @@ export const ReactionSceneTemplate: React.FC<BaseTemplateProps> = ({
       }}
       movement={movement}
       interaction={interaction}
-      reaction={reaction}
+      interactiveAction={interactiveAction}
       dialogue={dialogue}
       visualization={visualization}
       visualizationBounds={visualizationBounds}

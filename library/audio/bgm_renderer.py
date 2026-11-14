@@ -58,6 +58,12 @@ def find_chrome_binary() -> Optional[str]:
         if p and os.path.exists(p) and os.access(p, os.X_OK):
             return p
 
+    for search_root in [REPO_ROOT / "library" / "papercut" / "template" / "node_modules" / ".remotion", REPO_ROOT / "episodes"]:
+        if search_root.exists():
+            for bin_path in search_root.glob("**/headless_shell"):
+                if bin_path.is_file() and os.access(bin_path, os.X_OK):
+                    return str(bin_path)
+
     return None
 
 

@@ -28,7 +28,7 @@ export const DemonstrationSceneTemplate: React.FC<BaseTemplateProps> = ({
     startFrame: 30,
     duration: 120,
   },
-  reaction,
+  interactiveAction,
   dialogue,
   visualization,
   visualizationBounds = {x: 520, y: 950, width: 340, height: 350},
@@ -54,7 +54,7 @@ export const DemonstrationSceneTemplate: React.FC<BaseTemplateProps> = ({
       }}
       movement={movement}
       interaction={interaction}
-      reaction={reaction}
+      interactiveAction={interactiveAction}
       dialogue={dialogue}
       visualization={visualization}
       visualizationBounds={visualizationBounds}

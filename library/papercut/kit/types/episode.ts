@@ -133,13 +133,13 @@ export type InteractionType =
   | 'celebrate'
   | 'explain_with_gesture';
 
-export type ReactionAnimationType =
-  | 'squash_stretch'
-  | 'recoil_jump'
-  | 'duck'
-  | 'look_up_awe'
-  | 'balance_loss'
-  | 'bounce';
+export type InteractiveActionType =
+  | 'operate_lever'
+  | 'scan_instrument'
+  | 'turn_valve'
+  | 'shield_shockwave'
+  | 'measure_caliper'
+  | 'launch_experiment';
 
 export interface MovementConfig {
   type?: MovementType;
@@ -160,11 +160,13 @@ export interface InteractionConfig {
   intensity?: number;
 }
 
-export interface ReactionConfig {
-  type?: ReactionAnimationType;
-  triggerFrame?: number;
+export interface InteractiveActionConfig {
+  type: InteractiveActionType;
+  target?: {x: number; y: number};
+  startFrame?: number;
   duration?: number;
-  magnitude?: number;
+  intensity?: number;
+  label?: string;
 }
 
 export interface TextElementConfig {
@@ -210,8 +212,7 @@ export interface DeclarativeSceneConfig {
   interaction_target?: string | {x: number; y: number; name?: string};
   interaction_type?: InteractionType;
   interaction_timing?: {startFrame: number; duration?: number; triggerWord?: string};
-  reaction_trigger?: string | number;
-  reaction_animation?: ReactionAnimationType;
+  interactive_action?: InteractiveActionConfig;
   visualization_event?: string;
   visualization_timing?: number;
   visualization_bounds?: {x: number; y: number; width: number; height: number};

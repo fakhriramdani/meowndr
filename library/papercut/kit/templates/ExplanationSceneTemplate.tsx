@@ -27,7 +27,7 @@ export const ExplanationSceneTemplate: React.FC<BaseTemplateProps> = ({
     startFrame: 25,
     duration: 140,
   },
-  reaction,
+  interactiveAction,
   dialogue,
   visualization,
   visualizationBounds = {x: 580, y: 920, width: 340, height: 380},
@@ -53,7 +53,7 @@ export const ExplanationSceneTemplate: React.FC<BaseTemplateProps> = ({
       }}
       movement={movement}
       interaction={interaction}
-      reaction={reaction}
+      interactiveAction={interactiveAction}
       dialogue={dialogue}
       visualization={visualization}
       visualizationBounds={visualizationBounds}
