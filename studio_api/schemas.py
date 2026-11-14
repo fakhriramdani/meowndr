@@ -41,6 +41,7 @@ class HealthResponse(BaseModel):
 class TrendDiscoverRequest(StrictRequestModel):
     niche: str
     ageCategory: str
+    excludePremises: list[str] = Field(default_factory=list, max_length=100)
 
 
 class TrendOpportunity(BaseModel):

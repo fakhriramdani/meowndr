@@ -168,17 +168,38 @@ class InMemoryFakeAdapter:
         self.executed_stages: dict[str, list[int]] = {}
         self.upload_count: dict[str, int] = {}
 
-    def discover_trends(self, niche: Niche, age_category: AgeCategory) -> list[TrendOpportunity]:
-        scores = [95, 91, 87, 82, 76]
+    def discover_trends(
+        self,
+        niche: Niche,
+        age_category: AgeCategory,
+        exclude_premises: list[str] | None = None,
+    ) -> list[TrendOpportunity]:
+        scores = [95, 91, 87, 82, 76, 93, 89, 85, 80, 74]
         premises = [
             f"Bagaimana jika hukum dasar {niche} berubah mendadak selama lima detik?",
             f"Bagaimana jika fenomena utama {niche} tidak pernah terjadi di bumi?",
             f"Bagaimana jika kapasitas {niche} manusia meningkat dua kali lipat?",
             f"Bagaimana jika titik balik sejarah {niche} tertunda satu abad?",
             f"Bagaimana jika anomali {niche} terjadi tepat di garis khatulistiwa?",
+            f"Bagaimana jika seluruh arsip {niche} dunia hilang dalam semalam?",
+            f"Bagaimana jika kecepatan proses {niche} berbalik arah sepuluh kali lipat?",
+            f"Bagaimana jika eksperimen {niche} abad ke-19 berhasil sejak awal?",
+            f"Bagaimana jika batas energi {niche} di bumi turun setengahnya?",
+            f"Bagaimana jika dua peristiwa besar {niche} bertabrakan di tahun yang sama?",
         ]
+        excluded = {p.strip().lower() for p in (exclude_premises or []) if p.strip()}
+        candidates = [
+            (idx, score, premise)
+            for idx, (score, premise) in enumerate(zip(scores, premises), start=1)
+            if premise.strip().lower() not in excluded
+        ]
+        if not candidates:
+            candidates = [
+                (idx, score, premise)
+                for idx, (score, premise) in enumerate(zip(scores, premises), start=1)
+            ]
         items: list[TrendOpportunity] = []
-        for idx, (score, premise) in enumerate(zip(scores, premises), start=1):
+        for idx, score, premise in candidates[:5]:
             items.append(
                 TrendOpportunity(
                     id=f"trend-{niche}-{idx}",

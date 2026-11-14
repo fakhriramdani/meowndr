@@ -51,7 +51,12 @@ class PipelinePort(Protocol):
 
     store: EpisodeStore
 
-    def discover_trends(self, niche: Niche, age_category: AgeCategory) -> list[TrendOpportunity]: ...
+    def discover_trends(
+        self,
+        niche: Niche,
+        age_category: AgeCategory,
+        exclude_premises: list[str] | None = None,
+    ) -> list[TrendOpportunity]: ...
 
     def create_episode(self, req: CreateEpisodeRequest) -> tuple[str, list[int]]: ...
 
@@ -99,7 +104,12 @@ class LiveLibraryAdapter:
             base_dir=str(self.episodes_root),
         )
 
-    def discover_trends(self, niche: Niche, age_category: AgeCategory) -> list[TrendOpportunity]:
+    def discover_trends(
+        self,
+        niche: Niche,
+        age_category: AgeCategory,
+        exclude_premises: list[str] | None = None,
+    ) -> list[TrendOpportunity]:
         from library.content_factory.trend_intelligence import run_trend_research_pipeline
 
         result = run_trend_research_pipeline(niche=niche)
@@ -108,7 +118,13 @@ class LiveLibraryAdapter:
             o for o in raw_opps
             if any(k in str(o.get("proposed_title", "")).lower() for k in ("bagaimana jika", "apa yang terjadi jika"))
         ]
-        selected = what_if_opps if len(what_if_opps) >= 5 else (what_if_opps + [o for o in raw_opps if o not in what_if_opps])
+        pool = what_if_opps + [o for o in raw_opps if o not in what_if_opps]
+        excluded = {p.strip().lower() for p in (exclude_premises or []) if p.strip()}
+        unseen = [
+            o for o in pool
+            if str(o.get("proposed_title", "")).strip().lower() not in excluded
+        ]
+        selected = unseen if unseen else pool
 
         opportunities: list[TrendOpportunity] = []
         for idx, item in enumerate(selected[:5], start=1):

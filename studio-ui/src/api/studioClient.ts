@@ -124,11 +124,12 @@ export class StudioClient {
 
   discoverTrends(
     niche: Niche | "",
-    ageCategory: AgeCategory | ""
+    ageCategory: AgeCategory | "",
+    excludePremises: string[] = []
   ): Promise<Result<{ opportunities: TrendOpportunity[]; requestId: string }>> {
     return this.request("/api/trends/discover", {
       method: "POST",
-      body: JSON.stringify({ niche, ageCategory }),
+      body: JSON.stringify({ niche, ageCategory, excludePremises }),
     });
   }
 

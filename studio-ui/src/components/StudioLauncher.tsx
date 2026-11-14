@@ -42,6 +42,7 @@ export const StudioLauncher: React.FC<StudioLauncherProps> = ({
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [noticeMsg, setNoticeMsg] = useState<string | null>(null);
   const [opportunities, setOpportunities] = useState<TrendOpportunity[]>([]);
+  const [seenPremises, setSeenPremises] = useState<string[]>([]);
 
   async function handleLaunch() {
     if (inFlight) return;
@@ -55,13 +56,14 @@ export const StudioLauncher: React.FC<StudioLauncherProps> = ({
 
     if (mode === "TopicResearchMode") {
       setInFlight(true);
-      const res = await client.discoverTrends(niche, ageCategory);
+      const res = await client.discoverTrends(niche, ageCategory, []);
       setInFlight(false);
       if (!res.ok) {
         setErrorMsg(res.error.message);
         return;
       }
       setOpportunities(res.data.opportunities);
+      setSeenPremises(res.data.opportunities.map((o) => o.premise));
       return;
     }
 
@@ -89,6 +91,24 @@ export const StudioLauncher: React.FC<StudioLauncherProps> = ({
       return;
     }
     onEpisodeCreated(res.data.episode, res.data.jobId);
+  }
+
+  async function handleDiscoverMore() {
+    if (inFlight || !niche || !ageCategory) return;
+    setErrorMsg(null);
+    setNoticeMsg(null);
+    setInFlight(true);
+    const res = await client.discoverTrends(niche, ageCategory, seenPremises);
+    setInFlight(false);
+    if (!res.ok) {
+      setErrorMsg(res.error.message);
+      return;
+    }
+    const nextOpps = res.data.opportunities;
+    const nextPremises = nextOpps.map((o) => o.premise);
+    const allAlreadySeen = nextPremises.every((p) => seenPremises.includes(p));
+    setOpportunities(nextOpps);
+    setSeenPremises(allAlreadySeen ? nextPremises : [...seenPremises, ...nextPremises]);
   }
 
   async function handleSelectTrend(item: TrendOpportunity) {
@@ -236,7 +256,17 @@ export const StudioLauncher: React.FC<StudioLauncherProps> = ({
 
       {!inFlight && opportunities.length > 0 && mode === "TopicResearchMode" && (
         <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-          <h2>5 Ranked TrendOpportunity Cards</h2>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
+            <h2>5 Ranked TrendOpportunity Cards</h2>
+            <button
+              type="button"
+              className="btn btn-secondary"
+              disabled={inFlight}
+              onClick={handleDiscoverMore}
+            >
+              Cari Ide Lain
+            </button>
+          </div>
           <div className="grid-2">
             {opportunities.map((opp, idx) => (
               <article key={opp.id} className="card card-interactive">

@@ -92,7 +92,11 @@ def build_router(
                 status_code=400,
                 details={"niche": payload.niche, "ageCategory": payload.ageCategory},
             )
-        opportunities = adapter.discover_trends(niche=niche, age_category=age)  # type: ignore[arg-type]
+        opportunities = adapter.discover_trends(
+            niche=niche,  # type: ignore[arg-type]
+            age_category=age,  # type: ignore[arg-type]
+            exclude_premises=payload.excludePremises,
+        )
         return {
             "opportunities": [item.model_dump() for item in opportunities],
             "requestId": get_request_id(),
