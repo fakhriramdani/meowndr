@@ -348,14 +348,69 @@ class EpisodeStore:
 
     def _load_publishing_kit(self, ep_dir: Path) -> PublishingKit | None:
         raw = _read_json(ep_dir / "publishing" / "publishing-kit.json")
-        if not isinstance(raw, dict):
+        captions_raw = _read_json(ep_dir / "publishing" / "captions.json")
+        if not isinstance(raw, dict) and not isinstance(captions_raw, dict):
             return None
+        raw_dict = raw if isinstance(raw, dict) else {}
+        cap_platforms = (
+            captions_raw.get("platforms", {})
+            if isinstance(captions_raw, dict) and isinstance(captions_raw.get("platforms"), dict)
+            else {}
+        )
+        # Support flat PublishingKit format (used by tests / fake adapter)
+        if "youtube" in raw_dict and "tiktok" in raw_dict and "instagram" in raw_dict:
+            try:
+                return PublishingKit(**raw_dict)
+            except Exception as exc:
+                _log.warn(
+                    "store.publishing_kit_invalid",
+                    "Failed to parse publishing-kit.json",
+                    path=str(ep_dir / "publishing" / "publishing-kit.json"),
+                    error=str(exc),
+                )
+                return None
+
+        # Normalize production_pipeline.py publish-kit / captions.json structure
+        yt_src = raw_dict.get("youtube_shorts") or cap_platforms.get("youtube") or {}
+        tt_src = raw_dict.get("tiktok") or cap_platforms.get("tiktok") or {}
+        ig_src = raw_dict.get("instagram_reels") or cap_platforms.get("instagram") or {}
+
+        yt_title = str(
+            yt_src.get("recommended_title")
+            or yt_src.get("title")
+            or (yt_src.get("title_options") or [""])[0]
+        )
+        tt_caption = str(
+            tt_src.get("recommended_caption")
+            or tt_src.get("caption")
+            or (tt_src.get("caption_options") or [""])[0]
+        )
+        ig_caption = str(
+            ig_src.get("caption")
+            or (ig_src.get("caption_options") or [""])[0]
+        )
+        normalized = {
+            "youtube": {
+                "titleWithHashtags": yt_title,
+                "description": str(yt_src.get("description") or ""),
+                "tags": [str(t) for t in (yt_src.get("tags") or yt_src.get("search_keywords") or [])],
+                "pinnedComment": str(yt_src.get("pinned_comment") or yt_src.get("pinnedComment") or ""),
+            },
+            "tiktok": {
+                "caption": tt_caption,
+                "tags": [str(t) for t in (tt_src.get("hashtags") or tt_src.get("tags") or [])],
+            },
+            "instagram": {
+                "caption": ig_caption,
+                "hashtags": [str(t) for t in (ig_src.get("hashtags") or [])],
+            },
+        }
         try:
-            return PublishingKit(**raw)
+            return PublishingKit(**normalized)
         except Exception as exc:
             _log.warn(
                 "store.publishing_kit_invalid",
-                "Failed to parse publishing-kit.json",
+                "Failed to parse normalized publishing kit",
                 path=str(ep_dir / "publishing" / "publishing-kit.json"),
                 error=str(exc),
             )

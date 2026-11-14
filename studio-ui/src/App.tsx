@@ -205,7 +205,10 @@ export const App: React.FC = () => {
             className={`rail-step ${
               view === "tracker" && (episode?.currentStage ?? 0) >= 7 ? "active" : ""
             }`}
-            disabled={!episode || !activeJobId}
+            disabled={
+              !episode ||
+              (episode.gates.gate2 !== "APPROVED" && (episode.currentStage ?? 0) < 7)
+            }
             onClick={() => setView("tracker")}
           >
             <span>4. Render Tracker</span>

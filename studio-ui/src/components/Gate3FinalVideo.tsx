@@ -29,7 +29,18 @@ export const Gate3FinalVideo: React.FC<Gate3FinalVideoProps> = ({
 
   async function copyText(label: string, text: string) {
     try {
-      await navigator.clipboard.writeText(text);
+      if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(text);
+      } else {
+        const ta = document.createElement("textarea");
+        ta.value = text;
+        ta.style.position = "fixed";
+        ta.style.opacity = "0";
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand("copy");
+        document.body.removeChild(ta);
+      }
       setCopiedLabel(label);
       window.setTimeout(() => setCopiedLabel(null), 1800);
     } catch {
@@ -126,6 +137,12 @@ export const Gate3FinalVideo: React.FC<Gate3FinalVideoProps> = ({
             </button>
           </div>
 
+          {!kit && (
+            <p className="muted">
+              Social media captions belum tersedia. Klik Re-render / Revise untuk men-generate PublishingKit.
+            </p>
+          )}
+
           {kit && tab === "youtube" && (
             <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
               <div>
@@ -163,6 +180,19 @@ export const Gate3FinalVideo: React.FC<Gate3FinalVideoProps> = ({
                   {copiedLabel === "Tags" ? "Copied!" : "Copy Tags"}
                 </button>
               </div>
+              {kit.youtube.pinnedComment && (
+                <div>
+                  <strong>Pinned Comment</strong>
+                  <p style={{ margin: "4px 0" }}>{kit.youtube.pinnedComment}</p>
+                  <button
+                    type="button"
+                    className="btn btn-secondary"
+                    onClick={() => copyText("Pinned Comment", kit.youtube.pinnedComment)}
+                  >
+                    {copiedLabel === "Pinned Comment" ? "Copied!" : "Copy Pinned Comment"}
+                  </button>
+                </div>
+              )}
             </div>
           )}
 
