@@ -98,7 +98,12 @@ class EpisodeStore:
                 details={"slug": slug},
             )
 
-    def read_studio_meta(self, ep_dir: Path) -> dict[str, Any]:
+    def read_studio_meta(self, ep_dir_or_slug: Path | str) -> dict[str, Any]:
+        ep_dir = (
+            ep_dir_or_slug
+            if isinstance(ep_dir_or_slug, Path)
+            else resolve_safe_episode_path(self.episodes_root, ep_dir_or_slug)
+        )
         meta_path = ep_dir / "content_factory" / "studio_meta.json"
         raw = _read_json(meta_path)
         if isinstance(raw, dict):

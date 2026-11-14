@@ -353,7 +353,8 @@ Jawab HANYA dengan JSON valid:
     }}
   ]
 }}"""
-        archetypes = ["paradox", "high_stakes", "direct_challenge", "mystery_gap", "counterfactual"]
+        archetypes = ["paradox", "counter_intuitive", "sensory_mystery", "high_stakes", "direct_challenge"]
+        valid_archetypes = set(archetypes)
         try:
             data = LLMCaptionGenerator.call_llm(prompt, timeout_sec=60)
             raw_variants = data.get("variants") if isinstance(data, dict) else None
@@ -363,10 +364,12 @@ Jawab HANYA dengan JSON valid:
                     if not isinstance(item, dict) or not str(item.get("hook_text") or "").strip():
                         continue
                     vid = str(item.get("id") or f"v{idx}")
+                    raw_arch = str(item.get("archetype") or "").strip().lower()
+                    arch = raw_arch if raw_arch in valid_archetypes else archetypes[(idx - 1) % len(archetypes)]
                     variants.append(
                         {
                             "id": vid,
-                            "archetype": str(item.get("archetype") or archetypes[(idx - 1) % len(archetypes)]),
+                            "archetype": arch,
                             "hook_text": str(item["hook_text"]).strip(),
                             "cover_lines": item.get("cover_lines") or [["BAGAIMANA", "JIKA"], [niche.upper(), "BERUBAH?"]],
                             "hot_words": item.get("hot_words") or ["BAGAIMANA", "JIKA"],
@@ -387,8 +390,8 @@ Jawab HANYA dengan JSON valid:
             ("v1", "paradox", topic, 9.4),
             ("v2", "high_stakes", f"Bayangkan detik pertama saat skenario ini benar-benar terjadi: {topic}", 9.0),
             ("v3", "direct_challenge", f"Kebanyakan orang tak sadar dampak berantainya: {topic}", 8.7),
-            ("v4", "mystery_gap", f"Apa yang berubah di dunia kita hari ini jika {topic.lower().rstrip('?')}?", 8.5),
-            ("v5", "counterfactual", f"Satu perubahan kecil di {niche}, seluruh peradaban ikut bergeser.", 8.2),
+            ("v4", "sensory_mystery", f"Apa yang berubah di dunia kita hari ini jika {topic.lower().rstrip('?')}?", 8.5),
+            ("v5", "counter_intuitive", f"Satu perubahan kecil di {niche}, seluruh peradaban ikut bergeser.", 8.2),
         ]
         variants = [
             {
