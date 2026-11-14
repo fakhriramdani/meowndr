@@ -837,6 +837,26 @@ ATURAN WAJIB:
         except Exception as exc:
             _log.warn("adapter.sync_episode_json", "Could not sync episode.json scenes", error=str(exc))
 
+    def _mark_gate_3_ready(self, ep_dir: Path) -> None:
+        """Advance workflow_state.json to Stage 12 so Gate 3 approval can run cleanly."""
+        state_path = ep_dir / "content_factory" / "workflow_state.json"
+        if not state_path.exists():
+            return
+        state_data = json.loads(state_path.read_text(encoding="utf-8"))
+        current = int(state_data.get("current_stage") or 0)
+        if current >= 12:
+            return
+        state_data["current_stage"] = 12
+        state_data["status"] = "PENDING_USER_APPROVAL"
+        gates = state_data.setdefault("approval_gates", {})
+        gate_3 = gates.setdefault("gate_3_final_video", {})
+        if gate_3.get("status") != "APPROVED":
+            gate_3["status"] = "PENDING"
+        state_path.write_text(
+            json.dumps(state_data, indent=2, ensure_ascii=False),
+            encoding="utf-8",
+        )
+
     def execute_render_pipeline(
         self, slug: str, stages: list[int], emit: StageEmitter
     ) -> dict[str, Any]:
@@ -927,6 +947,7 @@ ATURAN WAJIB:
                     ),
                     encoding="utf-8",
                 )
+                self._mark_gate_3_ready(ep_dir)
             emit(st, "COMPLETED", f"Stage {st} completed.")
         return {"status": "COMPLETED", "gate": 3}
 
@@ -956,8 +977,13 @@ ATURAN WAJIB:
                 message="; ".join(errors) or "CloudArchive upload failed.",
                 status_code=502,
             )
-        dest = str(details.get("destination") or f"gdrive-new:Antigravity/Videos/{datetime.now(timezone.utc).strftime('%Y-%m-%d')}_{slug}")
+        dest = str(
+            details.get("remote_destination")
+            or details.get("destination")
+            or f"gdrive-agy:Antigravity/Videos/{datetime.now(timezone.utc).strftime('%Y-%m-%d')}_{slug}"
+        )
         self.store.write_studio_meta(slug, {"gdriveDestination": dest})
+        self._mark_gate_3_ready(resolve_safe_episode_path(self.episodes_root, slug))
         engine = self._engine(slug=slug, niche=ep.niche, title=ep.title)
         engine.run_stage_12_gate_3_approval(
             approved_by="Studio User",
