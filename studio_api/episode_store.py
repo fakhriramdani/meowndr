@@ -335,13 +335,25 @@ class EpisodeStore:
         if not isinstance(raw, dict):
             return None
         dims = raw.get("dimensions", {})
+        if not isinstance(dims, dict):
+            dims = {}
+
+        def _dim_ok(val: Any) -> bool:
+            if isinstance(val, dict):
+                return str(val.get("status", "")).upper() == "PASS"
+            return bool(val)
+
+        overall = str(raw.get("overallStatus") or "").upper()
+        if not overall:
+            verdict = str(raw.get("verdict") or "").upper()
+            overall = "PASS" if verdict in ("PASS", "APPROVED", "APPROVED_FOR_RELEASE") else "PENDING"
         return QualityAuditReport(
-            overallStatus=str(raw.get("overallStatus", "PENDING")),  # type: ignore[arg-type]
+            overallStatus=overall,  # type: ignore[arg-type]
             dimensions=QualityAuditDimensions(
-                visual=bool(dims.get("visual", False)),
-                audio=bool(dims.get("audio", False)),
-                technical=bool(dims.get("technical", False)),
-                factual=bool(dims.get("factual", False)),
+                visual=_dim_ok(dims.get("visual")),
+                audio=_dim_ok(dims.get("audio")),
+                technical=_dim_ok(dims.get("technical")),
+                factual=_dim_ok(dims.get("factual")),
             ),
             diagnostics=[str(d) for d in raw.get("diagnostics", [])],
         )
