@@ -7,14 +7,17 @@ interface Gate2ScriptProps {
   client: StudioClient;
   episode: EpisodeDetail;
   onApproved: (episode: EpisodeDetail, jobId: string) => void;
+  onEpisodeUpdated?: (episode: EpisodeDetail) => void;
 }
 
 export const Gate2Script: React.FC<Gate2ScriptProps> = ({
   client,
   episode,
   onApproved,
+  onEpisodeUpdated,
 }) => {
   const [beats, setBeats] = useState<ScriptBeat[]>(episode.narrationScript?.beats ?? []);
+  const [revisionNote, setRevisionNote] = useState("");
   const [busy, setBusy] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
@@ -158,9 +161,65 @@ export const Gate2Script: React.FC<Gate2ScriptProps> = ({
         >
           Condense Script (95–105 words)
         </button>
+      </div>
+
+      <div className="card field" style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+        <label htmlFor="gate2-revision-input">Manual Revision Notes</label>
+        <textarea
+          id="gate2-revision-input"
+          rows={2}
+          className="textarea"
+          value={revisionNote}
+          onChange={(e) => setRevisionNote(e.target.value)}
+          placeholder="e.g., Make Beat 2 more dramatic, shorten Beat 4, emphasize scientific cause..."
+          disabled={busy || episode.isBaselineProtected}
+        />
+        <div className="pill-group">
+          <button
+            type="button"
+            className="btn btn-secondary"
+            disabled={busy || episode.isBaselineProtected}
+            onClick={async () => {
+              setBusy(true);
+              setErrorMsg(null);
+              const res = await client.reviseGate2(episode.episodeSlug, "");
+              setBusy(false);
+              if (!res.ok) {
+                setErrorMsg(res.error.message);
+                return;
+              }
+              setBeats(res.data.episode.narrationScript?.beats ?? []);
+              onEpisodeUpdated?.(res.data.episode);
+            }}
+          >
+            Discover More Script Angles
+          </button>
+          <button
+            type="button"
+            className="btn btn-pink"
+            disabled={busy || !revisionNote.trim() || episode.isBaselineProtected}
+            onClick={async () => {
+              setBusy(true);
+              setErrorMsg(null);
+              const res = await client.reviseGate2(episode.episodeSlug, revisionNote);
+              setBusy(false);
+              if (!res.ok) {
+                setErrorMsg(res.error.message);
+                return;
+              }
+              setBeats(res.data.episode.narrationScript?.beats ?? []);
+              onEpisodeUpdated?.(res.data.episode);
+            }}
+          >
+            Revise Script with Notes
+          </button>
+        </div>
+      </div>
+
+      <div className="form-actions">
         <button
           type="button"
-          className="btn btn-primary"
+          className="btn btn-primary btn-launch"
           disabled={busy || !report.isCompliant || episode.isBaselineProtected}
           onClick={handleApprove}
         >

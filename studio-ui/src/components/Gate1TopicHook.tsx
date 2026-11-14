@@ -6,15 +6,19 @@ interface Gate1TopicHookProps {
   client: StudioClient;
   episode: EpisodeDetail;
   onApproved: (episode: EpisodeDetail, jobId: string) => void;
+  onEpisodeUpdated?: (episode: EpisodeDetail) => void;
 }
 
 export const Gate1TopicHook: React.FC<Gate1TopicHookProps> = ({
   client,
   episode,
   onApproved,
+  onEpisodeUpdated,
 }) => {
   const [selectedHookId, setSelectedHookId] = useState<string>(episode.selectedHookId ?? "");
+  const [revisionNote, setRevisionNote] = useState("");
   const [loading, setLoading] = useState(false);
+  const [revising, setRevising] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   async function handleApprove() {
@@ -31,6 +35,20 @@ export const Gate1TopicHook: React.FC<Gate1TopicHookProps> = ({
       return;
     }
     onApproved(res.data.episode, res.data.jobId);
+  }
+
+  async function handleRevise(instructions: string) {
+    if (loading || revising) return;
+    setRevising(true);
+    setErrorMsg(null);
+    const res = await client.reviseGate1(episode.episodeSlug, instructions);
+    setRevising(false);
+    if (!res.ok) {
+      setErrorMsg(res.error.message);
+      return;
+    }
+    setSelectedHookId("");
+    onEpisodeUpdated?.(res.data.episode);
   }
 
   return (
@@ -94,14 +112,48 @@ export const Gate1TopicHook: React.FC<Gate1TopicHookProps> = ({
             </div>
           )}
 
-          <button
-            type="button"
-            className="btn btn-primary"
-            disabled={loading || episode.isBaselineProtected}
-            onClick={handleApprove}
-          >
-            {loading ? "Approving Gate 1..." : "Approve Gate 1"}
-          </button>
+          <div className="field" style={{ marginTop: 6 }}>
+            <label htmlFor="gate1-revision-input">Manual Revision Notes (Optional)</label>
+            <textarea
+              id="gate1-revision-input"
+              rows={2}
+              className="textarea"
+              value={revisionNote}
+              onChange={(e) => setRevisionNote(e.target.value)}
+              placeholder="e.g., Make hooks more urgent, focus on everyday human impact..."
+              disabled={loading || revising || episode.isBaselineProtected}
+            />
+          </div>
+
+          <div className="pill-group">
+            <button
+              type="button"
+              className="btn btn-secondary"
+              disabled={loading || revising || episode.isBaselineProtected}
+              onClick={() => handleRevise("")}
+            >
+              {revising ? "Discovering..." : "Discover More Hooks"}
+            </button>
+            <button
+              type="button"
+              className="btn btn-pink"
+              disabled={loading || revising || !revisionNote.trim() || episode.isBaselineProtected}
+              onClick={() => handleRevise(revisionNote)}
+            >
+              {revising ? "Revising..." : "Revise with Notes"}
+            </button>
+          </div>
+
+          <div className="form-actions">
+            <button
+              type="button"
+              className="btn btn-primary btn-launch"
+              disabled={loading || revising || episode.isBaselineProtected}
+              onClick={handleApprove}
+            >
+              {loading ? "Approving Gate 1..." : "Approve Gate 1"}
+            </button>
+          </div>
         </div>
       </div>
     </section>

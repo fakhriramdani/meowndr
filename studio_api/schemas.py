@@ -72,6 +72,10 @@ class Gate1ApproveRequest(StrictRequestModel):
     notes: str | None = None
 
 
+class GateRevisionRequest(StrictRequestModel):
+    instructions: str = Field(default="", max_length=2000)
+
+
 class ScriptBeatInput(StrictRequestModel):
     id: str
     beatNumber: Literal[1, 2, 3, 4, 5, 6]

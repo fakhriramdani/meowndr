@@ -22,6 +22,7 @@ from studio_api.schemas import (
     CreateEpisodeRequest,
     Gate1ApproveRequest,
     GateApproveNotesRequest,
+    GateRevisionRequest,
     LoginRequest,
     ScriptBeat,
     TrendDiscoverRequest,
@@ -195,6 +196,21 @@ def build_router(
         episode = adapter.store.get_episode(slug)
         return {"episode": episode.model_dump(), "jobId": job_id}
 
+    @router.post("/episodes/{slug}/gate1/revise")
+    def revise_gate_1(
+        slug: str,
+        payload: GateRevisionRequest,
+        _: AuthSessionState | None = Depends(require_session),
+    ) -> dict[str, Any]:
+        if runner.lock_manager.is_locked(slug):
+            raise AppError(
+                code="EPISODE_LOCKED",
+                message="Episode is currently executing a stage; wait for completion before triggering another action.",
+                status_code=409,
+            )
+        episode = adapter.revise_gate_1(slug=slug, instructions=payload.instructions)
+        return {"episode": episode.model_dump(), "requestId": get_request_id()}
+
     # ------------------------------------------------------------------
     # Gate 2: NarrationScript & Pacing Guard
     # ------------------------------------------------------------------
@@ -241,6 +257,44 @@ def build_router(
         adapter.store.write_studio_meta(slug, {"activeJobId": job_id})
         episode = adapter.store.get_episode(slug)
         return {"episode": episode.model_dump(), "jobId": job_id}
+
+    @router.post("/episodes/{slug}/gate2/revise")
+    def revise_gate_2(
+        slug: str,
+        payload: GateRevisionRequest,
+        _: AuthSessionState | None = Depends(require_session),
+    ) -> dict[str, Any]:
+        if runner.lock_manager.is_locked(slug):
+            raise AppError(
+                code="EPISODE_LOCKED",
+                message="Episode is currently executing a stage; wait for completion before triggering another action.",
+                status_code=409,
+            )
+        episode = adapter.revise_gate_2(slug=slug, instructions=payload.instructions)
+        return {"episode": episode.model_dump(), "requestId": get_request_id()}
+
+    @router.post("/episodes/{slug}/gate3/revise", status_code=202)
+    def revise_gate_3(
+        slug: str,
+        payload: GateRevisionRequest,
+        _: AuthSessionState | None = Depends(require_session),
+    ) -> dict[str, Any]:
+        if runner.lock_manager.is_locked(slug):
+            raise AppError(
+                code="EPISODE_LOCKED",
+                message="Episode is currently executing a stage; wait for completion before triggering another action.",
+                status_code=409,
+            )
+        stages = adapter.prepare_gate_3_revision(slug=slug, instructions=payload.instructions)
+        job_id = runner.enqueue(
+            slug=slug,
+            action="gate3_revision",
+            stages=stages,
+            worker_fn=lambda emit: adapter.execute_render_pipeline(slug, stages, emit),
+        )
+        adapter.store.write_studio_meta(slug, {"activeJobId": job_id})
+        episode = adapter.store.get_episode(slug)
+        return {"episode": episode.model_dump(), "jobId": job_id, "requestId": get_request_id()}
 
     # ------------------------------------------------------------------
     # Stages 7-11 Retry & SSE Job Streaming

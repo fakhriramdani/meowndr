@@ -64,13 +64,19 @@ class PipelinePort(Protocol):
 
     def approve_gate_1(self, slug: str, hook_id: str, notes: str | None = None) -> list[int]: ...
 
+    def revise_gate_1(self, slug: str, instructions: str = "") -> EpisodeDetail: ...
+
     def run_script_generation(self, slug: str, emit: StageEmitter) -> dict[str, Any]: ...
 
     def save_and_validate_script(self, slug: str, beats: list[ScriptBeat]) -> NarrationScriptState: ...
 
+    def revise_gate_2(self, slug: str, instructions: str = "") -> EpisodeDetail: ...
+
     def condense_script(self, slug: str) -> NarrationScriptState: ...
 
     def prepare_gate_2_approval(self, slug: str, notes: str | None = None) -> list[int]: ...
+
+    def prepare_gate_3_revision(self, slug: str, instructions: str = "") -> list[int]: ...
 
     def prepare_retry_stage(self, slug: str, stage: int) -> list[int]: ...
 
@@ -324,16 +330,31 @@ Jawab HANYA dengan JSON valid:
         ]
 
     def _generate_hooks_with_llm(
-        self, topic: str, niche: str, cascade: list[str]
+        self,
+        topic: str,
+        niche: str,
+        cascade: list[str],
+        instructions: str = "",
+        exclude_hooks: list[str] | None = None,
     ) -> tuple[list[dict[str, Any]], str, str]:
         """Generate 5 scored HookVariant candidates for Stage 3 via LLM, with fallback."""
         from library.content_factory.captions.llm_caption_generator import LLMCaptionGenerator
+
+        extra_blocks: list[str] = []
+        if instructions.strip():
+            extra_blocks.append(f"INSTRUKSI REVISI USER (WAJIB DIPATUHI): {instructions.strip()}")
+        if exclude_hooks:
+            joined = "\n".join(f"- {h}" for h in exclude_hooks[-15:])
+            extra_blocks.append(f"DILARANG mengulang atau memparafrase hook berikut:\n{joined}")
+        extra_section = ("\n" + "\n\n".join(extra_blocks) + "\n") if extra_blocks else ""
 
         prompt = f"""Kamu adalah Hook Researcher untuk video vertikal 9:16 @meowndr.
 Buatkan 5 varian hook pembuka (0-3 detik) berbahasa Indonesia yang memicu rasa penasaran tinggi untuk topik:
 Topik: {topic}
 Niche: {niche}
 Alur cascade: {json.dumps(cascade, ensure_ascii=False)}
+{extra_section}
+Archetype WAJIB dipilih dari: paradox, counter_intuitive, sensory_mystery, high_stakes, direct_challenge.
 
 Jawab HANYA dengan JSON valid:
 {{
@@ -410,16 +431,28 @@ Jawab HANYA dengan JSON valid:
         return variants, "v1", f"Cat Scientist memperagakan titik percabangan '{topic}' di atas meja papercut."
 
     def _generate_script_lines_with_llm(
-        self, topic: str, niche: str, cascade: list[str]
+        self,
+        topic: str,
+        niche: str,
+        cascade: list[str],
+        instructions: str = "",
+        current_beats: list[dict[str, str]] | None = None,
     ) -> list[dict[str, Any]]:
         """Generate 6-beat What-If Indonesian narration lines (no digits 0-9) via LLM, with fallback."""
         from library.content_factory.captions.llm_caption_generator import LLMCaptionGenerator
+
+        rev_block = ""
+        if instructions.strip():
+            rev_block += f"\nINSTRUKSI REVISI USER (WAJIB DIPATUHI): {instructions.strip()}\n"
+        if current_beats:
+            rev_block += f"\nNaskah sebelumnya sebagai referensi revisi:\n{json.dumps(current_beats, ensure_ascii=False)}\n"
 
         prompt = f"""Kamu adalah Scriptwriter untuk video reels edukasi papercut @meowndr (durasi 40-48 detik, 1.0x tempo alami).
 Tulis naskah voiceover bahasa Indonesia 6-beat What-If Narrative Arc untuk topik:
 Topik: {topic}
 Niche: {niche}
 Referensi cascade: {json.dumps(cascade, ensure_ascii=False)}
+{rev_block}
 
 ATURAN MUTLAK:
 1. Total kata seluruh 6 beat WAJIB antara 95 sampai 120 kata.
@@ -519,6 +552,28 @@ ATURAN MUTLAK:
         )
         return [5]
 
+    def revise_gate_1(self, slug: str, instructions: str = "") -> EpisodeDetail:
+        self.store.ensure_mutable(slug)
+        ep = self.store.get_episode(slug)
+        meta = self.store.read_studio_meta(slug)
+        cascade = list(meta.get("temporalCascade") or [])
+        exclude_hooks = [h.openingLine for h in ep.hookVariants if h.openingLine.strip()]
+        variants, primary_rec, visual_concept = self._generate_hooks_with_llm(
+            ep.title,
+            ep.niche,
+            cascade,
+            instructions=instructions,
+            exclude_hooks=exclude_hooks,
+        )
+        engine = self._engine(slug=slug, niche=ep.niche, title=ep.title)
+        engine.run_stage_3_hook_generation(
+            topic=ep.title,
+            variants=variants,
+            primary_rec=primary_rec,
+            visual_concept=visual_concept,
+        )
+        return self.store.get_episode(slug)
+
     def run_script_generation(self, slug: str, emit: StageEmitter) -> dict[str, Any]:
         ep = self.store.get_episode(slug)
         engine = self._engine(slug=slug, niche=ep.niche, title=ep.title)
@@ -549,6 +604,27 @@ ATURAN MUTLAK:
                 details=report.model_dump(),
             )
         return report
+
+    def revise_gate_2(self, slug: str, instructions: str = "") -> EpisodeDetail:
+        self.store.ensure_mutable(slug)
+        ep = self.store.get_episode(slug)
+        meta = self.store.read_studio_meta(slug)
+        cascade = list(meta.get("temporalCascade") or [])
+        current_beats = (
+            [{"beatLabel": b.beatLabel, "text": b.text} for b in ep.narrationScript.beats]
+            if ep.narrationScript
+            else None
+        )
+        lines = self._generate_script_lines_with_llm(
+            ep.title,
+            ep.niche,
+            cascade,
+            instructions=instructions,
+            current_beats=current_beats,
+        )
+        engine = self._engine(slug=slug, niche=ep.niche, title=ep.title)
+        engine.run_stage_5_scriptwriting(lines=lines, preflight_tts=False)
+        return self.store.get_episode(slug)
 
     def _condense_clause(self, text: str, max_words: int = 17) -> str:
         """Condense text to <= max_words on sentence or clause boundaries without mid-clause truncation."""
@@ -621,6 +697,11 @@ ATURAN MUTLAK:
             notes=notes or "Approved via Studio UI",
         )
         return [7, 8, 9, 10, 11]
+
+    def prepare_gate_3_revision(self, slug: str, instructions: str = "") -> list[int]:
+        self.store.ensure_mutable(slug)
+        self.store.write_studio_meta(slug, {"gate3RevisionNotes": instructions.strip()})
+        return [10, 11]
 
     def prepare_retry_stage(self, slug: str, stage: int) -> list[int]:
         self.store.ensure_mutable(slug)

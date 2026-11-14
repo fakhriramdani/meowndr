@@ -229,6 +229,7 @@ export const App: React.FC = () => {
             <Gate1TopicHook
               client={client}
               episode={episode}
+              onEpisodeUpdated={setEpisode}
               onApproved={(ep, jobId) => {
                 setEpisode(ep);
                 setActiveJobId(jobId);
@@ -241,6 +242,7 @@ export const App: React.FC = () => {
             <Gate2Script
               client={client}
               episode={episode}
+              onEpisodeUpdated={setEpisode}
               onApproved={(ep, jobId) => {
                 setEpisode(ep);
                 setActiveJobId(jobId);
@@ -267,6 +269,11 @@ export const App: React.FC = () => {
               client={client}
               episode={episode}
               onUpdated={(ep) => setEpisode(ep)}
+              onRevisionStarted={(ep, jobId) => {
+                setEpisode(ep);
+                setActiveJobId(jobId);
+                setView("tracker");
+              }}
             />
           )}
         </main>

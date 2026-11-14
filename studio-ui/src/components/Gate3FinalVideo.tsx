@@ -6,6 +6,7 @@ interface Gate3FinalVideoProps {
   client: StudioClient;
   episode: EpisodeDetail;
   onUpdated: (episode: EpisodeDetail) => void;
+  onRevisionStarted?: (episode: EpisodeDetail, jobId: string) => void;
 }
 
 type PlatformTab = "youtube" | "tiktok" | "instagram";
@@ -14,9 +15,12 @@ export const Gate3FinalVideo: React.FC<Gate3FinalVideoProps> = ({
   client,
   episode,
   onUpdated,
+  onRevisionStarted,
 }) => {
   const [tab, setTab] = useState<PlatformTab>("youtube");
+  const [revisionNote, setRevisionNote] = useState("");
   const [uploading, setUploading] = useState(false);
+  const [revising, setRevising] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [copiedLabel, setCopiedLabel] = useState<string | null>(null);
 
@@ -208,14 +212,68 @@ export const Gate3FinalVideo: React.FC<Gate3FinalVideoProps> = ({
               CloudArchive: {episode.gdriveDestination}
             </div>
           ) : (
-            <button
-              type="button"
-              className="btn btn-primary"
-              disabled={uploading || !auditPassed || episode.isBaselineProtected}
-              onClick={handleUpload}
-            >
-              {uploadButtonLabel}
-            </button>
+            <>
+              <div className="field">
+                <label htmlFor="gate3-revision-input">Manual Revision Notes</label>
+                <textarea
+                  id="gate3-revision-input"
+                  rows={2}
+                  className="textarea"
+                  value={revisionNote}
+                  onChange={(e) => setRevisionNote(e.target.value)}
+                  placeholder="e.g., Regenerate captions/QA or re-render after adjustments..."
+                  disabled={uploading || revising || episode.isBaselineProtected}
+                />
+              </div>
+              <div className="pill-group">
+                <button
+                  type="button"
+                  className="btn btn-secondary"
+                  disabled={uploading || revising || episode.isBaselineProtected}
+                  onClick={async () => {
+                    setRevising(true);
+                    setErrorMsg(null);
+                    const res = await client.reviseGate3(episode.episodeSlug, revisionNote);
+                    setRevising(false);
+                    if (!res.ok) {
+                      setErrorMsg(res.error.message);
+                      return;
+                    }
+                    onRevisionStarted?.(res.data.episode, res.data.jobId);
+                  }}
+                >
+                  {revising ? "Starting Revision..." : "Discover More / Re-render"}
+                </button>
+                <button
+                  type="button"
+                  className="btn btn-pink"
+                  disabled={uploading || revising || !revisionNote.trim() || episode.isBaselineProtected}
+                  onClick={async () => {
+                    setRevising(true);
+                    setErrorMsg(null);
+                    const res = await client.reviseGate3(episode.episodeSlug, revisionNote);
+                    setRevising(false);
+                    if (!res.ok) {
+                      setErrorMsg(res.error.message);
+                      return;
+                    }
+                    onRevisionStarted?.(res.data.episode, res.data.jobId);
+                  }}
+                >
+                  {revising ? "Revising..." : "Revise with Notes"}
+                </button>
+              </div>
+              <div className="form-actions">
+                <button
+                  type="button"
+                  className="btn btn-primary btn-launch"
+                  disabled={uploading || revising || !auditPassed || episode.isBaselineProtected}
+                  onClick={handleUpload}
+                >
+                  {uploadButtonLabel}
+                </button>
+              </div>
+            </>
           )}
         </div>
       </div>

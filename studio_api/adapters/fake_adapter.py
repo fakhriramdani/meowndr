@@ -348,6 +348,23 @@ class InMemoryFakeAdapter:
         _write_json(state_path, state)
         return [5]
 
+    def revise_gate_1(self, slug: str, instructions: str = "") -> EpisodeDetail:
+        self.store.ensure_mutable(slug)
+        ep_dir = resolve_safe_episode_path(self.episodes_root, slug)
+        ep = self.store.get_episode(slug)
+        suffix = f" ({instructions.strip()[:32]})" if instructions.strip() else " (Refreshed)"
+        new_hooks = [
+            {
+                "hookId": f"v{idx}-rev",
+                "openingLine": f"Alternatif {idx}{suffix}: {ep.title}",
+                "frame0CoverConcept": f"Cat Scientist frame 0 variant {idx}{suffix}",
+                "hookScore": 96 - idx * 2,
+            }
+            for idx in range(1, 6)
+        ]
+        _write_json(ep_dir / "research" / "hook_matrix.json", {"hooks": new_hooks})
+        return self.store.get_episode(slug)
+
     def run_script_generation(self, slug: str, emit: StageEmitter) -> dict[str, Any]:
         ep_dir = resolve_safe_episode_path(self.episodes_root, slug)
         emit(5, "RUNNING", "Writing 6-beat What-If NarrationScript...")
@@ -431,6 +448,27 @@ class InMemoryFakeAdapter:
         state["last_updated"] = datetime.now(timezone.utc).isoformat()
         _write_json(state_path, state)
         return [7, 8, 9, 10, 11]
+
+    def revise_gate_2(self, slug: str, instructions: str = "") -> EpisodeDetail:
+        self.store.ensure_mutable(slug)
+        ep_dir = resolve_safe_episode_path(self.episodes_root, slug)
+        note = instructions.strip() or "Versi revisi"
+        revised_beats = [
+            {
+                "id": b["id"],
+                "beatNumber": b["beatNumber"],
+                "beatLabel": b["beatLabel"],
+                "text": f"{b['text']} ({note})" if b["beatNumber"] == 1 else b["text"],
+            }
+            for b in _DEFAULT_BEATS
+        ]
+        _write_json(ep_dir / "narration" / "script.json", {"beats": revised_beats})
+        return self.store.get_episode(slug)
+
+    def prepare_gate_3_revision(self, slug: str, instructions: str = "") -> list[int]:
+        self.store.ensure_mutable(slug)
+        self.store.write_studio_meta(slug, {"gate3RevisionNotes": instructions.strip()})
+        return [10, 11]
 
     def prepare_retry_stage(self, slug: str, stage: int) -> list[int]:
         self.store.ensure_mutable(slug)

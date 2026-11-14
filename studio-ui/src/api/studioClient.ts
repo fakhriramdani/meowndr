@@ -174,6 +174,36 @@ export class StudioClient {
     });
   }
 
+  reviseGate1(
+    slug: string,
+    instructions: string
+  ): Promise<Result<{ episode: EpisodeDetail; requestId: string }>> {
+    return this.request(`/api/episodes/${encodeURIComponent(slug)}/gate1/revise`, {
+      method: "POST",
+      body: JSON.stringify({ instructions }),
+    });
+  }
+
+  reviseGate2(
+    slug: string,
+    instructions: string
+  ): Promise<Result<{ episode: EpisodeDetail; requestId: string }>> {
+    return this.request(`/api/episodes/${encodeURIComponent(slug)}/gate2/revise`, {
+      method: "POST",
+      body: JSON.stringify({ instructions }),
+    });
+  }
+
+  reviseGate3(
+    slug: string,
+    instructions: string
+  ): Promise<Result<{ episode: EpisodeDetail; jobId: string; requestId: string }>> {
+    return this.request(`/api/episodes/${encodeURIComponent(slug)}/gate3/revise`, {
+      method: "POST",
+      body: JSON.stringify({ instructions }),
+    });
+  }
+
   saveScript(
     slug: string,
     beats: ScriptBeat[]
