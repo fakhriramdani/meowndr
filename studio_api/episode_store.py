@@ -243,47 +243,75 @@ class EpisodeStore:
         dossier = _read_json(ep_dir / "research" / "dossier.json")
         if isinstance(dossier, dict):
             summary = dossier.get("summary")
-            if isinstance(summary, list):
+            if isinstance(summary, list) and summary:
                 return [str(x) for x in summary]
+            items: list[str] = []
             layer1 = dossier.get("layer1_baseline")
             layer2 = dossier.get("layer2_domino")
-            items: list[str] = []
             if layer1:
                 items.append(str(layer1))
             if layer2:
                 items.append(str(layer2))
             if items:
                 return items
+            claims = dossier.get("claims")
+            if isinstance(claims, list):
+                for claim in claims:
+                    if not isinstance(claim, dict):
+                        continue
+                    stmt = str(claim.get("statement") or "").strip()
+                    expl = str(claim.get("explanation") or "").strip()
+                    if stmt:
+                        items.append(f"{stmt} — {expl}" if expl else stmt)
+                if items:
+                    return items
         return []
 
     def _load_hook_variants(self, ep_dir: Path) -> list[HookVariant]:
         raw = _read_json(ep_dir / "research" / "hook_matrix.json")
         if not isinstance(raw, dict):
             return []
-        hooks = raw.get("hooks", [])
+        hooks = raw.get("hooks") if isinstance(raw.get("hooks"), list) else raw.get("variants", [])
         if not isinstance(hooks, list):
             return []
+        visual_concept = str(raw.get("visual_hook_concept") or "").strip()
         result: list[HookVariant] = []
         for idx, item in enumerate(hooks, start=1):
             if not isinstance(item, dict):
                 continue
+            cover = item.get("frame0CoverConcept") or item.get("visual_cover")
+            if not cover and isinstance(item.get("cover_lines"), list):
+                lines = [
+                    " ".join(str(w) for w in row)
+                    for row in item["cover_lines"]
+                    if isinstance(row, list)
+                ]
+                cover = " / ".join(line for line in lines if line.strip())
+            if not cover:
+                cover = visual_concept or "Papercraft Cat Scientist Frame 0"
+            raw_score = item.get("hookScore") or item.get("score")
+            if raw_score is None and item.get("composite_score") is not None:
+                comp = float(item["composite_score"])
+                raw_score = round(comp * 10) if comp <= 10.0 else round(comp)
+            score_val = max(0, min(100, int(raw_score if raw_score is not None else 85)))
             result.append(
                 HookVariant(
                     hookId=str(item.get("hookId") or item.get("id") or f"hook-{idx}"),
-                    openingLine=str(item.get("openingLine") or item.get("hook") or ""),
-                    frame0CoverConcept=str(
-                        item.get("frame0CoverConcept") or item.get("visual_cover") or "Papercraft Cat Scientist Frame 0"
-                    ),
-                    hookScore=int(item.get("hookScore") or item.get("score") or 85),
+                    openingLine=str(item.get("openingLine") or item.get("hook") or item.get("hook_text") or ""),
+                    frame0CoverConcept=str(cover),
+                    hookScore=score_val,
                 )
             )
         return result
 
     def _load_script_state(self, ep_dir: Path, meta: dict[str, Any]) -> Any:
         raw = _read_json(ep_dir / "narration" / "script.json")
-        if not isinstance(raw, dict):
+        if isinstance(raw, list):
+            beats_raw = raw
+        elif isinstance(raw, dict):
+            beats_raw = raw.get("beats", [])
+        else:
             return None
-        beats_raw = raw.get("beats", [])
         beats: list[ScriptBeat] = []
         if isinstance(beats_raw, list) and len(beats_raw) == 6:
             for idx, item in enumerate(beats_raw, start=1):
@@ -292,7 +320,7 @@ class EpisodeStore:
                         ScriptBeat(
                             id=str(item.get("id") or f"beat-{idx}"),
                             beatNumber=int(item.get("beatNumber") or idx),  # type: ignore[arg-type]
-                            beatLabel=str(item.get("beatLabel") or f"Beat {idx}"),
+                            beatLabel=str(item.get("beatLabel") or item.get("beat_label") or f"Beat {idx}"),
                             text=str(item.get("text") or ""),
                         )
                     )
