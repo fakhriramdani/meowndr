@@ -20,8 +20,11 @@ export const Gate1TopicHook: React.FC<Gate1TopicHookProps> = ({
   const [loading, setLoading] = useState(false);
   const [revising, setRevising] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const isApproved = episode.gates.gate1 === "APPROVED";
+  const locked = isApproved || episode.isBaselineProtected;
 
   async function handleApprove() {
+    if (locked) return;
     if (!selectedHookId) {
       setErrorMsg("Select 1 of the 5 HookVariant candidates before approving Gate 1.");
       return;
@@ -80,7 +83,14 @@ export const Gate1TopicHook: React.FC<Gate1TopicHookProps> = ({
         </div>
 
         <div className="card" style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-          <h3>Select 1 of 5 HookVariant Candidates</h3>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
+            <h3>Select 1 of 5 HookVariant Candidates</h3>
+            {isApproved && (
+              <span className="badge badge-ok">
+                Approved · {episode.selectedHookId || "Selected"}
+              </span>
+            )}
+          </div>
           {episode.hookVariants.map((hook) => {
             const isSelected = selectedHookId === hook.hookId;
             return (
@@ -89,6 +99,7 @@ export const Gate1TopicHook: React.FC<Gate1TopicHookProps> = ({
                 type="button"
                 className={`card card-interactive ${isSelected ? "selected" : ""}`}
                 style={{ textAlign: "left", padding: 16 }}
+                disabled={locked}
                 onClick={() => {
                   setSelectedHookId(hook.hookId);
                   setErrorMsg(null);
@@ -121,7 +132,7 @@ export const Gate1TopicHook: React.FC<Gate1TopicHookProps> = ({
               value={revisionNote}
               onChange={(e) => setRevisionNote(e.target.value)}
               placeholder="e.g., Make hooks more urgent, focus on everyday human impact..."
-              disabled={loading || revising || episode.isBaselineProtected}
+              disabled={loading || revising || locked}
             />
           </div>
 
@@ -129,7 +140,7 @@ export const Gate1TopicHook: React.FC<Gate1TopicHookProps> = ({
             <button
               type="button"
               className="btn btn-secondary"
-              disabled={loading || revising || episode.isBaselineProtected}
+              disabled={loading || revising || locked}
               onClick={() => handleRevise("")}
             >
               {revising ? "Discovering..." : "Discover More Hooks"}
@@ -137,7 +148,7 @@ export const Gate1TopicHook: React.FC<Gate1TopicHookProps> = ({
             <button
               type="button"
               className="btn btn-pink"
-              disabled={loading || revising || !revisionNote.trim() || episode.isBaselineProtected}
+              disabled={loading || revising || !revisionNote.trim() || locked}
               onClick={() => handleRevise(revisionNote)}
             >
               {revising ? "Revising..." : "Revise with Notes"}
@@ -148,10 +159,14 @@ export const Gate1TopicHook: React.FC<Gate1TopicHookProps> = ({
             <button
               type="button"
               className="btn btn-primary btn-launch"
-              disabled={loading || revising || episode.isBaselineProtected}
+              disabled={loading || revising || locked}
               onClick={handleApprove}
             >
-              {loading ? "Approving Gate 1..." : "Approve Gate 1"}
+              {isApproved
+                ? "Gate 1 Already Approved"
+                : loading
+                  ? "Approving Gate 1..."
+                  : "Approve Gate 1"}
             </button>
           </div>
         </div>

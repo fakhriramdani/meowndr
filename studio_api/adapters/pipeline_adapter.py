@@ -590,10 +590,8 @@ ATURAN MUTLAK:
         ep_dir = resolve_safe_episode_path(self.episodes_root, slug)
         script_path = ep_dir / "narration" / "script.json"
         script_path.parent.mkdir(parents=True, exist_ok=True)
-        existing = json.loads(script_path.read_text(encoding="utf-8")) if script_path.exists() else {}
-        existing["beats"] = [b.model_dump() for b in beats]
-        existing["spoken_text"] = " ".join(b.text.strip() for b in beats)
-        script_path.write_text(json.dumps(existing, indent=2, ensure_ascii=False), encoding="utf-8")
+        payload = [b.model_dump() for b in beats]
+        script_path.write_text(json.dumps(payload, indent=2, ensure_ascii=False), encoding="utf-8")
         report = analyze_narration_beats(beats)
         if not report.isCompliant:
             code = "SPOKEN_DIGITS_FORBIDDEN" if report.hasNumericDigits else "PACING_CEILING_EXCEEDED"
@@ -647,10 +645,10 @@ ATURAN MUTLAK:
         clauses = [c.strip() for c in re.split(r"(?<=[,;:])\s+", candidate) if c.strip()]
         if len(clauses) > 1:
             trimmed = clauses[0].rstrip(",;:")
-            if not trimmed.endswith((".", "!", "?")):
-                trimmed += "."
-            return trimmed
-        return candidate
+            if len(trimmed.split()) <= max_words:
+                return trimmed if trimmed.endswith((".", "!", "?")) else f"{trimmed}."
+        words_trimmed = " ".join(candidate.split()[:max_words]).rstrip(",;:")
+        return words_trimmed if words_trimmed.endswith((".", "!", "?")) else f"{words_trimmed}."
 
     def condense_script(self, slug: str) -> NarrationScriptState:
         self.store.ensure_mutable(slug)
@@ -665,13 +663,9 @@ ATURAN MUTLAK:
             )
         ep_dir = resolve_safe_episode_path(self.episodes_root, slug)
         script_path = ep_dir / "narration" / "script.json"
-        existing = json.loads(script_path.read_text(encoding="utf-8")) if script_path.exists() else {}
-        spoken_text = " ".join(b.text.strip() for b in condensed_beats if b.text.strip()).strip()
-        existing["beats"] = [b.model_dump() for b in condensed_beats]
-        existing["spoken_text"] = spoken_text
-        existing["text"] = spoken_text
-        existing["tts"] = spoken_text
-        script_path.write_text(json.dumps(existing, indent=2, ensure_ascii=False), encoding="utf-8")
+        script_path.parent.mkdir(parents=True, exist_ok=True)
+        payload = [b.model_dump() for b in condensed_beats]
+        script_path.write_text(json.dumps(payload, indent=2, ensure_ascii=False), encoding="utf-8")
         return analyze_narration_beats(condensed_beats)
 
     def prepare_gate_2_approval(self, slug: str, notes: str | None = None) -> list[int]:
@@ -692,10 +686,17 @@ ATURAN MUTLAK:
             )
             raise AppError(code=code, message=" ".join(violations), status_code=422)
         engine = self._engine(slug=slug, niche=ep.niche, title=ep.title)
-        engine.run_stage_6_gate_2_approval(
-            approved_by="Studio User",
-            notes=notes or "Approved via Studio UI",
-        )
+        try:
+            engine.run_stage_6_gate_2_approval(
+                approved_by="Studio User",
+                notes=notes or "Approved via Studio UI",
+            )
+        except (RuntimeError, ValueError) as err:
+            raise AppError(
+                code="GATE_APPROVAL_FAILED",
+                message=str(err),
+                status_code=409,
+            ) from err
         return [7, 8, 9, 10, 11]
 
     def prepare_gate_3_revision(self, slug: str, instructions: str = "") -> list[int]:

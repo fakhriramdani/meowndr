@@ -18,8 +18,14 @@ export const Gate2Script: React.FC<Gate2ScriptProps> = ({
 }) => {
   const [beats, setBeats] = useState<ScriptBeat[]>(episode.narrationScript?.beats ?? []);
   const [revisionNote, setRevisionNote] = useState("");
-  const [busy, setBusy] = useState(false);
+  const [activeAction, setActiveAction] = useState<
+    null | "save" | "condense" | "discover" | "revise" | "approve"
+  >(null);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
+
+  const busy = activeAction !== null;
+  const isApproved = episode.gates.gate2 === "APPROVED";
+  const locked = isApproved || episode.isBaselineProtected;
 
   useEffect(() => {
     setBeats(episode.narrationScript?.beats ?? []);
@@ -35,10 +41,11 @@ export const Gate2Script: React.FC<Gate2ScriptProps> = ({
   }
 
   async function handleSave() {
-    setBusy(true);
+    if (locked || busy) return;
+    setActiveAction("save");
     setErrorMsg(null);
     const res = await client.saveScript(episode.episodeSlug, beats);
-    setBusy(false);
+    setActiveAction(null);
     if (!res.ok) {
       setErrorMsg(res.error.message);
       return;
@@ -47,10 +54,17 @@ export const Gate2Script: React.FC<Gate2ScriptProps> = ({
   }
 
   async function handleCondense() {
-    setBusy(true);
+    if (locked || busy) return;
+    setActiveAction("condense");
     setErrorMsg(null);
+    const saveRes = await client.saveScript(episode.episodeSlug, beats);
+    if (!saveRes.ok) {
+      setActiveAction(null);
+      setErrorMsg(saveRes.error.message);
+      return;
+    }
     const res = await client.condenseScript(episode.episodeSlug);
-    setBusy(false);
+    setActiveAction(null);
     if (!res.ok) {
       setErrorMsg(res.error.message);
       return;
@@ -59,17 +73,17 @@ export const Gate2Script: React.FC<Gate2ScriptProps> = ({
   }
 
   async function handleApprove() {
-    if (!report.isCompliant) return;
-    setBusy(true);
+    if (locked || busy || !report.isCompliant) return;
+    setActiveAction("approve");
     setErrorMsg(null);
     const saveRes = await client.saveScript(episode.episodeSlug, beats);
     if (!saveRes.ok) {
-      setBusy(false);
+      setActiveAction(null);
       setErrorMsg(saveRes.error.message);
       return;
     }
     const res = await client.approveGate2(episode.episodeSlug);
-    setBusy(false);
+    setActiveAction(null);
     if (!res.ok) {
       setErrorMsg(res.error.message);
       return;
@@ -88,6 +102,7 @@ export const Gate2Script: React.FC<Gate2ScriptProps> = ({
             </h2>
           </div>
           <div className="pill-group" aria-live="polite">
+            {isApproved && <span className="badge badge-ok">Approved</span>}
             <span className="badge badge-blue mono">Words: {report.wordCount}</span>
             <span
               className={`badge mono ${
@@ -138,7 +153,7 @@ export const Gate2Script: React.FC<Gate2ScriptProps> = ({
               className={`textarea ${report.hasNumericDigits ? "error" : ""}`}
               value={beat.text}
               onChange={(e) => updateBeatText(beat.beatNumber, e.target.value)}
-              disabled={episode.isBaselineProtected}
+              disabled={locked}
             />
           </div>
         ))}
@@ -148,18 +163,18 @@ export const Gate2Script: React.FC<Gate2ScriptProps> = ({
         <button
           type="button"
           className="btn btn-secondary"
-          disabled={busy || episode.isBaselineProtected}
+          disabled={busy || locked}
           onClick={handleSave}
         >
-          Save Draft
+          {activeAction === "save" ? "Saving..." : "Save Draft"}
         </button>
         <button
           type="button"
           className="btn btn-secondary"
-          disabled={busy || episode.isBaselineProtected}
+          disabled={busy || locked}
           onClick={handleCondense}
         >
-          Condense Script (95–105 words)
+          {activeAction === "condense" ? "Condensing..." : "Condense Script (95–105 words)"}
         </button>
       </div>
 
@@ -172,18 +187,18 @@ export const Gate2Script: React.FC<Gate2ScriptProps> = ({
           value={revisionNote}
           onChange={(e) => setRevisionNote(e.target.value)}
           placeholder="e.g., Make Beat 2 more dramatic, shorten Beat 4, emphasize scientific cause..."
-          disabled={busy || episode.isBaselineProtected}
+          disabled={busy || locked}
         />
         <div className="pill-group">
           <button
             type="button"
             className="btn btn-secondary"
-            disabled={busy || episode.isBaselineProtected}
+            disabled={busy || locked}
             onClick={async () => {
-              setBusy(true);
+              setActiveAction("discover");
               setErrorMsg(null);
               const res = await client.reviseGate2(episode.episodeSlug, "");
-              setBusy(false);
+              setActiveAction(null);
               if (!res.ok) {
                 setErrorMsg(res.error.message);
                 return;
@@ -192,17 +207,17 @@ export const Gate2Script: React.FC<Gate2ScriptProps> = ({
               onEpisodeUpdated?.(res.data.episode);
             }}
           >
-            Discover More Script Angles
+            {activeAction === "discover" ? "Discovering..." : "Discover More Script Angles"}
           </button>
           <button
             type="button"
             className="btn btn-pink"
-            disabled={busy || !revisionNote.trim() || episode.isBaselineProtected}
+            disabled={busy || !revisionNote.trim() || locked}
             onClick={async () => {
-              setBusy(true);
+              setActiveAction("revise");
               setErrorMsg(null);
               const res = await client.reviseGate2(episode.episodeSlug, revisionNote);
-              setBusy(false);
+              setActiveAction(null);
               if (!res.ok) {
                 setErrorMsg(res.error.message);
                 return;
@@ -211,7 +226,7 @@ export const Gate2Script: React.FC<Gate2ScriptProps> = ({
               onEpisodeUpdated?.(res.data.episode);
             }}
           >
-            Revise Script with Notes
+            {activeAction === "revise" ? "Revising..." : "Revise Script with Notes"}
           </button>
         </div>
       </div>
@@ -220,10 +235,14 @@ export const Gate2Script: React.FC<Gate2ScriptProps> = ({
         <button
           type="button"
           className="btn btn-primary btn-launch"
-          disabled={busy || !report.isCompliant || episode.isBaselineProtected}
+          disabled={busy || !report.isCompliant || locked}
           onClick={handleApprove}
         >
-          {busy ? "Starting Render..." : "Approve Gate 2"}
+          {isApproved
+            ? "Gate 2 Already Approved"
+            : activeAction === "approve"
+              ? "Starting Render..."
+              : "Approve Gate 2"}
         </button>
       </div>
     </section>
