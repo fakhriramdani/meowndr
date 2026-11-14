@@ -1,0 +1,34 @@
+{$STUDIO_DOMAIN:reels.ramdanistudio.com} {
+	encode gzip
+
+	handle /api/episodes/*/jobs/*/events {
+		reverse_proxy studio-api:8420 {
+			flush_interval -1
+			header_up X-Forwarded-Proto {scheme}
+			header_up X-Forwarded-For {remote_host}
+		}
+	}
+
+	handle /api/episodes/*/events {
+		reverse_proxy studio-api:8420 {
+			flush_interval -1
+			header_up X-Forwarded-Proto {scheme}
+			header_up X-Forwarded-For {remote_host}
+		}
+	}
+
+	handle /api/* {
+		reverse_proxy studio-api:8420 {
+			header_up X-Forwarded-Proto {scheme}
+			header_up X-Forwarded-For {remote_host}
+		}
+	}
+
+	handle /health {
+		reverse_proxy studio-api:8420
+	}
+
+	handle {
+		reverse_proxy studio-ui:80
+	}
+}

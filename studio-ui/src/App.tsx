@@ -1,0 +1,272 @@
+import React, { useCallback, useEffect, useMemo, useState } from "react";
+import type { AuthSessionState, EpisodeDetail, JobStatus } from "./api/types";
+import { StudioClient } from "./api/studioClient";
+import { CatMascot } from "./components/CatMascot";
+import { EpisodeHistoryDrawer } from "./components/EpisodeHistoryDrawer";
+import { Gate1TopicHook } from "./components/Gate1TopicHook";
+import { Gate2Script } from "./components/Gate2Script";
+import { Gate3FinalVideo } from "./components/Gate3FinalVideo";
+import { LoginView } from "./components/LoginView";
+import { PipelineTracker } from "./components/PipelineTracker";
+import { StudioLauncher } from "./components/StudioLauncher";
+
+type ActiveView = "launcher" | "gate1" | "gate2" | "tracker" | "gate3";
+
+function resolveViewForEpisode(ep: EpisodeDetail): ActiveView {
+  if (ep.gates.gate3 === "APPROVED" || ep.qualityAudit?.overallStatus === "PASS") {
+    return "gate3";
+  }
+  if (ep.currentStage >= 7 && ep.currentStage <= 11 && ep.activeJobId) {
+    return "tracker";
+  }
+  if (ep.gates.gate1 === "APPROVED" && ep.gates.gate2 === "PENDING") {
+    return "gate2";
+  }
+  return "gate1";
+}
+
+export const App: React.FC = () => {
+  const [theme, setTheme] = useState<"light" | "dark">("light");
+  const [session, setSession] = useState<AuthSessionState | null>(null);
+  const [authChecked, setAuthChecked] = useState(false);
+  const [healthy, setHealthy] = useState(false);
+  const [view, setView] = useState<ActiveView>("launcher");
+  const [episode, setEpisode] = useState<EpisodeDetail | null>(null);
+  const [activeJobId, setActiveJobId] = useState<string | null>(null);
+  const [historyOpen, setHistoryOpen] = useState(false);
+
+  const client = useMemo(
+    () =>
+      new StudioClient({
+        onUnauthorized: () => {
+          setSession(null);
+          if (window.location.pathname !== "/login") {
+            window.history.replaceState(null, "", "/login");
+          }
+        },
+      }),
+    []
+  );
+
+  useEffect(() => {
+    document.documentElement.setAttribute("data-theme", theme);
+  }, [theme]);
+
+  useEffect(() => {
+    async function boot() {
+      const [hRes, meRes] = await Promise.all([client.health(), client.me()]);
+      setHealthy(hRes.ok);
+      if (meRes.ok) {
+        setSession(meRes.data);
+      } else {
+        setSession(null);
+      }
+      setAuthChecked(true);
+    }
+    void boot();
+  }, [client]);
+
+  const toggleTheme = () => setTheme((prev) => (prev === "light" ? "dark" : "light"));
+
+  const handleEpisodeCreated = useCallback((ep: EpisodeDetail, jobId: string) => {
+    setEpisode(ep);
+    setActiveJobId(jobId);
+    setView("tracker");
+  }, []);
+
+  const handleSelectEpisode = useCallback(
+    async (slug: string) => {
+      const res = await client.getEpisode(slug);
+      if (!res.ok) return;
+      setEpisode(res.data);
+      setActiveJobId(res.data.activeJobId);
+      setView(resolveViewForEpisode(res.data));
+    },
+    [client]
+  );
+
+  const handleJobTerminal = useCallback(
+    async (status: JobStatus) => {
+      const res = await client.getEpisode(status.episodeSlug);
+      if (!res.ok) return;
+      setEpisode(res.data);
+      if (status.status === "PACING_REMEDIATION" || status.gate === 2) {
+        setView("gate2");
+      } else if (status.gate === 1) {
+        setView("gate1");
+      } else if (status.gate === 3) {
+        setView("gate3");
+      }
+    },
+    [client]
+  );
+
+  async function handleLogout() {
+    await client.logout();
+    setSession(null);
+    setEpisode(null);
+    setActiveJobId(null);
+    setView("launcher");
+    window.history.replaceState(null, "", "/login");
+  }
+
+  if (!authChecked) {
+    return (
+      <div className="login-wrap">
+        <div className="skeleton" style={{ width: 360 }} />
+      </div>
+    );
+  }
+
+  if (!session) {
+    return (
+      <LoginView
+        client={client}
+        theme={theme}
+        onToggleTheme={toggleTheme}
+        onSuccess={(s) => {
+          setSession(s);
+          window.history.replaceState(null, "", "/");
+        }}
+      />
+    );
+  }
+
+  return (
+    <>
+      <a className="skip-link" href="#studio-workspace">
+        Skip to workspace
+      </a>
+
+      <header className="topbar">
+        <div className="topbar-inner">
+          <div className="brand-group">
+            <CatMascot size={40} />
+            <span className="brand-title">@meowndr Studio</span>
+            <span className={`badge ${healthy ? "badge-ok" : "badge-warn"}`}>
+              {healthy ? "Connected" : "Offline"}
+            </span>
+          </div>
+
+          <div className="topbar-actions">
+            <button type="button" className="btn btn-secondary" onClick={toggleTheme}>
+              {theme === "light" ? "Dark Mode" : "Light Mode"}
+            </button>
+            <button
+              type="button"
+              className="btn btn-secondary"
+              onClick={() => setHistoryOpen(true)}
+            >
+              Episode History
+            </button>
+            <button type="button" className="btn btn-secondary" onClick={handleLogout}>
+              Logout
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <div className="studio-shell">
+        <nav className="stage-rail" aria-label="Production Stages">
+          <button
+            type="button"
+            className={`rail-step ${view === "launcher" ? "active" : ""}`}
+            onClick={() => setView("launcher")}
+          >
+            <span>1. Studio Home</span>
+          </button>
+          <button
+            type="button"
+            className={`rail-step ${view === "gate1" ? "active" : ""}`}
+            disabled={!episode}
+            onClick={() => setView("gate1")}
+          >
+            <span>2. Gate 1 · Hook</span>
+          </button>
+          <button
+            type="button"
+            className={`rail-step ${view === "gate2" ? "active" : ""}`}
+            disabled={!episode || episode.gates.gate1 !== "APPROVED"}
+            onClick={() => setView("gate2")}
+          >
+            <span>3. Gate 2 · Script</span>
+          </button>
+          <button
+            type="button"
+            className={`rail-step ${view === "tracker" ? "active" : ""}`}
+            disabled={!episode || !activeJobId}
+            onClick={() => setView("tracker")}
+          >
+            <span>4. Render Tracker</span>
+          </button>
+          <button
+            type="button"
+            className={`rail-step ${view === "gate3" ? "active" : ""}`}
+            disabled={!episode || episode.qualityAudit?.overallStatus !== "PASS"}
+            onClick={() => setView("gate3")}
+          >
+            <span>5. Gate 3 · Archive</span>
+          </button>
+        </nav>
+
+        <main id="studio-workspace">
+          {view === "launcher" && (
+            <StudioLauncher client={client} onEpisodeCreated={handleEpisodeCreated} />
+          )}
+
+          {view === "gate1" && episode && (
+            <Gate1TopicHook
+              client={client}
+              episode={episode}
+              onApproved={(ep, jobId) => {
+                setEpisode(ep);
+                setActiveJobId(jobId);
+                setView("tracker");
+              }}
+            />
+          )}
+
+          {view === "gate2" && episode && (
+            <Gate2Script
+              client={client}
+              episode={episode}
+              onApproved={(ep, jobId) => {
+                setEpisode(ep);
+                setActiveJobId(jobId);
+                setView("tracker");
+              }}
+            />
+          )}
+
+          {view === "tracker" && episode && activeJobId && (
+            <PipelineTracker
+              client={client}
+              episode={episode}
+              jobId={activeJobId}
+              onJobTerminal={handleJobTerminal}
+              onRetryStarted={(ep, nextJobId) => {
+                setEpisode(ep);
+                setActiveJobId(nextJobId);
+              }}
+            />
+          )}
+
+          {view === "gate3" && episode && (
+            <Gate3FinalVideo
+              client={client}
+              episode={episode}
+              onUpdated={(ep) => setEpisode(ep)}
+            />
+          )}
+        </main>
+      </div>
+
+      <EpisodeHistoryDrawer
+        client={client}
+        open={historyOpen}
+        onClose={() => setHistoryOpen(false)}
+        onSelectEpisode={handleSelectEpisode}
+      />
+    </>
+  );
+};
