@@ -27,7 +27,12 @@ function resolveViewForEpisode(ep: EpisodeDetail): ActiveView {
 }
 
 export const App: React.FC = () => {
-  const [theme, setTheme] = useState<"light" | "dark">("light");
+  const [theme, setTheme] = useState<"light" | "dark">(() =>
+    typeof window !== "undefined" &&
+    window.matchMedia?.("(prefers-color-scheme: dark)").matches
+      ? "dark"
+      : "light"
+  );
   const [session, setSession] = useState<AuthSessionState | null>(null);
   const [authChecked, setAuthChecked] = useState(false);
   const [healthy, setHealthy] = useState(false);

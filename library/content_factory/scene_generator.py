@@ -126,7 +126,7 @@ def _svg_for_scene_slot(idx: int, scene_id: str, metric: str, cx: int) -> str:
     if idx == 0:
         # S01Hook: Dual-Chamber Transformation Tank + Dissolving Crystals + Dial
         return f"""
-        <g transform={{`translate(${{cx}}, 740) scale(${{pop}})`}} filter="url(#paperShadow{scene_id})">
+        <g transform={{`translate({cx}, 740) scale(${{pop}})`}} filter="url(#paperShadow{scene_id})">
           <rect x={{-230}} y={{-200}} width={{460}} height={{390}} rx={{28}} fill="#FBF6EC" stroke="#1E293B" strokeWidth={{6}} />
           <rect x={{-195}} y={{-160}} width={{175}} height={{230}} rx={{16}} fill="#0284C7" stroke="#075985" strokeWidth={{4}} />
           <polygon points="-145,-60 -115,-85 -85,-60 -115,-35" fill="#F8FAFC" transform={{`translate(0, ${{wave * 0.6}})`}} />
@@ -141,7 +141,7 @@ def _svg_for_scene_slot(idx: int, scene_id: str, metric: str, cx: int) -> str:
     if idx == 1:
         # S02Shockwave: Swelling Osmotic Cell + Expanding Shockwave Rings + Needle Gauge
         return f"""
-        <g transform={{`translate(${{cx}}, 740) scale(${{pop}})`}} filter="url(#paperShadow{scene_id})">
+        <g transform={{`translate({cx}, 740) scale(${{pop}})`}} filter="url(#paperShadow{scene_id})">
           <circle cx={{0}} cy={{-30}} r={{175 + pulse * 35}} fill="none" stroke="#EF4444" strokeWidth={{5}} strokeDasharray="16 12" opacity={{0.55}} />
           <circle cx={{0}} cy={{-30}} r={{130 + pulse * 24}} fill="#FEE2E2" stroke="#DC2626" strokeWidth={{6}} />
           <circle cx={{0}} cy={{-30}} r={{85 + pulse * 28}} fill="#FCA5A5" stroke="#B91C1C" strokeWidth={{5}} />
@@ -155,7 +155,7 @@ def _svg_for_scene_slot(idx: int, scene_id: str, metric: str, cx: int) -> str:
     if idx == 2:
         # S03Domino: Cascading Domino Blocks + Rising Gas Bubbles + Dropping Bar Meter
         return f"""
-        <g transform={{`translate(${{cx}}, 750) scale(${{pop}})`}} filter="url(#paperShadow{scene_id})">
+        <g transform={{`translate({cx}, 750) scale(${{pop}})`}} filter="url(#paperShadow{scene_id})">
           <rect x={{-230}} y={{-200}} width={{460}} height={{400}} rx={{28}} fill="#FEF3C7" stroke="#92400E" strokeWidth={{6}} />
           {{[-145, -55, 35, 125].map((dx, i) => (
             <g key={{i}} transform={{`translate(${{dx}}, 10) rotate(${{Math.min(72, Math.max(0, (frame - 16 - i * 12) * 3.2))}}, 0, 70)`}}>
@@ -175,7 +175,7 @@ def _svg_for_scene_slot(idx: int, scene_id: str, metric: str, cx: int) -> str:
     if idx == 3:
         # S04ModernReset: Layered Paper Earth Globe + Rising Thermometer + Storm Cloud
         return f"""
-        <g transform={{`translate(${{cx}}, 740) scale(${{pop}})`}} filter="url(#paperShadow{scene_id})">
+        <g transform={{`translate({cx}, 740) scale(${{pop}})`}} filter="url(#paperShadow{scene_id})">
           <circle cx={{-35}} cy={{0}} r={{165}} fill="#0284C7" stroke="#0F172A" strokeWidth={{6}} />
           <path d="M -115 -65 Q -55 -105 10 -60 Q 45 -20 -5 30 Q -70 50 -120 5 Z" fill="#22C55E" stroke="#15803D" strokeWidth={{4}} />
           <path d="M 35 -10 Q 95 -25 110 35 Q 75 95 20 75 Z" fill="#16A34A" stroke="#15803D" strokeWidth={{4}} />
@@ -195,7 +195,7 @@ def _svg_for_scene_slot(idx: int, scene_id: str, metric: str, cx: int) -> str:
     if idx == 4:
         # S05RealityAnchor: Precision Analog Dial + Rotating Equilibrium Ring
         return f"""
-        <g transform={{`translate(${{cx}}, 740) scale(${{pop}})`}} filter="url(#paperShadow{scene_id})">
+        <g transform={{`translate({cx}, 740) scale(${{pop}})`}} filter="url(#paperShadow{scene_id})">
           <g transform={{`rotate(${{frame * 0.8}})`}}>
             <circle cx={{0}} cy={{-20}} r={{195}} fill="none" stroke="#0EA5E9" strokeWidth={{14}} strokeDasharray="48 24" />
           </g>
@@ -218,7 +218,7 @@ def _svg_for_scene_slot(idx: int, scene_id: str, metric: str, cx: int) -> str:
 
     # S06Outro: Dilemma Balance Scale + @meowndr CTA Card
     return f"""
-        <g transform={{`translate(${{cx}}, 840) scale(${{pop}})`}} filter="url(#paperShadow{scene_id})">
+        <g transform={{`translate({cx}, 840) scale(${{pop}})`}} filter="url(#paperShadow{scene_id})">
           <rect x={{-14}} y={{0}} width={{28}} height={{220}} rx={{6}} fill="#78350F" />
           <rect x={{-90}} y={{210}} width={{180}} height={{28}} rx={{10}} fill="#92400E" />
           <g transform={{`rotate(${{wave * 0.8}})`}}>
@@ -237,7 +237,7 @@ def _svg_for_scene_slot(idx: int, scene_id: str, metric: str, cx: int) -> str:
             </g>
           </g>
         </g>
-        <g transform={{`translate(${{cx}}, 560) scale(${{pop}})`}} filter="url(#paperShadow{scene_id})">
+        <g transform={{`translate({cx}, 560) scale(${{pop}})`}} filter="url(#paperShadow{scene_id})">
           <rect x={{-215}} y={{-62}} width={{430}} height={{116}} rx={{20}} fill="#FBF6EC" stroke="#D94E34" strokeWidth={{5}} />
           <text x={{0}} y={{-10}} textAnchor="middle" fill="#0F172A" fontSize={{28}} fontWeight={{900}} fontFamily="sans-serif">SIMPAN &amp; DISKUSI!</text>
           <text x={{0}} y={{32}} textAnchor="middle" fill="#D94E34" fontSize={{24}} fontWeight={{800}} fontFamily="sans-serif">@meowndr</text>
