@@ -366,11 +366,8 @@ def ensure_episode_scenes(ep_dir: Path, title: str, niche: str, force: bool = Fa
     ep_data["scenes"] = new_scenes
     ep_data["banners"] = {"S01Hook": banner}
     ep_data["cuts"] = {
-        "S02Shockwave": {"kind": "cut"},
-        "S03Domino": {"kind": "pageTurn", "dir": "right"},
-        "S04ModernReset": {"kind": "cut"},
-        "S05RealityAnchor": {"kind": "pageTurn", "dir": "right"},
-        "S06Outro": {"kind": "cut"},
+        "S03Domino": {"kind": "pageTurn"},
+        "S05RealityAnchor": {"kind": "pageTurn"},
     }
     ep_json_path.write_text(json.dumps(ep_data, indent=2, ensure_ascii=False), encoding="utf-8")
 
