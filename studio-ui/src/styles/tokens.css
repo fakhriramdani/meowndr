@@ -196,7 +196,7 @@ h3 {
   flex-wrap: wrap;
 }
 
-.topbar-menu-toggle {
+.btn.topbar-menu-toggle {
   display: none;
   min-width: 42px;
   min-height: 40px;
@@ -703,7 +703,7 @@ textarea:focus-visible {
 }
 
 @media (max-width: 768px) {
-  .topbar-menu-toggle {
+  .btn.topbar-menu-toggle {
     display: inline-flex;
   }
   .topbar-actions {
