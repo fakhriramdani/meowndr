@@ -27,7 +27,27 @@ HERE = Path(__file__).resolve().parent
 REPO_ROOT = HERE.parent.parent
 sys.path.insert(0, str(REPO_ROOT))
 
-DEFAULT_GDRIVE_REMOTE = os.environ.get("GDRIVE_REMOTE", "gdrive-new")
+def _resolve_default_remote() -> str:
+    env_remote = os.environ.get("GDRIVE_REMOTE", "").strip()
+    if env_remote:
+        return env_remote.rstrip(":")
+    rclone_bin = shutil.which("rclone")
+    if rclone_bin:
+        try:
+            res = subprocess.run([rclone_bin, "listremotes"], capture_output=True, text=True, timeout=5)
+            remotes = [r.strip().rstrip(":") for r in res.stdout.splitlines() if r.strip()]
+            if "gdrive-new" in remotes:
+                return "gdrive-new"
+            if "gdrive-agy" in remotes:
+                return "gdrive-agy"
+            if remotes:
+                return remotes[0]
+        except Exception:
+            pass
+    return "gdrive-new"
+
+
+DEFAULT_GDRIVE_REMOTE = _resolve_default_remote()
 DEFAULT_GDRIVE_BASE_DIR = os.environ.get("GDRIVE_BASE_DIR", "Antigravity/Videos")
 
 
