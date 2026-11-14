@@ -45,8 +45,8 @@ export const RemotionRoot: React.FC = () => (
       defaultProps={{
         episodeTitle: THUMB_CFG.episodeTitle || (EP as Record<string, string>).title || 'What-If Science',
         thumbnailHook: THUMB_CFG.thumbnailHook || 'Bagaimana Jika?',
+        niche: (EP as Record<string, string>).niche || 'science',
         standalone: true,
-        backgroundColor: '#FDF8F2',
       }}
     />
     <Composition
