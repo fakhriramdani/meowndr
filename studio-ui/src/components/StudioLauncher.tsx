@@ -264,7 +264,7 @@ export const StudioLauncher: React.FC<StudioLauncherProps> = ({
               disabled={inFlight}
               onClick={handleDiscoverMore}
             >
-              Cari Ide Lain
+              Discover More Ideas
             </button>
           </div>
           <div className="grid-2">

@@ -110,6 +110,10 @@ class LiveLibraryAdapter:
         age_category: AgeCategory,
         exclude_premises: list[str] | None = None,
     ) -> list[TrendOpportunity]:
+        llm_items = self._discover_trends_with_llm(niche, age_category, exclude_premises)
+        if llm_items:
+            return llm_items
+
         from library.content_factory.trend_intelligence import run_trend_research_pipeline
 
         result = run_trend_research_pipeline(niche=niche)
@@ -149,6 +153,87 @@ class LiveLibraryAdapter:
             )
         opportunities.sort(key=lambda o: o.opportunityScore, reverse=True)
         return opportunities
+
+    def _discover_trends_with_llm(
+        self,
+        niche: Niche,
+        age_category: AgeCategory,
+        exclude_premises: list[str] | None,
+    ) -> list[TrendOpportunity]:
+        """Generate 5 fresh counterfactual What-If ideas via LLM, falling back on error."""
+        from library.content_factory.captions.llm_caption_generator import LLMCaptionGenerator
+
+        excluded_clean = [p.strip() for p in (exclude_premises or []) if p.strip()]
+        exclude_block = ""
+        if excluded_clean:
+            joined = "\n".join(f"- {p}" for p in excluded_clean[-30:])
+            exclude_block = f"\nDILARANG mengulang, memparafrase, atau memakai premis berikut:\n{joined}\n"
+
+        prompt = f"""Kamu adalah Trend & What-If Researcher untuk kanal edukasi papercut @meowndr (YouTube Shorts / TikTok / Reels bahasa Indonesia).
+Buatkan 5 ide topik skenario kontrafaktual "Bagaimana jika..." yang segar, mengejutkan, akurat secara sains/sejarah, dan berpotensi viral tinggi.
+
+Niche: {niche}
+Target audiens: {age_category}
+{exclude_block}
+Aturan wajib:
+1. Setiap premise HARUS diawali "Bagaimana jika ..." dalam bahasa Indonesia yang natural dan memicu rasa penasaran tinggi.
+2. Setiap ide HARUS memiliki 6 beat Temporal Cascade (Beat 1 Katalis -> Beat 2 Guncangan Awal -> Beat 3 Efek Domino -> Beat 4 Masa Kini -> Beat 5 Realitas Ilmiah/Sejarah -> Beat 6 Dilema).
+3. Beri opportunityScore realistis antara 75-98.
+4. Jawab HANYA dengan JSON valid sesuai skema ini tanpa teks tambahan:
+{{
+  "opportunities": [
+    {{
+      "premise": "Bagaimana jika ...?",
+      "opportunityScore": 94,
+      "temporalCascade": [
+        "Beat 1 (Katalis): ...",
+        "Beat 2 (Guncangan Awal): ...",
+        "Beat 3 (Efek Domino): ...",
+        "Beat 4 (Masa Kini): ...",
+        "Beat 5 (Realitas): ...",
+        "Beat 6 (Dilema): ..."
+      ]
+    }}
+  ]
+}}"""
+        try:
+            data = LLMCaptionGenerator.call_llm(prompt, timeout_sec=60)
+            raw_list = data.get("opportunities") if isinstance(data, dict) else None
+            if not isinstance(raw_list, list) or not raw_list:
+                return []
+
+            excluded_lower = {p.lower() for p in excluded_clean}
+            items: list[TrendOpportunity] = []
+            for idx, entry in enumerate(raw_list[:5], start=1):
+                if not isinstance(entry, dict):
+                    continue
+                premise = str(entry.get("premise") or "").strip()
+                if not premise or premise.lower() in excluded_lower:
+                    continue
+                raw_cascade = entry.get("temporalCascade") or []
+                cascade = [str(b).strip() for b in raw_cascade if str(b).strip()]
+                while len(cascade) < 6:
+                    cascade.append(f"Beat {len(cascade) + 1}: Dampak lanjutan pada {niche}.")
+                score_raw = entry.get("opportunityScore", 92 - idx * 2)
+                try:
+                    score = max(0, min(100, int(round(float(score_raw)))))
+                except (TypeError, ValueError):
+                    score = 88
+                items.append(
+                    TrendOpportunity(
+                        id=f"trend-llm-{niche}-{uuid.uuid4().hex[:6]}",
+                        premise=premise,
+                        niche=niche,
+                        ageCategory=age_category,
+                        opportunityScore=score,
+                        temporalCascade=cascade[:6],
+                    )
+                )
+            items.sort(key=lambda o: o.opportunityScore, reverse=True)
+            return items
+        except Exception as err:
+            _log.warning("LLM trend discovery failed, falling back to local pipeline: %s", err)
+            return []
 
     def create_episode(self, req: CreateEpisodeRequest) -> tuple[str, list[int]]:
         niche = str(req.niche).lower()
