@@ -414,6 +414,21 @@ class InMemoryFakeAdapter:
         self.store.write_studio_meta(slug, {"measuredAudioDurationSec": None})
         return analyze_narration_beats(beats)
 
+    def reopen_gate_2(self, slug: str) -> EpisodeDetail:
+        self.store.ensure_mutable(slug)
+        ep = self.store.get_episode(slug)
+        if ep.gates.gate3 == "APPROVED" and ep.gdriveDestination:
+            raise AppError("ALREADY_ARCHIVED", "Episode already archived.", 409)
+        ep_dir = resolve_safe_episode_path(self.episodes_root, slug)
+        state_path = ep_dir / "content_factory" / "workflow_state.json"
+        if state_path.exists():
+            state = _read_json(state_path)
+            state["current_stage"] = 6
+            state["status"] = "PENDING_USER_APPROVAL"
+            state["approval_gates"]["gate_2_script"]["status"] = "PENDING"
+            _write_json(state_path, state)
+        return self.store.get_episode(slug)
+
     def prepare_gate_2_approval(self, slug: str, notes: str | None = None) -> list[int]:
         self.store.ensure_mutable(slug)
         ep = self.store.get_episode(slug)

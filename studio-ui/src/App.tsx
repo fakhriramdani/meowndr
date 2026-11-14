@@ -303,6 +303,11 @@ export const App: React.FC = () => {
                 setEpisode(ep);
                 setActiveJobId(nextJobId);
               }}
+              onReopenScript={(ep) => {
+                setEpisode(ep);
+                setActiveJobId(null);
+                setView("gate2");
+              }}
             />
           )}
 

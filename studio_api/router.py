@@ -273,6 +273,20 @@ def build_router(
         episode = adapter.revise_gate_2(slug=slug, instructions=payload.instructions)
         return {"episode": episode.model_dump(), "requestId": get_request_id()}
 
+    @router.post("/episodes/{slug}/gate2/reopen")
+    def reopen_gate_2(
+        slug: str,
+        _: AuthSessionState | None = Depends(require_session),
+    ) -> dict[str, Any]:
+        if runner.lock_manager.is_locked(slug):
+            raise AppError(
+                code="EPISODE_LOCKED",
+                message="Episode is currently executing a stage; wait for completion before triggering another action.",
+                status_code=409,
+            )
+        episode = adapter.reopen_gate_2(slug=slug)
+        return {"episode": episode.model_dump(), "requestId": get_request_id()}
+
     @router.post("/episodes/{slug}/gate3/revise", status_code=202)
     def revise_gate_3(
         slug: str,

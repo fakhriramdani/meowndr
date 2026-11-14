@@ -76,6 +76,8 @@ class PipelinePort(Protocol):
 
     def prepare_gate_2_approval(self, slug: str, notes: str | None = None) -> list[int]: ...
 
+    def reopen_gate_2(self, slug: str) -> EpisodeDetail: ...
+
     def prepare_gate_3_revision(self, slug: str, instructions: str = "") -> list[int]: ...
 
     def prepare_retry_stage(self, slug: str, stage: int) -> list[int]: ...
@@ -759,6 +761,34 @@ ATURAN WAJIB:
                 status_code=409,
             ) from err
         return [7, 8, 9, 10, 11]
+
+    def reopen_gate_2(self, slug: str) -> EpisodeDetail:
+        """Roll back workflow_state to Stage 6 (Gate 2) so the user can revise/condense the script."""
+        self.store.ensure_mutable(slug)
+        ep = self.store.get_episode(slug)
+        if ep.gates.gate3 == "APPROVED" and ep.gdriveDestination:
+            raise AppError(
+                code="ALREADY_ARCHIVED",
+                message="Episode is already archived in CloudArchive and cannot reopen Gate 2.",
+                status_code=409,
+            )
+        ep_dir = resolve_safe_episode_path(self.episodes_root, slug)
+        state_path = ep_dir / "content_factory" / "workflow_state.json"
+        if state_path.exists():
+            state_data = json.loads(state_path.read_text(encoding="utf-8"))
+            state_data["current_stage"] = 6
+            state_data["status"] = "PENDING_USER_APPROVAL"
+            gates = state_data.setdefault("approval_gates", {})
+            gate2 = gates.setdefault("gate_2_script", {})
+            gate2["status"] = "PENDING"
+            gate3 = gates.setdefault("gate_3_final_video", {})
+            if gate3.get("status") != "APPROVED":
+                gate3["status"] = "PENDING"
+            state_path.write_text(
+                json.dumps(state_data, indent=2, ensure_ascii=False),
+                encoding="utf-8",
+            )
+        return self.store.get_episode(slug)
 
     def prepare_gate_3_revision(self, slug: str, instructions: str = "") -> list[int]:
         self.store.ensure_mutable(slug)

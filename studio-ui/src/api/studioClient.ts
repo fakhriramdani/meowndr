@@ -221,6 +221,13 @@ export class StudioClient {
     });
   }
 
+  reopenGate2(slug: string): Promise<Result<{ episode: EpisodeDetail; requestId: string }>> {
+    return this.request(`/api/episodes/${encodeURIComponent(slug)}/gate2/reopen`, {
+      method: "POST",
+      body: JSON.stringify({}),
+    });
+  }
+
   approveGate2(
     slug: string,
     notes?: string

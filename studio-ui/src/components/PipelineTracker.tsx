@@ -15,6 +15,7 @@ interface PipelineTrackerProps {
   jobId: string;
   onJobTerminal: (status: JobStatus) => void;
   onRetryStarted: (episode: EpisodeDetail, nextJobId: string) => void;
+  onReopenScript?: (episode: EpisodeDetail) => void;
 }
 
 export const PipelineTracker: React.FC<PipelineTrackerProps> = ({
@@ -23,9 +24,11 @@ export const PipelineTracker: React.FC<PipelineTrackerProps> = ({
   jobId,
   onJobTerminal,
   onRetryStarted,
+  onReopenScript,
 }) => {
   const [job, setJob] = useState<JobStatus | null>(null);
   const [retrying, setRetrying] = useState(false);
+  const [reopeningScript, setReopeningScript] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   useEffect(() => {
@@ -109,6 +112,25 @@ export const PipelineTracker: React.FC<PipelineTrackerProps> = ({
     onRetryStarted(res.data.episode, res.data.jobId);
   }
 
+  async function handleReopenScript() {
+    if (reopeningScript || retrying) return;
+    setReopeningScript(true);
+    setErrorMsg(null);
+    const res = await client.reopenGate2(episode.episodeSlug);
+    setReopeningScript(false);
+    if (!res.ok) {
+      setErrorMsg(res.error.message);
+      return;
+    }
+    onReopenScript?.(res.data.episode);
+  }
+
+  const canReopenScript =
+    Boolean(onReopenScript) &&
+    episode.currentStage >= 7 &&
+    episode.gates.gate3 !== "APPROVED" &&
+    job?.status !== "RUNNING";
+
   const trackerBadgeLabel = (() => {
     const stages = (job?.stageStates ?? []).map((s) => s.stage);
     if (stages.some((s) => s === 2 || s === 3)) {
@@ -165,16 +187,28 @@ export const PipelineTracker: React.FC<PipelineTrackerProps> = ({
           </div>
         )}
 
-        {(job?.status === "FAILED" || (errorMsg !== null && episode.currentStage >= 7)) && (
-          <div>
-            <button
-              type="button"
-              className="btn btn-primary"
-              disabled={retrying}
-              onClick={handleRetry}
-            >
-              {retrying ? "Retrying Stage..." : "Resume / Retry Stage"}
-            </button>
+        {(job?.status === "FAILED" || (errorMsg !== null && episode.currentStage >= 7) || canReopenScript) && (
+          <div className="pill-group">
+            {(job?.status === "FAILED" || (errorMsg !== null && episode.currentStage >= 7)) && (
+              <button
+                type="button"
+                className="btn btn-primary"
+                disabled={retrying || reopeningScript}
+                onClick={handleRetry}
+              >
+                {retrying ? "Retrying Stage..." : "Resume / Retry Stage"}
+              </button>
+            )}
+            {canReopenScript && (
+              <button
+                type="button"
+                className="btn btn-secondary"
+                disabled={retrying || reopeningScript}
+                onClick={handleReopenScript}
+              >
+                {reopeningScript ? "Membuka Naskah..." : "Revisi Naskah (Gate 2)"}
+              </button>
+            )}
           </div>
         )}
 
