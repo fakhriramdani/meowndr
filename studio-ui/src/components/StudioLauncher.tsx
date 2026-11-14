@@ -112,6 +112,12 @@ export const StudioLauncher: React.FC<StudioLauncherProps> = ({
     onEpisodeCreated(res.data.episode, res.data.jobId);
   }
 
+  const launchButtonLabel = (() => {
+    if (!inFlight) return "Create Episode";
+    if (mode === "TopicResearchMode") return "Discovering Trends...";
+    return "Launching Episode...";
+  })();
+
   return (
     <section className="workspace" data-enter aria-labelledby="launcher-title">
       <div className="card" style={{ display: "flex", flexDirection: "column", gap: 20 }}>
@@ -216,11 +222,7 @@ export const StudioLauncher: React.FC<StudioLauncherProps> = ({
             disabled={inFlight}
             onClick={handleLaunch}
           >
-            {inFlight
-              ? mode === "TopicResearchMode"
-                ? "Discovering Trends..."
-                : "Launching Episode..."
-              : "Create Episode"}
+            {launchButtonLabel}
           </button>
         </div>
       </div>

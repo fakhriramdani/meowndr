@@ -2,6 +2,13 @@ import React, { useEffect, useState } from "react";
 import type { EpisodeDetail, JobStatus } from "../api/types";
 import { StudioClient } from "../api/studioClient";
 
+const STAGE_BADGE_MAP: Record<string, string> = {
+  COMPLETED: "badge-ok",
+  FAILED: "badge-danger",
+  RUNNING: "badge-blue",
+  PENDING: "badge-lavender",
+};
+
 interface PipelineTrackerProps {
   client: StudioClient;
   episode: EpisodeDetail;
@@ -85,14 +92,7 @@ export const PipelineTracker: React.FC<PipelineTrackerProps> = ({
 
         <div style={{ display: "flex", flexDirection: "column", gap: 10 }} aria-live="polite">
           {(job?.stageStates ?? []).map((st) => {
-            const badgeClass =
-              st.status === "COMPLETED"
-                ? "badge-ok"
-                : st.status === "FAILED"
-                ? "badge-danger"
-                : st.status === "RUNNING"
-                ? "badge-blue"
-                : "badge-lavender";
+            const badgeClass = STAGE_BADGE_MAP[st.status] ?? "badge-lavender";
             return (
               <div
                 key={st.stage}

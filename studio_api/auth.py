@@ -102,6 +102,13 @@ class AuthService:
             if jwt_secret is not None
             else os.getenv("STUDIO_JWT_SECRET", "dev-insecure-change-me-in-production")
         )
+        env_mode = os.getenv("STUDIO_ENV", "development").strip().lower()
+        if env_mode == "production" and (
+            not self.jwt_secret or self.jwt_secret == "dev-insecure-change-me-in-production"
+        ):
+            raise RuntimeError(
+                "STUDIO_JWT_SECRET must be set to a strong secret when STUDIO_ENV=production."
+            )
         if cookie_secure is None:
             env_secure = os.getenv("STUDIO_COOKIE_SECURE", "true").strip().lower()
             self.cookie_secure = env_secure not in {"false", "0", "no"}
@@ -208,7 +215,9 @@ class AuthService:
 
 
 def extract_client_ip(request: Request) -> str:
-    forwarded = request.headers.get("X-Forwarded-For", "").split(",")[0].strip()
-    if forwarded:
-        return forwarded
+    trust_proxy = os.getenv("STUDIO_TRUST_PROXY", "false").strip().lower() in {"true", "1", "yes"}
+    if trust_proxy:
+        forwarded = request.headers.get("X-Forwarded-For", "").split(",")[0].strip()
+        if forwarded:
+            return forwarded
     return request.client.host if request.client else "127.0.0.1"

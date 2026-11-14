@@ -109,3 +109,20 @@ def test_trusted_origins_cors_allows_subdomain_and_rejects_evil(tmp_path: Path) 
         },
     )
     assert evil_cors.headers.get("access-control-allow-origin") is None
+
+
+def test_production_fails_fast_when_jwt_secret_is_insecure(monkeypatch) -> None:
+    monkeypatch.setenv("STUDIO_ENV", "production")
+    monkeypatch.delenv("STUDIO_JWT_SECRET", raising=False)
+    try:
+        AuthService(admin_email="creator@ramdanistudio.com", password_hash="x")
+        assert False, "Expected RuntimeError for default JWT secret in production"
+    except RuntimeError as exc:
+        assert "STUDIO_JWT_SECRET" in str(exc)
+
+    monkeypatch.setenv("STUDIO_JWT_SECRET", "dev-insecure-change-me-in-production")
+    try:
+        AuthService(admin_email="creator@ramdanistudio.com", password_hash="x")
+        assert False, "Expected RuntimeError for dev-insecure secret in production"
+    except RuntimeError as exc:
+        assert "STUDIO_JWT_SECRET" in str(exc)

@@ -204,6 +204,32 @@ class LiveLibraryAdapter:
             )
         return report
 
+    def _condense_clause(self, text: str, max_words: int = 17) -> str:
+        """Condense text to <= max_words on sentence or clause boundaries without mid-clause truncation."""
+        words = text.split()
+        if len(words) <= max_words:
+            return text.strip()
+        sentences = [s.strip() for s in re.split(r"(?<=[.!?])\s+", text.strip()) if s.strip()]
+        kept: list[str] = []
+        total = 0
+        for sentence in sentences:
+            s_words = sentence.split()
+            if total + len(s_words) <= max_words or not kept:
+                kept.append(sentence)
+                total += len(s_words)
+            else:
+                break
+        candidate = " ".join(kept).strip()
+        if len(candidate.split()) <= max_words:
+            return candidate
+        clauses = [c.strip() for c in re.split(r"(?<=[,;:])\s+", candidate) if c.strip()]
+        if len(clauses) > 1:
+            trimmed = clauses[0].rstrip(",;:")
+            if not trimmed.endswith((".", "!", "?")):
+                trimmed += "."
+            return trimmed
+        return candidate
+
     def condense_script(self, slug: str) -> NarrationScriptState:
         self.store.ensure_mutable(slug)
         ep = self.store.get_episode(slug)
@@ -211,17 +237,19 @@ class LiveLibraryAdapter:
             raise AppError("VALIDATION_ERROR", "No script found to condense.", 400)
         condensed_beats: list[ScriptBeat] = []
         for b in ep.narrationScript.beats:
-            words = b.text.split()
-            trimmed = " ".join(words[:16])
+            trimmed = self._condense_clause(b.text, max_words=17)
             condensed_beats.append(
                 ScriptBeat(id=b.id, beatNumber=b.beatNumber, beatLabel=b.beatLabel, text=trimmed)
             )
         ep_dir = resolve_safe_episode_path(self.episodes_root, slug)
         script_path = ep_dir / "narration" / "script.json"
-        script_path.write_text(
-            json.dumps({"beats": [b.model_dump() for b in condensed_beats]}, indent=2, ensure_ascii=False),
-            encoding="utf-8",
-        )
+        existing = json.loads(script_path.read_text(encoding="utf-8")) if script_path.exists() else {}
+        spoken_text = " ".join(b.text.strip() for b in condensed_beats if b.text.strip()).strip()
+        existing["beats"] = [b.model_dump() for b in condensed_beats]
+        existing["spoken_text"] = spoken_text
+        existing["text"] = spoken_text
+        existing["tts"] = spoken_text
+        script_path.write_text(json.dumps(existing, indent=2, ensure_ascii=False), encoding="utf-8")
         return analyze_narration_beats(condensed_beats)
 
     def prepare_gate_2_approval(self, slug: str, notes: str | None = None) -> list[int]:
@@ -251,21 +279,88 @@ class LiveLibraryAdapter:
             raise AppError("VALIDATION_ERROR", f"Stage {stage} cannot be retried via render pipeline.", 400)
         return list(range(stage, 12))
 
+    def _run_tool(self, args: list[str], stage: int) -> str:
+        proc = subprocess.run(
+            args,
+            cwd=str(self.repo_root),
+            capture_output=True,
+            text=True,
+        )
+        if proc.returncode != 0:
+            detail = (proc.stderr or proc.stdout or f"Stage {stage} command failed").strip()
+            raise RuntimeError(detail)
+        return (proc.stdout or "").strip()
+
+    def _measure_audio_duration_sec(self, ep_dir: Path) -> float | None:
+        audio_plan = ep_dir / "audio" / "audio_plan.json"
+        if audio_plan.exists():
+            try:
+                data = json.loads(audio_plan.read_text(encoding="utf-8"))
+                for key in ("total_duration_sec", "duration_sec", "narration_duration_sec"):
+                    if key in data and data[key] is not None:
+                        return float(data[key])
+            except (OSError, ValueError, TypeError, json.JSONDecodeError) as exc:
+                _log.warn("adapter.audio_plan_parse", "Could not parse audio_plan.json", error=str(exc))
+        timing_js = ep_dir / "narration" / "timing_narrator.js"
+        if timing_js.exists():
+            match = re.search(r"durationSec\s*[:=]\s*([0-9]+(?:\.[0-9]+)?)", timing_js.read_text(encoding="utf-8"))
+            if match:
+                return float(match.group(1))
+        return None
+
     def execute_render_pipeline(
         self, slug: str, stages: list[int], emit: StageEmitter
     ) -> dict[str, Any]:
-        pipeline_cli = self.repo_root / "library" / "tools" / "production_pipeline.py"
+        ep = self.store.get_episode(slug)
+        ep_dir = resolve_safe_episode_path(self.episodes_root, slug)
+        engine = self._engine(slug=slug, niche=ep.niche, title=ep.title)
+        tools_dir = self.repo_root / "library" / "tools"
+        pipeline_cli = tools_dir / "production_pipeline.py"
+        narration_cli = tools_dir / "generate_narration.py"
+        scaffold_cli = tools_dir / "scaffold_episode.py"
+
         for st in stages:
             emit(st, "RUNNING", f"Executing Stage {st}...")
-            if st == 9:
-                proc = subprocess.run(
-                    [sys.executable, str(pipeline_cli), "bgm", slug],
-                    cwd=str(self.repo_root),
-                    capture_output=True,
-                    text=True,
-                )
-                if proc.returncode != 0:
-                    raise RuntimeError(proc.stderr or proc.stdout or f"Stage {st} failed")
+            if st == 7:
+                storyboard_path = ep_dir / "storyboard" / "storyboard.json"
+                if not storyboard_path.exists():
+                    engine.run_stage_7_storyboard()
+                if not (ep_dir / "papercut" / "package.json").exists():
+                    self._run_tool([sys.executable, str(scaffold_cli), slug, "--force"], st)
+            elif st == 8:
+                asset_plan_path = ep_dir / "assets" / "asset_plan.json"
+                if not asset_plan_path.exists():
+                    engine.run_stage_8_visuals()
+            elif st == 9:
+                self._run_tool([sys.executable, str(narration_cli), slug], st)
+                measured = self._measure_audio_duration_sec(ep_dir)
+                if measured is not None and measured > 50.0:
+                    emit(
+                        9,
+                        "FAILED",
+                        f"Audio duration {measured:.1f}s exceeds 50.0s target at 1.0x pace; artificial speed-up prohibited.",
+                    )
+                    self.condense_script(slug)
+                    state_path = ep_dir / "content_factory" / "workflow_state.json"
+                    if state_path.exists():
+                        state = json.loads(state_path.read_text(encoding="utf-8"))
+                        state["current_stage"] = 6
+                        state["status"] = "PACING_REMEDIATION"
+                        state["approval_gates"]["gate_2_script"]["status"] = "PENDING"
+                        state_path.write_text(json.dumps(state, indent=2), encoding="utf-8")
+                    self.store.write_studio_meta(slug, {"measuredAudioDurationSec": measured})
+                    return {
+                        "status": "PACING_REMEDIATION",
+                        "gate": 2,
+                        "measuredDurationSec": measured,
+                    }
+                self._run_tool([sys.executable, str(pipeline_cli), "bgm", slug], st)
+            elif st == 10:
+                self._run_tool([sys.executable, str(pipeline_cli), "validate", slug], st)
+                self._run_tool([sys.executable, str(pipeline_cli), "render", slug], st)
+            elif st == 11:
+                self._run_tool([sys.executable, str(pipeline_cli), "qa", slug], st)
+                self._run_tool([sys.executable, str(pipeline_cli), "publish-kit", slug], st)
             emit(st, "COMPLETED", f"Stage {st} completed.")
         return {"status": "COMPLETED", "gate": 3}
 

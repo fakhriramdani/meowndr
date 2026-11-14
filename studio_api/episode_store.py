@@ -9,6 +9,7 @@ from pathlib import Path
 from typing import Any
 
 from studio_api.errors import AppError
+from studio_api.logger import get_logger
 from studio_api.pacing import analyze_narration_beats
 from studio_api.schemas import (
     AgeCategory,
@@ -23,6 +24,8 @@ from studio_api.schemas import (
     ScriptBeat,
     WorkflowMode,
 )
+
+_log = get_logger("episode_store")
 
 SLUG_RE = re.compile(r"^[a-z0-9-]+$")
 PROTECTED_SLUGS: frozenset[str] = frozenset({"episode-01-v4"})
@@ -316,5 +319,11 @@ class EpisodeStore:
             return None
         try:
             return PublishingKit(**raw)
-        except Exception:
+        except Exception as exc:
+            _log.warn(
+                "store.publishing_kit_invalid",
+                "Failed to parse publishing-kit.json",
+                path=str(ep_dir / "publishing" / "publishing-kit.json"),
+                error=str(exc),
+            )
             return None

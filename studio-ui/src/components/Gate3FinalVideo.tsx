@@ -47,6 +47,11 @@ export const Gate3FinalVideo: React.FC<Gate3FinalVideoProps> = ({
   }
 
   const kit = episode.publishingKit;
+  const uploadButtonLabel = (() => {
+    if (uploading) return "Uploading to CloudArchive...";
+    if (errorMsg) return "Upload Failed — Retry";
+    return "Approve & Upload to CloudArchive";
+  })();
 
   return (
     <section className="workspace" data-enter aria-labelledby="gate3-heading">
@@ -209,11 +214,7 @@ export const Gate3FinalVideo: React.FC<Gate3FinalVideoProps> = ({
               disabled={uploading || !auditPassed || episode.isBaselineProtected}
               onClick={handleUpload}
             >
-              {uploading
-                ? "Uploading to CloudArchive..."
-                : errorMsg
-                ? "Upload Failed — Retry"
-                : "Approve & Upload to CloudArchive"}
+              {uploadButtonLabel}
             </button>
           )}
         </div>
