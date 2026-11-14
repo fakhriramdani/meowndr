@@ -30,48 +30,77 @@ export const PipelineTracker: React.FC<PipelineTrackerProps> = ({
 
   useEffect(() => {
     let closed = false;
+    let fatal = false;
     let pollTimer: number | null = null;
+    let source: EventSource | null = null;
+
+    function stopPolling() {
+      if (pollTimer !== null) {
+        window.clearInterval(pollTimer);
+        pollTimer = null;
+      }
+      if (source) {
+        source.close();
+        source = null;
+      }
+    }
 
     async function pollOnce() {
       const res = await client.getJobStatus(episode.episodeSlug, jobId);
-      if (closed || !res.ok) return;
+      if (closed) return;
+      if (!res.ok) {
+        fatal = true;
+        stopPolling();
+        setErrorMsg(
+          res.error.code === "JOB_NOT_FOUND"
+            ? "Job session no longer exists on server (likely due to a server restart). Click Resume / Retry Stage below."
+            : res.error.message
+        );
+        return;
+      }
+      setErrorMsg(null);
       setJob(res.data);
       if (res.data.status !== "RUNNING") {
+        stopPolling();
         onJobTerminal(res.data);
       }
     }
 
-    pollOnce();
+    void pollOnce();
     const url = client.jobEventsUrl(episode.episodeSlug, jobId);
-    const source = new EventSource(url, { withCredentials: true });
+    source = new EventSource(url, { withCredentials: true });
 
     const refresh = () => {
       void pollOnce();
     };
     source.addEventListener("stage", refresh);
     source.addEventListener("terminal", () => {
-      source.close();
+      stopPolling();
       void pollOnce();
     });
     source.onerror = () => {
-      source.close();
-      if (!closed) {
-        pollTimer = window.setInterval(pollOnce, 600);
+      if (source) {
+        source.close();
+        source = null;
+      }
+      if (!closed && !fatal && pollTimer === null) {
+        pollTimer = window.setInterval(() => {
+          void pollOnce();
+        }, 1000);
       }
     };
 
     return () => {
       closed = true;
-      source.close();
-      if (pollTimer !== null) window.clearInterval(pollTimer);
+      stopPolling();
     };
   }, [client, episode.episodeSlug, jobId, onJobTerminal]);
 
   async function handleRetry() {
-    if (!job) return;
     setRetrying(true);
     setErrorMsg(null);
-    const res = await client.retryStage(episode.episodeSlug, job.currentStage || 7);
+    const stageToRetry = job?.currentStage || (episode.currentStage >= 7 ? episode.currentStage : 7);
+    const res = await client.retryStage(episode.episodeSlug, stageToRetry);
     setRetrying(false);
     if (!res.ok) {
       setErrorMsg(res.error.message);
@@ -136,7 +165,7 @@ export const PipelineTracker: React.FC<PipelineTrackerProps> = ({
           </div>
         )}
 
-        {job?.status === "FAILED" && (
+        {(job?.status === "FAILED" || (errorMsg !== null && episode.currentStage >= 7)) && (
           <div>
             <button
               type="button"
@@ -144,7 +173,7 @@ export const PipelineTracker: React.FC<PipelineTrackerProps> = ({
               disabled={retrying}
               onClick={handleRetry}
             >
-              {retrying ? "Retrying Stage..." : "Retry Stage"}
+              {retrying ? "Retrying Stage..." : "Resume / Retry Stage"}
             </button>
           </div>
         )}
