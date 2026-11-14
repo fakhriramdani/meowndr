@@ -93,7 +93,7 @@ export const App: React.FC = () => {
       setEpisode(res.data);
       if (status.status === "PACING_REMEDIATION" || status.gate === 2) {
         setView("gate2");
-      } else if (status.gate === 1) {
+      } else if (status.gate === 1 || (status.status === "COMPLETED" && res.data.gates.gate1 === "PENDING" && res.data.hookVariants.length > 0)) {
         setView("gate1");
       } else if (status.gate === 3) {
         setView("gate3");
@@ -176,7 +176,11 @@ export const App: React.FC = () => {
           </button>
           <button
             type="button"
-            className={`rail-step ${view === "gate1" ? "active" : ""}`}
+            className={`rail-step ${
+              view === "gate1" || (view === "tracker" && (episode?.currentStage ?? 0) <= 4)
+                ? "active"
+                : ""
+            }`}
             disabled={!episode}
             onClick={() => setView("gate1")}
           >
@@ -184,7 +188,13 @@ export const App: React.FC = () => {
           </button>
           <button
             type="button"
-            className={`rail-step ${view === "gate2" ? "active" : ""}`}
+            className={`rail-step ${
+              view === "gate2" ||
+              (view === "tracker" &&
+                ((episode?.currentStage ?? 0) === 5 || (episode?.currentStage ?? 0) === 6))
+                ? "active"
+                : ""
+            }`}
             disabled={!episode || episode.gates.gate1 !== "APPROVED"}
             onClick={() => setView("gate2")}
           >
@@ -192,7 +202,9 @@ export const App: React.FC = () => {
           </button>
           <button
             type="button"
-            className={`rail-step ${view === "tracker" ? "active" : ""}`}
+            className={`rail-step ${
+              view === "tracker" && (episode?.currentStage ?? 0) >= 7 ? "active" : ""
+            }`}
             disabled={!episode || !activeJobId}
             onClick={() => setView("tracker")}
           >

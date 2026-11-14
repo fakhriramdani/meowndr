@@ -80,11 +80,22 @@ export const PipelineTracker: React.FC<PipelineTrackerProps> = ({
     onRetryStarted(res.data.episode, res.data.jobId);
   }
 
+  const trackerBadgeLabel = (() => {
+    const stages = (job?.stageStates ?? []).map((s) => s.stage);
+    if (stages.some((s) => s === 2 || s === 3)) {
+      return "Stage 2–3 · FactResearch & HookGeneration";
+    }
+    if (stages.includes(5)) {
+      return "Stage 5 · NarrationScript Generation";
+    }
+    return "Stage 7–11 · Automated Render Pipeline";
+  })();
+
   return (
     <section className="workspace" data-enter aria-labelledby="tracker-heading">
       <div className="card" style={{ display: "flex", flexDirection: "column", gap: 16 }}>
         <div>
-          <span className="badge badge-blue">Automated Render Pipeline</span>
+          <span className="badge badge-blue">{trackerBadgeLabel}</span>
           <h2 id="tracker-heading" style={{ marginTop: 6 }}>
             {episode.title}
           </h2>
