@@ -33,13 +33,13 @@ export type InteractionType =
   | 'celebrate'
   | 'explain_with_gesture';
 
-export type ReactionAnimationType =
-  | 'squash_stretch'
-  | 'recoil_jump'
-  | 'duck'
-  | 'look_up_awe'
-  | 'balance_loss'
-  | 'bounce';
+export type InteractiveActionType =
+  | 'operate_lever'
+  | 'scan_instrument'
+  | 'turn_valve'
+  | 'shield_shockwave'
+  | 'measure_caliper'
+  | 'launch_experiment';
 
 export interface MovementConfig {
   type?: MovementType;
@@ -50,7 +50,7 @@ export interface MovementConfig {
   startFrame?: number;
   duration?: number;
   easing?: 'linear' | 'easeOut' | 'easeInOut';
-  paceLaps?: number; // for type: 'pace' (mondar-mandir), number of back-and-forth laps
+  paceLaps?: number;
 }
 
 export interface InteractionConfig {
@@ -61,11 +61,13 @@ export interface InteractionConfig {
   intensity?: number;
 }
 
-export interface ReactionConfig {
-  type?: ReactionAnimationType;
-  triggerFrame?: number;
+export interface InteractiveActionConfig {
+  type: InteractiveActionType;
+  target?: {x: number; y: number};
+  startFrame?: number;
   duration?: number;
-  magnitude?: number;
+  intensity?: number;
+  label?: string;
 }
 
 export interface DynamicCatScientistProps {
@@ -81,7 +83,8 @@ export interface DynamicCatScientistProps {
   movement?: MovementConfig;
   movements?: MovementConfig[];
   interaction?: InteractionConfig;
-  reaction?: ReactionConfig;
+  interactiveAction?: InteractiveActionConfig;
+  interactiveActions?: InteractiveActionConfig[];
   gaze?: GazeDirection;
   cues?: PresenterCue[];
   dialogue?: DialogueConfig;
@@ -92,7 +95,7 @@ export interface DynamicCatScientistProps {
 }
 
 /**
- * Pure kinematic calculation function for deterministic testing and rendering.
+ * Pure kinematic & interactive choreography calculation function.
  */
 export function calculateCatKinematics(
   frame: number,
@@ -106,7 +109,8 @@ export function calculateCatKinematics(
     movement?: MovementConfig;
     movements?: MovementConfig[];
     interaction?: InteractionConfig;
-    reaction?: ReactionConfig;
+    interactiveAction?: InteractiveActionConfig;
+    interactiveActions?: InteractiveActionConfig[];
     gaze?: GazeDirection;
     cues?: PresenterCue[];
     dialogue?: DialogueConfig;
@@ -126,7 +130,8 @@ export function calculateCatKinematics(
     movement,
     movements,
     interaction,
-    reaction,
+    interactiveAction,
+    interactiveActions,
     gaze,
     cues,
     dialogue,
@@ -170,7 +175,6 @@ export function calculateCatKinematics(
   let autoFace = baseFace;
 
   if (movementList.length > 0) {
-    // If the first movement defines an initial startX or entry, prime curX
     const firstM = movementList[0];
     if (firstM.type === 'enter_left') curX = -180;
     else if (firstM.type === 'enter_right') curX = 1260;
@@ -209,16 +213,13 @@ export function calculateCatKinematics(
       }
 
       if (frame < startF) {
-        // Not reached this segment yet, stay at current position
         break;
       } else if (frame >= endF) {
-        // Past this segment, update to end coordinates
         curX = eX;
         curY = eY;
         if (eX > sX + 5) autoFace = 1;
         else if (eX < sX - 5) autoFace = -1;
       } else {
-        // Currently inside this movement segment!
         isMoving = true;
         const progress = interpolate(frame, [startF, endF], [0, 1], {
           extrapolateLeft: 'clamp',
@@ -226,7 +227,6 @@ export function calculateCatKinematics(
         });
 
         if (m.type === 'pace') {
-          // Mondar-mandir back and forth between sX and eX
           const laps = m.paceLaps ?? 2;
           const lapDur = Math.max(15, durF / (laps * 2));
           const cycleProgress = ((frame - startF) % (lapDur * 2)) / lapDur;
@@ -289,23 +289,19 @@ export function calculateCatKinematics(
         const tx = interaction.target.x;
         const ty = interaction.target.y;
 
-        // Auto face towards target when interacting
         if (!isMoving) {
           activeFace = tx >= curX ? 1 : -1;
         }
 
-        // Calculate dynamic pointing angle
         if (interaction.type === 'point_at' || interaction.type === 'explain_with_gesture') {
           activeState = 'explaining';
           const armY = curY - size * 0.45;
           const dx = tx - curX;
           const dy = ty - armY;
           const rawDeg = (Math.atan2(dy, activeFace === 1 ? dx : -dx) * 180) / Math.PI;
-          // Clamp to natural anatomical arm range
           activePointAngle = Math.max(-80, Math.min(45, Math.round(rawDeg)));
         }
 
-        // Gaze tracking towards target coordinates
         if (interaction.type === 'look_at' || interaction.type === 'point_at' || interaction.type === 'reach_for') {
           const eyeY = curY - size * 0.7;
           if (ty < eyeY - size * 0.25) activeGaze = 'up';
@@ -327,63 +323,123 @@ export function calculateCatKinematics(
     }
   }
 
-  // 4. Physical Reaction Dynamics & Squash-Stretch
+  // 4. Interactive Action Choreography (Replaces legacy passive reaction)
+  const actionList: InteractiveActionConfig[] = [];
+  if (interactiveActions && interactiveActions.length > 0) {
+    actionList.push(...interactiveActions);
+  } else if (interactiveAction) {
+    actionList.push(interactiveAction);
+  }
+
   let bodyOffset = {x: 0, y: -walkBob, rotate: 0};
   let squashStretch = {scaleX: 1, scaleY: 1};
+  let activeGadget: {
+    type: InteractiveActionType;
+    progress: number;
+    pawX: number;
+    pawY: number;
+    targetX: number;
+    targetY: number;
+    face: 1 | -1;
+    label?: string;
+  } | null = null;
 
-  if (reaction && reaction.triggerFrame !== undefined) {
-    const trig = reaction.triggerFrame;
-    const rDur = reaction.duration ?? 26;
-    const mag = reaction.magnitude ?? 1.0;
-    const rf = frame - trig;
+  for (const act of actionList) {
+    const aStart = act.startFrame ?? 30;
+    const aDur = Math.max(24, act.duration ?? 75);
+    const rf = frame - aStart;
+    if (rf >= 0 && rf <= aDur) {
+      const progress = rf / aDur;
+      const intensity = act.intensity ?? 1.0;
+      const envelope = Math.sin(progress * Math.PI);
+      const tx = act.target?.x ?? (activeFace === 1 ? curX + 340 : curX - 340);
+      const ty = act.target?.y ?? 680;
+      activeFace = tx >= curX ? 1 : -1;
 
-    if (rf >= 0 && rf < rDur) {
-      if (reaction.type === 'recoil_jump') {
-        // Airborne jump backwards + shock
-        if (rf < 14) {
-          activeState = 'surprised';
-          const t = rf / 14;
-          const jumpArc = Math.sin(t * Math.PI);
-          const recoilX = -activeFace * (50 * mag) * (rf / 14);
-          const recoilY = -(65 * mag) * jumpArc;
-          bodyOffset.x += recoilX;
-          bodyOffset.y += recoilY;
-          bodyOffset.rotate = -activeFace * (10 * mag) * jumpArc;
-        } else if (rf < 20) {
-          // Squash on impact landing
-          activeState = 'thinking';
-          const tLand = (rf - 14) / 6;
-          const squash = Math.sin(tLand * Math.PI) * 0.22 * mag;
-          squashStretch.scaleX = 1 + squash;
-          squashStretch.scaleY = 1 - squash;
-          bodyOffset.x += -activeFace * (50 * mag);
-        } else {
-          // Re-stabilize & recover
-          const tRecover = (rf - 20) / 6;
-          const settle = (1 - tRecover) * 0.05 * mag;
-          squashStretch.scaleY = 1 + settle;
-          bodyOffset.x += -activeFace * (50 * mag) * (1 - tRecover * 0.2);
-          activeState = 'curious';
-        }
-      } else if (reaction.type === 'duck') {
-        const duckProgress = Math.sin((rf / rDur) * Math.PI);
-        squashStretch.scaleY = 1 - 0.28 * duckProgress * mag;
-        squashStretch.scaleX = 1 + 0.15 * duckProgress * mag;
-        bodyOffset.y += 24 * duckProgress * mag;
-        activeState = 'ducking';
-      } else if (reaction.type === 'look_up_awe') {
-        activeGaze = 'up';
+      // Dynamic aim toward apparatus target
+      const armY = curY - size * 0.48;
+      const dx = tx - curX;
+      const dy = ty - armY;
+      const aimDeg = Math.max(-75, Math.min(40, Math.round((Math.atan2(dy, activeFace === 1 ? dx : -dx) * 180) / Math.PI)));
+
+      if (act.type === 'operate_lever') {
+        // Step forward toward lever, pull down with torque, step back
+        const stepIn = Math.sin(progress * Math.PI) * 52 * intensity;
+        const pullCycle = Math.sin(progress * Math.PI * 2);
+        bodyOffset.x += activeFace * stepIn;
+        bodyOffset.rotate = activeFace * (pullCycle * 9 * intensity);
+        squashStretch.scaleY = 1 - Math.abs(pullCycle) * 0.08;
+        squashStretch.scaleX = 1 + Math.abs(pullCycle) * 0.06;
+        activeState = progress < 0.5 ? 'pointing' : 'explaining';
+        activePointAngle = -25 + pullCycle * 32;
+        activeGaze = ty < armY ? 'up' : 'right';
+      } else if (act.type === 'scan_instrument') {
+        // Hold scanner lens & sweep vertically across the target apparatus
+        const sweep = Math.sin(progress * Math.PI * 3);
+        bodyOffset.x += activeFace * 28 * envelope;
+        bodyOffset.y -= Math.abs(sweep) * 8;
         activeState = 'curious';
-        bodyOffset.rotate = -activeFace * 8;
-      } else if (reaction.type === 'balance_loss') {
-        const wobble = Math.sin(rf * 0.5) * 12 * Math.exp(-rf / 14) * mag;
-        bodyOffset.rotate = wobble;
+        activePointAngle = aimDeg + sweep * 16;
+        activeGaze = sweep < 0 ? 'up' : 'down';
+      } else if (act.type === 'turn_valve') {
+        // Lean in and crank rotary valve wheel 3 times
+        const crank = Math.sin(progress * Math.PI * 6);
+        bodyOffset.x += activeFace * 42 * envelope;
+        bodyOffset.rotate = activeFace * crank * 7 * intensity;
+        bodyOffset.y += Math.abs(crank) * 6;
+        activeState = 'explaining';
+        activePointAngle = -15 + crank * 22;
+      } else if (act.type === 'shield_shockwave') {
+        // Brace against kinetic blast while holding up field shield; pushed back slightly with vibration
+        const pushBack = envelope * 44 * intensity;
+        const tremor = Math.sin(rf * 1.1) * 4 * envelope;
+        bodyOffset.x -= activeFace * pushBack;
+        bodyOffset.y += 14 * envelope + tremor;
+        bodyOffset.rotate = -activeFace * 10 * envelope;
+        squashStretch.scaleY = 1 - 0.14 * envelope;
+        squashStretch.scaleX = 1 + 0.1 * envelope;
         activeState = 'surprised';
-      } else if (reaction.type === 'bounce') {
-        const bounceH = Math.abs(Math.sin(rf * 0.4)) * 20 * mag;
-        bodyOffset.y -= bounceH;
-        activeState = 'excited';
+        activePointAngle = -45;
+        activeGaze = 'up';
+      } else if (act.type === 'measure_caliper') {
+        // Extend unrolling caliper tape toward apparatus & nod
+        const nod = Math.sin(progress * Math.PI * 4) * 5;
+        bodyOffset.x += activeFace * 34 * envelope;
+        bodyOffset.rotate = activeFace * nod;
+        activeState = 'thinking';
+        activePointAngle = aimDeg;
+        activeGaze = 'up';
+      } else if (act.type === 'launch_experiment') {
+        // Press plunger down on beat, then hop in excitement as pulse fires to apparatus
+        if (progress < 0.35) {
+          const press = progress / 0.35;
+          bodyOffset.y += press * 22 * intensity;
+          squashStretch.scaleY = 1 - press * 0.16;
+          squashStretch.scaleX = 1 + press * 0.12;
+          activeState = 'pointing';
+          activePointAngle = 25;
+        } else {
+          const hop = Math.abs(Math.sin(((progress - 0.35) / 0.65) * Math.PI * 2));
+          bodyOffset.y -= hop * 46 * intensity;
+          activeState = 'excited';
+          activePointAngle = aimDeg;
+          activeGaze = 'up';
+        }
       }
+
+      const pawX = curX + bodyOffset.x + activeFace * (size * 0.42);
+      const pawY = curY + bodyOffset.y - size * 0.48;
+      activeGadget = {
+        type: act.type,
+        progress,
+        pawX,
+        pawY,
+        targetX: tx,
+        targetY: ty,
+        face: activeFace,
+        label: act.label,
+      };
+      break;
     }
   }
 
@@ -408,13 +464,167 @@ export function calculateCatKinematics(
     bodyOffset,
     squashStretch,
     activeMouthShape,
+    activeGadget,
   };
 }
 
-/**
- * DynamicCatScientist: Active, expressive presenter that moves freely across environments,
- * interacts with scientific apparatus and molecular models, and reacts to physics events.
- */
+const renderInteractiveGadget = (
+  gadget: NonNullable<ReturnType<typeof calculateCatKinematics>['activeGadget']>
+) => {
+  const {type, progress, pawX, pawY, targetX, targetY, face, label} = gadget;
+  const env = Math.sin(progress * Math.PI);
+
+  return (
+    <svg
+      viewBox="0 0 1080 1920"
+      width="1080"
+      height="1920"
+      style={{
+        position: 'absolute',
+        inset: 0,
+        pointerEvents: 'none',
+        overflow: 'visible',
+        zIndex: 45,
+      }}
+    >
+      {type === 'scan_instrument' && (
+        <g opacity={Math.min(1, env * 1.4)}>
+          {/* Laser Telemetry Cone from Cat Paw to Apparatus */}
+          <polygon
+            points={`${pawX},${pawY} ${targetX - 45},${targetY - 35 + Math.sin(progress * Math.PI * 3) * 55} ${targetX + 45},${targetY + 35 + Math.sin(progress * Math.PI * 3) * 55}`}
+            fill="#38BDF8"
+            opacity="0.22"
+          />
+          <line
+            x1={pawX}
+            y1={pawY}
+            x2={targetX}
+            y2={targetY + Math.sin(progress * Math.PI * 3) * 55}
+            stroke="#38BDF8"
+            strokeWidth="4"
+            strokeDasharray="10 6"
+          />
+          {/* Handheld Scanner Gadget at Paw */}
+          <circle cx={pawX} cy={pawY} r="22" fill="#0F172A" stroke="#38BDF8" strokeWidth="4" />
+          <circle cx={pawX} cy={pawY} r="10" fill="#38BDF8" />
+          {/* Target Crosshair Reticle on Apparatus */}
+          <circle
+            cx={targetX}
+            cy={targetY + Math.sin(progress * Math.PI * 3) * 55}
+            r="26"
+            fill="none"
+            stroke="#FACC15"
+            strokeWidth="3.5"
+            strokeDasharray="8 6"
+          />
+        </g>
+      )}
+
+      {type === 'measure_caliper' && (
+        <g opacity={Math.min(1, env * 1.4)}>
+          {/* Unrolling Yellow Paper Measuring Tape to Target */}
+          <line
+            x1={pawX}
+            y1={pawY}
+            x2={pawX + (targetX - pawX) * Math.min(1, progress * 1.6)}
+            y2={pawY + (targetY - pawY) * Math.min(1, progress * 1.6)}
+            stroke="#FACC15"
+            strokeWidth="12"
+            strokeLinecap="round"
+          />
+          <line
+            x1={pawX}
+            y1={pawY}
+            x2={pawX + (targetX - pawX) * Math.min(1, progress * 1.6)}
+            y2={pawY + (targetY - pawY) * Math.min(1, progress * 1.6)}
+            stroke="#713F12"
+            strokeWidth="3"
+            strokeDasharray="6 10"
+          />
+          <rect x={pawX - 20} y={pawY - 20} width="40" height="40" rx="10" fill="#CA8A04" stroke="#FEF08A" strokeWidth="3" />
+          {label && (
+            <text
+              x={(pawX + targetX) / 2}
+              y={(pawY + targetY) / 2 - 18}
+              textAnchor="middle"
+              fill="#FEF08A"
+              fontSize="22"
+              fontWeight="900"
+              fontFamily="monospace"
+            >
+              {label}
+            </text>
+          )}
+        </g>
+      )}
+
+      {type === 'operate_lever' && (
+        <g transform={`translate(${pawX + face * 24}, ${pawY + 10})`} opacity={Math.min(1, env * 1.4)}>
+          <rect x="-28" y="-12" width="56" height="42" rx="8" fill="#334155" stroke="#F8FAFC" strokeWidth="3" />
+          <g transform={`rotate(${Math.sin(progress * Math.PI * 2) * 38})`}>
+            <line x1="0" y1="0" x2="0" y2="-64" stroke="#F8FAFC" strokeWidth="7" strokeLinecap="round" />
+            <circle cx="0" cy="-68" r="14" fill="#EF4444" stroke="#FEF08A" strokeWidth="3" />
+          </g>
+        </g>
+      )}
+
+      {type === 'turn_valve' && (
+        <g
+          transform={`translate(${pawX + face * 26}, ${pawY}) rotate(${progress * 540})`}
+          opacity={Math.min(1, env * 1.4)}
+        >
+          <circle cx="0" cy="0" r="34" fill="none" stroke="#EF4444" strokeWidth="8" />
+          <line x1="-34" y1="0" x2="34" y2="0" stroke="#EF4444" strokeWidth="6" />
+          <line x1="0" y1="-34" x2="0" y2="34" stroke="#EF4444" strokeWidth="6" />
+          <circle cx="0" cy="0" r="10" fill="#FEF08A" stroke="#0F172A" strokeWidth="3" />
+        </g>
+      )}
+
+      {type === 'shield_shockwave' && (
+        <g transform={`translate(${pawX + face * 30}, ${pawY - 25})`} opacity={Math.min(1, env * 1.5)}>
+          {/* Deflecting Shockwave Arcs */}
+          <path
+            d={face === 1 ? 'M 15,-75 Q 55,0 15,75' : 'M -15,-75 Q -55,0 -15,75'}
+            fill="none"
+            stroke="#38BDF8"
+            strokeWidth="6"
+          />
+          <path
+            d={face === 1 ? 'M 35,-95 Q 85,0 35,95' : 'M -35,-95 Q -85,0 -35,95'}
+            fill="none"
+            stroke="#FACC15"
+            strokeWidth="4"
+            strokeDasharray="10 8"
+          />
+        </g>
+      )}
+
+      {type === 'launch_experiment' && (
+        <g opacity={Math.min(1, env * 1.4)}>
+          {/* Detonator Plunger Box + Pulse Wire to Target */}
+          <path
+            d={`M ${pawX},${pawY + 40} Q ${(pawX + targetX) / 2},${pawY + 90} ${targetX},${targetY}`}
+            fill="none"
+            stroke="#FACC15"
+            strokeWidth="4"
+            strokeDasharray="12 8"
+          />
+          {progress > 0.3 && (
+            <circle
+              cx={pawX + (targetX - pawX) * Math.min(1, (progress - 0.3) / 0.5)}
+              cy={pawY + 40 + (targetY - (pawY + 40)) * Math.min(1, (progress - 0.3) / 0.5)}
+              r="14"
+              fill="#FEF08A"
+              stroke="#EF4444"
+              strokeWidth="4"
+            />
+          )}
+        </g>
+      )}
+    </svg>
+  );
+};
+
 export const DynamicCatScientist: React.FC<DynamicCatScientistProps> = (props) => {
   const frame = useCurrentFrame();
 
@@ -431,7 +641,8 @@ export const DynamicCatScientist: React.FC<DynamicCatScientistProps> = (props) =
     movement,
     movements,
     interaction,
-    reaction,
+    interactiveAction,
+    interactiveActions,
     gaze,
     cues,
     dialogue,
@@ -453,7 +664,8 @@ export const DynamicCatScientist: React.FC<DynamicCatScientistProps> = (props) =
     movement,
     movements,
     interaction,
-    reaction,
+    interactiveAction,
+    interactiveActions,
     gaze,
     cues,
     dialogue,
@@ -464,22 +676,25 @@ export const DynamicCatScientist: React.FC<DynamicCatScientistProps> = (props) =
   });
 
   return (
-    <CatScientist
-      x={kinematics.curX}
-      y={kinematics.curY}
-      size={size}
-      state={kinematics.activeState}
-      face={kinematics.activeFace}
-      pointAngle={kinematics.activePointAngle}
-      glasses={glasses}
-      labCoat={labCoat}
-      gaze={kinematics.activeGaze}
-      squashStretch={kinematics.squashStretch}
-      bodyOffset={kinematics.bodyOffset}
-      mouthShape={kinematics.activeMouthShape}
-      dialogue={dialogue}
-      speakerId={speakerId}
-      activeSpeaker={activeSpeaker}
-    />
+    <>
+      <CatScientist
+        x={kinematics.curX}
+        y={kinematics.curY}
+        size={size}
+        state={kinematics.activeState}
+        face={kinematics.activeFace}
+        pointAngle={kinematics.activePointAngle}
+        glasses={glasses}
+        labCoat={labCoat}
+        gaze={kinematics.activeGaze}
+        squashStretch={kinematics.squashStretch}
+        bodyOffset={kinematics.bodyOffset}
+        mouthShape={kinematics.activeMouthShape}
+        dialogue={dialogue}
+        speakerId={speakerId}
+        activeSpeaker={activeSpeaker}
+      />
+      {kinematics.activeGadget && renderInteractiveGadget(kinematics.activeGadget)}
+    </>
   );
 };

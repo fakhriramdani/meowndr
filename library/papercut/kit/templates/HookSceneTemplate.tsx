@@ -29,7 +29,7 @@ export const HookSceneTemplate: React.FC<BaseTemplateProps> = ({
     startFrame: 32,
     duration: 100,
   },
-  reaction,
+  interactiveAction,
   dialogue,
   visualization,
   visualizationBounds = {x: 620, y: 1160, width: 220, height: 240},
@@ -55,7 +55,7 @@ export const HookSceneTemplate: React.FC<BaseTemplateProps> = ({
       }}
       movement={movement}
       interaction={interaction}
-      reaction={reaction}
+      interactiveAction={interactiveAction}
       dialogue={dialogue}
       visualization={visualization}
       visualizationBounds={visualizationBounds}

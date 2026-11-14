@@ -1070,7 +1070,8 @@ export class AssetLoader {
    * Retrieves an environment by ID with validation.
    */
   public getEnvironment(id: string): EnvironmentAsset {
-    const env = this.library.categories.environments.find((e) => e.id === id);
+    const resolvedId = id === 'science-lab' ? 'science-laboratory' : id;
+    const env = this.library.categories.environments.find((e) => e.id === resolvedId);
     if (!env) {
       const available = this.library.categories.environments.map((e) => e.id).join(', ');
       throw new Error(

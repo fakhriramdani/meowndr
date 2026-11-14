@@ -879,6 +879,15 @@ ATURAN WAJIB:
                         [sys.executable, str(scaffold_cli), slug, ep.title, "--niche", ep.niche, "--force"],
                         st,
                     )
+                else:
+                    import shutil
+                    from library.platform_utils import sync_kit
+
+                    sync_kit(ep_dir / "papercut")
+                    tmpl_root = self.repo_root / "library" / "papercut" / "template" / "src" / "Root.tsx"
+                    ep_root = ep_dir / "papercut" / "src" / "Root.tsx"
+                    if tmpl_root.exists():
+                        shutil.copy2(tmpl_root, ep_root)
                 from library.content_factory.scene_generator import ensure_episode_scenes
 
                 ensure_episode_scenes(ep_dir, ep.title, ep.niche)

@@ -28,7 +28,7 @@ export const ConsequenceSceneTemplate: React.FC<BaseTemplateProps> = ({
     startFrame: 32,
     duration: 90,
   },
-  reaction,
+  interactiveAction,
   dialogue,
   visualization,
   visualizationBounds = {x: 50, y: 480, width: 580, height: 520},
@@ -54,7 +54,7 @@ export const ConsequenceSceneTemplate: React.FC<BaseTemplateProps> = ({
       }}
       movement={movement}
       interaction={interaction}
-      reaction={reaction}
+      interactiveAction={interactiveAction}
       dialogue={dialogue}
       visualization={visualization}
       visualizationBounds={visualizationBounds}

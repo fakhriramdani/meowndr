@@ -10,6 +10,7 @@ export interface OpeningThumbnailFrameProps {
   thumbnailHook?: string;
   openingHook?: string;
   channelName?: string;
+  niche?: string;
   mascotExpression?: CatState;
   durationInFrames?: number;
   mainSubject?: string;
@@ -18,6 +19,70 @@ export interface OpeningThumbnailFrameProps {
   background?: React.ReactNode;
   grainOverlay?: boolean;
 }
+
+type NicheTheme = {
+  label: string;
+  bgGradient: string;
+  accent: string;
+  badgeBg: string;
+  line2Bg: string;
+  hookBg: string;
+  wave1: string;
+  wave2: string;
+};
+
+const NICHE_THEMES: Record<string, NicheTheme> = {
+  science: {
+    label: 'SAINS',
+    bgGradient: 'linear-gradient(160deg, #0F172A 0%, #0C4A6E 55%, #0284C7 100%)',
+    accent: '#38BDF8',
+    badgeBg: '#0284C7',
+    line2Bg: '#38BDF8',
+    hookBg: '#0369A1',
+    wave1: '#38BDF8',
+    wave2: '#2DD4BF',
+  },
+  history: {
+    label: 'SEJARAH',
+    bgGradient: 'linear-gradient(160deg, #1C1917 0%, #451A03 55%, #92400E 100%)',
+    accent: '#F59E0B',
+    badgeBg: '#B45309',
+    line2Bg: '#FBBF24',
+    hookBg: '#991B1B',
+    wave1: '#FBBF24',
+    wave2: '#F97316',
+  },
+  geography: {
+    label: 'GEOGRAFI',
+    bgGradient: 'linear-gradient(160deg, #064E3B 0%, #065F46 55%, #0D9488 100%)',
+    accent: '#34D399',
+    badgeBg: '#059669',
+    line2Bg: '#34D399',
+    hookBg: '#0F766E',
+    wave1: '#34D399',
+    wave2: '#38BDF8',
+  },
+  technology: {
+    label: 'TEKNOLOGI',
+    bgGradient: 'linear-gradient(160deg, #090D16 0%, #1E293B 55%, #1D4ED8 100%)',
+    accent: '#60A5FA',
+    badgeBg: '#2563EB',
+    line2Bg: '#60A5FA',
+    hookBg: '#0284C7',
+    wave1: '#60A5FA',
+    wave2: '#22D3EE',
+  },
+  mystery: {
+    label: 'MISTERI',
+    bgGradient: 'linear-gradient(160deg, #18181B 0%, #3F1D2B 55%, #881337 100%)',
+    accent: '#FB7185',
+    badgeBg: '#BE123C',
+    line2Bg: '#FDA4AF',
+    hookBg: '#9F1239',
+    wave1: '#FB7185',
+    wave2: '#F59E0B',
+  },
+};
 
 /**
  * OpeningThumbnailFrame: Mandatory 9:16 Vertical Opening Thumbnail Frame (1080x1920).
@@ -35,13 +100,15 @@ export const OpeningThumbnailFrame: React.FC<OpeningThumbnailFrameProps> = ({
   thumbnailHook: rawThumbnailHook,
   openingHook,
   channelName = CHANNEL_NAME,
+  niche = 'science',
   mascotExpression = 'curious',
   durationInFrames = 30,
   standalone = false,
   backgroundColor = 'transparent',
   background,
-  grainOverlay = Boolean(background || (backgroundColor && backgroundColor !== 'transparent')),
+  grainOverlay = true,
 }) => {
+  const theme = NICHE_THEMES[niche.toLowerCase()] ?? NICHE_THEMES.science;
   const thumbnailHook = rawThumbnailHook ?? openingHook;
   const f = useCurrentFrame();
 
@@ -74,6 +141,7 @@ export const OpeningThumbnailFrame: React.FC<OpeningThumbnailFrameProps> = ({
         width: 1080,
         height: 1920,
         backgroundColor,
+        backgroundImage: !background && backgroundColor === 'transparent' ? theme.bgGradient : undefined,
         overflow: 'hidden',
         fontFamily: FONT.label,
         transform: `translateY(${-exitProgress * 1920}px)`,
@@ -144,7 +212,7 @@ export const OpeningThumbnailFrame: React.FC<OpeningThumbnailFrameProps> = ({
         <path
           d="M 20 80 Q 250 20 500 120 T 940 80"
           fill="none"
-          stroke="#38BDF8"
+          stroke={theme.wave1}
           strokeWidth="7"
           strokeDasharray="16 12"
           strokeLinecap="round"
@@ -152,7 +220,7 @@ export const OpeningThumbnailFrame: React.FC<OpeningThumbnailFrameProps> = ({
         <path
           d="M 40 140 Q 280 80 520 180 T 940 140"
           fill="none"
-          stroke="#F59E0B"
+          stroke={theme.wave2}
           strokeWidth="6"
           strokeDasharray="12 10"
           strokeLinecap="round"
@@ -160,7 +228,7 @@ export const OpeningThumbnailFrame: React.FC<OpeningThumbnailFrameProps> = ({
         <path
           d="M 10 200 Q 260 140 510 240 T 940 200"
           fill="none"
-          stroke="#38BDF8"
+          stroke={theme.wave1}
           strokeWidth="5"
           strokeDasharray="10 8"
           strokeLinecap="round"
@@ -180,7 +248,7 @@ export const OpeningThumbnailFrame: React.FC<OpeningThumbnailFrameProps> = ({
           backgroundColor: '#0F172A',
           padding: '10px 24px 10px 18px',
           borderRadius: 14,
-          border: '2px solid #F97316',
+          border: `2px solid ${theme.accent}`,
           boxShadow: '0 8px 20px rgba(0,0,0,0.5), inset 1px 1px 0 rgba(255,255,255,0.3)',
           zIndex: 60,
         }}
@@ -189,7 +257,7 @@ export const OpeningThumbnailFrame: React.FC<OpeningThumbnailFrameProps> = ({
           style={{
             width: 32,
             height: 32,
-            backgroundColor: '#F97316',
+            backgroundColor: theme.badgeBg,
             borderRadius: 8,
             display: 'flex',
             alignItems: 'center',
@@ -224,14 +292,14 @@ export const OpeningThumbnailFrame: React.FC<OpeningThumbnailFrameProps> = ({
           style={{
             fontSize: 16,
             fontWeight: 800,
-            backgroundColor: '#0D9488',
+            backgroundColor: theme.badgeBg,
             color: '#FFFDF7',
             padding: '3px 10px',
             borderRadius: 6,
             letterSpacing: '0.06em',
           }}
         >
-          SAINS
+          {theme.label}
         </span>
       </div>
 
@@ -271,7 +339,7 @@ export const OpeningThumbnailFrame: React.FC<OpeningThumbnailFrameProps> = ({
         {line2 ? (
           <div
             style={{
-              backgroundColor: '#F59E0B',
+              backgroundColor: theme.line2Bg,
               color: '#0F172A',
               fontFamily: FONT.banner,
               fontSize: 72,
@@ -293,7 +361,7 @@ export const OpeningThumbnailFrame: React.FC<OpeningThumbnailFrameProps> = ({
           <div
             style={{
               marginTop: 14,
-              backgroundColor: '#E11D48',
+              backgroundColor: theme.hookBg,
               color: '#FFFDF7',
               fontFamily: FONT.label,
               fontSize: 26,

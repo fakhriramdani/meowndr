@@ -31,7 +31,7 @@ export const OutroCtaSceneTemplate: React.FC<OutroCtaTemplateProps> = ({
     startFrame: 15,
     duration: 90,
   },
-  reaction,
+  interactiveAction,
   dialogue,
   visualization,
   visualizationBounds,
@@ -59,7 +59,7 @@ export const OutroCtaSceneTemplate: React.FC<OutroCtaTemplateProps> = ({
       }}
       movement={movement}
       interaction={interaction}
-      reaction={reaction}
+      interactiveAction={interactiveAction}
       dialogue={dialogue}
       visualization={visualization}
       visualizationBounds={visualizationBounds}
