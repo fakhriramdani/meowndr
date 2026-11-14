@@ -34,3 +34,12 @@ def test_cli_status_compatible_with_existing_episode() -> None:
         text=True,
     )
     assert proc.returncode == 0
+
+
+def test_live_library_adapter_discover_trends_returns_five_what_if_items(tmp_path: Path) -> None:
+    repo_root = Path(__file__).resolve().parent.parent.parent
+    adapter = LiveLibraryAdapter(repo_root=repo_root, episodes_root=tmp_path)
+    items = adapter.discover_trends(niche="science", age_category="Dewasa Muda 18-35")
+    assert len(items) == 5
+    assert all(len(item.temporalCascade) == 6 for item in items)
+    assert all(0 <= item.opportunityScore <= 100 for item in items)

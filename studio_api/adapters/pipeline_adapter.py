@@ -100,22 +100,34 @@ class LiveLibraryAdapter:
         )
 
     def discover_trends(self, niche: Niche, age_category: AgeCategory) -> list[TrendOpportunity]:
-        from library.content_factory.trend_intelligence import discover_what_if_trends
+        from library.content_factory.trend_intelligence import run_trend_research_pipeline
 
-        raw_items = discover_what_if_trends(niche=niche, count=5)
+        result = run_trend_research_pipeline(niche=niche)
+        raw_opps = result.get("payload", {}).get("evaluated_opportunities", [])
+        what_if_opps = [
+            o for o in raw_opps
+            if any(k in str(o.get("proposed_title", "")).lower() for k in ("bagaimana jika", "apa yang terjadi jika"))
+        ]
+        selected = what_if_opps if len(what_if_opps) >= 5 else (what_if_opps + [o for o in raw_opps if o not in what_if_opps])
+
         opportunities: list[TrendOpportunity] = []
-        for idx, item in enumerate(raw_items[:5], start=1):
-            premise = str(item.get("premise") or item.get("title") or f"Bagaimana jika {niche} berubah?")
-            cascade = list(item.get("temporalCascade") or item.get("beats") or [])
+        for idx, item in enumerate(selected[:5], start=1):
+            premise = str(item.get("proposed_title") or f"Bagaimana jika {niche} berubah?")
+            vc = item.get("video_concept") or {}
+            scenes = vc.get("scenes") or []
+            cascade = [str(s) for s in scenes if str(s).strip()]
+            if not cascade and vc.get("opening_hook"):
+                cascade.append(str(vc["opening_hook"]))
             while len(cascade) < 6:
                 cascade.append(f"Dampak lanjutan tahap {len(cascade) + 1} pada {niche}.")
+            score_val = (item.get("scoring") or {}).get("total_score") or (96 - idx * 3)
             opportunities.append(
                 TrendOpportunity(
                     id=str(item.get("id") or f"trend-{niche}-{idx}"),
                     premise=premise,
                     niche=niche,
                     ageCategory=age_category,
-                    opportunityScore=max(0, min(100, int(item.get("opportunityScore") or (96 - idx * 3)))),
+                    opportunityScore=max(0, min(100, int(round(float(score_val))))),
                     temporalCascade=cascade[:6],
                 )
             )
