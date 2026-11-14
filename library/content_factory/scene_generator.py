@@ -469,7 +469,7 @@ def ensure_episode_scenes(ep_dir: Path, title: str, niche: str, force: bool = Fa
     index_lines.append("export const SCENES: SceneDef[] = [")
     for i, (sid, _, _, _) in enumerate(SCENE_SLOTS):
         b = banner if i == 0 else ""
-        index_lines.append(f"  {{id: '{sid}', component: {sid}, banner: '{b}', band: 0.77}},")
+        index_lines.append(f"  {{id: '{sid}', component: {sid}, banner: '{b}', band: 0.86}},")
     index_lines.append("];")
     (scenes_dir / "index.ts").write_text("\n".join(index_lines) + "\n", encoding="utf-8")
 
