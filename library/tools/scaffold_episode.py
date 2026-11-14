@@ -55,7 +55,7 @@ def get_environment_floor_y(env_id):
     return 1380
 
 
-def scaffold_episode(slug, title, topic=None, env_id="science-lab", comp_name=None, out_prefix=None, target_sec=60, force=False, niche="science", bed_preset=None):
+def scaffold_episode(slug, title, topic=None, env_id="science-laboratory", comp_name=None, out_prefix=None, target_sec=60, force=False, niche="science", bed_preset=None):
     if not topic:
         topic = title
 
@@ -462,7 +462,7 @@ def main():
     parser.add_argument("--topic", help="Scientific topic description")
     parser.add_argument("--niche", default="science", help="Content niche (science, history, geography, technology, mystery, psychology)")
     parser.add_argument("--bed", default=None, help="Explicit BGM bed override (e.g. marimba-G-116)")
-    parser.add_argument("--env", default="science-lab", help="Environment background ID (default: science-lab)")
+    parser.add_argument("--env", default="science-laboratory", help="Environment background ID (default: science-laboratory)")
     parser.add_argument("--comp", help="Remotion composition ID (default: EpisodeNN)")
     parser.add_argument("--out", help="Output file prefix (default: episode-<slug>)")
     parser.add_argument("--target-sec", type=int, default=60, help="Target duration in seconds (default: 60)")
