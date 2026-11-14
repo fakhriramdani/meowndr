@@ -375,11 +375,16 @@ class EpisodeStore:
         tt_src = raw_dict.get("tiktok") or cap_platforms.get("tiktok") or {}
         ig_src = raw_dict.get("instagram_reels") or cap_platforms.get("instagram") or {}
 
+        yt_cap = cap_platforms.get("youtube") or {}
         yt_title = str(
-            yt_src.get("recommended_title")
+            yt_src.get("titleWithHashtags")
+            or yt_src.get("recommended_title")
             or yt_src.get("title")
             or (yt_src.get("title_options") or [""])[0]
-        )
+        ).strip()
+        yt_hashtags = [str(h) for h in (yt_src.get("hashtags") or yt_cap.get("hashtags") or ["#Shorts"]) if str(h).strip()]
+        if yt_title and "#" not in yt_title and yt_hashtags:
+            yt_title = f"{yt_title} {' '.join(yt_hashtags[:3])}"
         tt_caption = str(
             tt_src.get("recommended_caption")
             or tt_src.get("caption")
