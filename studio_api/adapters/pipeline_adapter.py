@@ -650,17 +650,78 @@ ATURAN MUTLAK:
         words_trimmed = " ".join(candidate.split()[:max_words]).rstrip(",;:")
         return words_trimmed if words_trimmed.endswith((".", "!", "?")) else f"{words_trimmed}."
 
+    def _condense_script_with_llm(
+        self, topic: str, niche: str, beats: list[ScriptBeat]
+    ) -> list[ScriptBeat] | None:
+        """Condense 6-beat narration naturally to 90-102 words via LLM without cutting meaning."""
+        from library.content_factory.captions.llm_caption_generator import LLMCaptionGenerator
+
+        current_json = json.dumps(
+            [{"beatNumber": b.beatNumber, "beatLabel": b.beatLabel, "text": b.text} for b in beats],
+            ensure_ascii=False,
+        )
+        prompt = f"""Kamu adalah Editor Naskah Senior untuk video vertikal edukasi @meowndr.
+Padatkan naskah voiceover bahasa Indonesia 6-beat berikut agar tetap utuh maknanya, mengalir alami (1.0x tempo), dan tidak terpotong di tengah kalimat.
+
+Topik: {topic}
+Niche: {niche}
+Naskah saat ini:
+{current_json}
+
+ATURAN WAJIB:
+1. Total kata seluruh 6 beat WAJIB antara 88 sampai 102 kata (sekitar 14-17 kata per beat).
+2. DILARANG menulis angka digit (0-9). Tulis semua angka dengan huruf (contoh: "lima", "dua kali lipat").
+3. Pertahankan keutuhan 6 beat (Katalis -> Guncangan Awal -> Efek Domino -> Masa Kini -> Realitas -> Dilema & CTA).
+4. Jawab HANYA dengan JSON valid:
+{{
+  "beats": [
+    {{"beatNumber": 1, "text": "..."}},
+    {{"beatNumber": 2, "text": "..."}},
+    {{"beatNumber": 3, "text": "..."}},
+    {{"beatNumber": 4, "text": "..."}},
+    {{"beatNumber": 5, "text": "..."}},
+    {{"beatNumber": 6, "text": "..."}}
+  ]
+}}"""
+        try:
+            data = LLMCaptionGenerator.call_llm(prompt, timeout_sec=60)
+            raw_beats = data.get("beats") if isinstance(data, dict) else None
+            if not isinstance(raw_beats, list) or len(raw_beats) != len(beats):
+                return None
+            by_num = {int(item["beatNumber"]): str(item.get("text") or "").strip() for item in raw_beats if isinstance(item, dict) and "beatNumber" in item}
+            condensed: list[ScriptBeat] = []
+            for b in beats:
+                text = re.sub(r"\d+", "beberapa", by_num.get(b.beatNumber, "")).strip()
+                if not text:
+                    return None
+                condensed.append(
+                    ScriptBeat(id=b.id, beatNumber=b.beatNumber, beatLabel=b.beatLabel, text=text)
+                )
+            report = analyze_narration_beats(condensed)
+            if report.isCompliant:
+                return condensed
+            _log.warning("LLM condensed script still non-compliant (%s words), falling back", report.wordCount)
+            return None
+        except Exception as err:
+            _log.warning("LLM condense failed, falling back to clause condenser: %s", err)
+            return None
+
     def condense_script(self, slug: str) -> NarrationScriptState:
         self.store.ensure_mutable(slug)
         ep = self.store.get_episode(slug)
         if ep.narrationScript is None:
             raise AppError("VALIDATION_ERROR", "No script found to condense.", 400)
-        condensed_beats: list[ScriptBeat] = []
-        for b in ep.narrationScript.beats:
-            trimmed = self._condense_clause(b.text, max_words=17)
-            condensed_beats.append(
-                ScriptBeat(id=b.id, beatNumber=b.beatNumber, beatLabel=b.beatLabel, text=trimmed)
-            )
+        condensed_beats = self._condense_script_with_llm(ep.title, ep.niche, ep.narrationScript.beats)
+        if condensed_beats is None:
+            condensed_beats = [
+                ScriptBeat(
+                    id=b.id,
+                    beatNumber=b.beatNumber,
+                    beatLabel=b.beatLabel,
+                    text=self._condense_clause(b.text, max_words=17),
+                )
+                for b in ep.narrationScript.beats
+            ]
         ep_dir = resolve_safe_episode_path(self.episodes_root, slug)
         script_path = ep_dir / "narration" / "script.json"
         script_path.parent.mkdir(parents=True, exist_ok=True)
@@ -757,7 +818,10 @@ ATURAN MUTLAK:
                 if not storyboard_path.exists():
                     engine.run_stage_7_storyboarding()
                 if not (ep_dir / "papercut" / "package.json").exists():
-                    self._run_tool([sys.executable, str(scaffold_cli), slug, "--force"], st)
+                    self._run_tool(
+                        [sys.executable, str(scaffold_cli), slug, ep.title, "--niche", ep.niche, "--force"],
+                        st,
+                    )
             elif st == 8:
                 asset_plan_path = ep_dir / "assets" / "asset_plan.json"
                 if not asset_plan_path.exists():
