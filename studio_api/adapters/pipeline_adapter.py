@@ -859,6 +859,9 @@ ATURAN WAJIB:
                         [sys.executable, str(scaffold_cli), slug, ep.title, "--niche", ep.niche, "--force"],
                         st,
                     )
+                from library.content_factory.scene_generator import ensure_episode_scenes
+
+                ensure_episode_scenes(ep_dir, ep.title, ep.niche)
                 self._sync_episode_json_scenes(ep_dir)
             elif st == 8:
                 asset_plan_path = ep_dir / "assets" / "asset_plan.json"
@@ -890,6 +893,17 @@ ATURAN WAJIB:
                     }
                 self._run_tool([sys.executable, str(pipeline_cli), "bgm", slug], st)
             elif st == 10:
+                from library.content_factory.scene_generator import ensure_episode_scenes
+
+                scene_res = ensure_episode_scenes(ep_dir, ep.title, ep.niche)
+                if scene_res.get("generated") and (ep_dir / "narration" / "timing_narrator.js").exists():
+                    subprocess.run(
+                        [sys.executable, str(tools_dir / "build_vo.py")],
+                        cwd=str(ep_dir / "papercut"),
+                        capture_output=True,
+                        text=True,
+                        timeout=60,
+                    )
                 self._run_tool([sys.executable, str(pipeline_cli), "validate", slug], st)
                 self._run_tool([sys.executable, str(pipeline_cli), "render", slug], st)
             elif st == 11:
