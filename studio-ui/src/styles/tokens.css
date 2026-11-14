@@ -698,31 +698,98 @@ textarea:focus-visible {
 @media (max-width: 768px) {
   .studio-shell {
     grid-template-columns: minmax(0, 1fr);
-    padding: 20px;
+    padding: 16px 16px 48px;
+    gap: 16px;
+  }
+  .workspace {
+    gap: 16px;
+  }
+  .card {
+    padding: 18px;
+    border-radius: 16px;
   }
   .stage-rail {
     position: static;
     flex-direction: row;
     overflow-x: auto;
-    padding: 10px;
+    scrollbar-width: none;
+    scroll-snap-type: x proximity;
+    padding: 8px;
+    gap: 6px;
+    border-radius: 16px;
+  }
+  .stage-rail::-webkit-scrollbar {
+    display: none;
   }
   .rail-step {
     flex: 0 0 auto;
     white-space: nowrap;
+    min-height: 38px;
+    padding: 8px 14px;
+    font-size: 0.84rem;
+    scroll-snap-align: start;
   }
   .grid-2,
   .gate3-split {
     grid-template-columns: minmax(0, 1fr);
+    gap: 16px;
+  }
+  .video-stage {
+    width: 100%;
+    max-width: 340px;
+    margin: 0 auto;
+    padding: 12px;
+  }
+  .mono,
+  .card p,
+  .card h2,
+  .card h3 {
+    overflow-wrap: anywhere;
   }
 }
 
 @media (max-width: 480px) {
-  .topbar-inner,
-  .studio-shell {
-    padding-left: 16px;
-    padding-right: 16px;
+  .topbar-inner {
+    padding: 10px 14px;
+    gap: 10px;
   }
-  .btn {
+  .brand-title {
+    font-size: 0.95rem;
+  }
+  .topbar-actions {
+    gap: 6px;
+  }
+  .topbar-actions .btn {
+    width: auto;
+    min-height: 36px;
+    padding: 6px 12px;
+    font-size: 0.8rem;
+  }
+  .studio-shell {
+    padding: 12px 12px 40px;
+  }
+  .card {
+    padding: 14px;
+  }
+  .pill-group {
+    gap: 8px;
+  }
+  .pill {
+    flex: 1 1 auto;
+    text-align: center;
+    min-height: 38px;
+    padding: 8px 12px;
+    font-size: 0.8125rem;
+  }
+  .workspace .btn {
     width: 100%;
+  }
+  .form-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .drawer-panel {
+    width: 100vw;
+    padding: 16px;
   }
 }
