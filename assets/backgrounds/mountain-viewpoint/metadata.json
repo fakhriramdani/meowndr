@@ -1,0 +1,73 @@
+{
+  "id": "mountain-viewpoint",
+  "name": "Mountain Viewpoint",
+  "description": "An open mountain viewpoint with layered green hills, distant peaks, and a clear sky.",
+  "category": "Geography / Nature",
+  "mood": "Fresh, calm, crisp, cool blue and green",
+  "style": {
+    "type": "2D Papercraft Cutout",
+    "construction": "Layered paper collage with scissor-cut edges and subtle paper drop shadows",
+    "color_palette": [
+      "#C3E4F7",
+      "#4A6B82",
+      "#2A4D3A",
+      "#64748B",
+      "#F8FAFC",
+      "#A0AEC0"
+    ],
+    "lighting": "Crisp morning alpine daylight with high paper clouds"
+  },
+  "dimensions": {
+    "width": 1080,
+    "height": 1920,
+    "aspect_ratio": "9:16"
+  },
+  "layout": {
+    "floor_y": 1380,
+    "presenter_zone": {
+      "x_range": [
+        180,
+        900
+      ],
+      "y_range": [
+        850,
+        1650
+      ],
+      "status": "clear_unobstructed"
+    },
+    "header_zone": {
+      "y_range": [
+        0,
+        420
+      ],
+      "status": "clear_for_banner"
+    },
+    "caption_zone": {
+      "y_range": [
+        1300,
+        1550
+      ],
+      "status": "low_detail_for_legibility"
+    }
+  },
+  "best_for": [
+    "Geology & landforms",
+    "Atmospheric science",
+    "Ecosystems",
+    "Earth geography"
+  ],
+  "rules_compliance": {
+    "consistent_papercraft_style": true,
+    "layered_cutout_construction": true,
+    "visible_paper_edges_and_shadows": true,
+    "no_characters_or_people": true,
+    "foreground_suitable_for_presenter": true,
+    "vertical_9_16_composition": true,
+    "reusable_environment": true
+  },
+  "asset_paths": {
+    "image": "assets/backgrounds/mountain-viewpoint/background.png",
+    "metadata": "assets/backgrounds/mountain-viewpoint/metadata.json"
+  },
+  "created_at": "2026-10-29T08:51:24+07:00"
+}

@@ -1,0 +1,330 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "StoryboardAndSceneTiming",
+  "type": "object",
+  "required": [
+    "environment_id",
+    "fps",
+    "total_frames",
+    "scenes"
+  ],
+  "properties": {
+    "environment_id": {
+      "type": "string",
+      "description": "Primary or fallback environment ID for the episode"
+    },
+    "environments_used": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "List of all unique environment IDs used across scenes"
+    },
+    "fps": { "type": "integer", "enum": [30] },
+    "total_frames": { "type": "integer", "minimum": 600, "maximum": 5400 },
+    "scenes": {
+      "type": "array",
+      "minItems": 3,
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "script_line_id",
+          "durationInFrames",
+          "banner_text"
+        ],
+        "properties": {
+          "id": { "type": "string" },
+          "script_line_id": { "type": "string" },
+          "durationInFrames": { "type": "integer", "minimum": 30 },
+          "banner_text": { "type": ["string", "null"] },
+          "environment_id": {
+            "type": "string",
+            "description": "Specific environment ID for this scene from registered asset library"
+          },
+          "scene_purpose": {
+            "type": "string",
+            "description": "Educational or narrative purpose of this scene beat"
+          },
+          "background_type": {
+            "type": "string",
+            "enum": [
+              "environment_scene",
+              "demonstration_scene",
+              "scientific_visualization",
+              "full_visual_scene",
+              "return_scene"
+            ],
+            "description": "Visual scene type classification"
+          },
+          "transition_in": {
+            "type": ["string", "object"],
+            "description": "Incoming transition style or cut specification"
+          },
+          "transition_out": {
+            "type": ["string", "object"],
+            "description": "Outgoing transition style or cut specification"
+          },
+          "transition_cut": {
+            "type": "string",
+            "enum": ["pageTurn", "tearAway", "zoomThrough", "tapePull", "stampCut", "popUpBook", "hardCut", "none"],
+            "description": "Backward-compatible cut style"
+          },
+          "camera_motion": {
+            "type": "object",
+            "properties": {
+              "yaw": { "type": "number" },
+              "push": { "type": "number" },
+              "origin": {
+                "type": "array",
+                "items": { "type": "number" },
+                "minItems": 2,
+                "maxItems": 2
+              },
+              "motion_type": {
+                "type": "string",
+                "enum": ["static", "orbit", "pushIn", "pan"]
+              }
+            }
+          },
+          "camera": {
+            "type": "object",
+            "description": "Backward-compatible camera definition",
+            "properties": {
+              "yaw": { "type": "number" },
+              "push": { "type": "number" },
+              "origin": {
+                "type": "array",
+                "items": { "type": "number" },
+                "minItems": 2,
+                "maxItems": 2
+              }
+            }
+          },
+          "presenter_position": {
+            "type": "object",
+            "properties": {
+              "x": { "type": "number" },
+              "y": { "type": "number" },
+              "size": { "type": "number" },
+              "state": {
+                "type": "string",
+                "enum": ["idle", "explaining", "pointing", "surprised", "curious", "celebrating", "thinking", "waving"]
+              },
+              "pointAngle": { "type": "number" },
+              "face": { "type": ["integer", "string"] },
+              "visible": { "type": "boolean" }
+            }
+          },
+          "character_position": {
+            "type": "object",
+            "description": "Full dynamic character positioning spec",
+            "properties": {
+              "x": { "type": "number" },
+              "y": { "type": "number" },
+              "size": { "type": "number" },
+              "state": { "type": "string" },
+              "face": { "type": ["integer", "string"] },
+              "pointAngle": { "type": "number" },
+              "visible": { "type": "boolean" }
+            }
+          },
+          "character_start_position": {
+            "type": "object",
+            "properties": {
+              "x": { "type": "number" },
+              "y": { "type": "number" }
+            }
+          },
+          "character_end_position": {
+            "type": "object",
+            "properties": {
+              "x": { "type": "number" },
+              "y": { "type": "number" }
+            }
+          },
+          "character_movement": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": ["static", "walk", "slide", "jump", "step_back", "enter_left", "enter_right", "exit_left", "exit_right"]
+              },
+              "startFrame": { "type": "number" },
+              "duration": { "type": "number" },
+              "easing": { "type": "string" }
+            }
+          },
+          "character_facing": {
+            "type": ["integer", "string"]
+          },
+          "character_expression": { "type": "string" },
+          "character_pose": { "type": "string" },
+          "character_action": { "type": "string" },
+          "interaction_target": {
+            "type": ["string", "object"],
+            "properties": {
+              "x": { "type": "number" },
+              "y": { "type": "number" },
+              "name": { "type": "string" }
+            }
+          },
+          "interaction_type": {
+            "type": "string",
+            "enum": [
+              "point_at",
+              "look_at",
+              "reach_for",
+              "touch",
+              "push",
+              "pull",
+              "catch",
+              "dodge",
+              "jump",
+              "recoil",
+              "surprised_reaction",
+              "celebrate",
+              "explain_with_gesture"
+            ]
+          },
+          "interaction_timing": {
+            "type": "object",
+            "properties": {
+              "startFrame": { "type": "number" },
+              "duration": { "type": "number" },
+              "triggerWord": { "type": "string" }
+            }
+          },
+          "reaction_trigger": {
+            "type": ["string", "number"]
+          },
+          "reaction_animation": {
+            "type": "string",
+            "enum": ["squash_stretch", "recoil_jump", "duck", "look_up_awe", "balance_loss", "bounce"]
+          },
+          "visualization_event": { "type": "string" },
+          "visualization_timing": { "type": "number" },
+          "visualization_bounds": {
+            "type": "object",
+            "properties": {
+              "x": { "type": "number" },
+              "y": { "type": "number" },
+              "width": { "type": "number" },
+              "height": { "type": "number" }
+            }
+          },
+          "text_elements": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["id", "text"],
+              "properties": {
+                "id": { "type": "string" },
+                "text": { "type": "string" },
+                "type": { "type": "string" },
+                "priority": { "type": "number" },
+                "preferredX": { "type": "number" },
+                "preferredY": { "type": "number" },
+                "targetPoint": {
+                  "type": "object",
+                  "properties": {
+                    "x": { "type": "number" },
+                    "y": { "type": "number" }
+                  }
+                }
+              }
+            }
+          },
+          "text_safe_zones": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "x": { "type": "number" },
+                "y": { "type": "number" },
+                "width": { "type": "number" },
+                "height": { "type": "number" },
+                "label": { "type": "string" }
+              }
+            }
+          },
+          "text_priority": {
+            "type": "object"
+          },
+          "speaker_id": { "type": "string" },
+          "dialogue_text": { "type": "string" },
+          "dialogue_start_frame": { "type": "number" },
+          "dialogue_end_frame": { "type": "number" },
+          "audio_segment_id": { "type": "string" },
+          "lip_sync_mode": {
+            "type": "string",
+            "enum": ["auto", "audio_driven", "dialogue_timed", "viseme_timeline", "manual"]
+          },
+          "viseme_timeline": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["frame", "shape"],
+              "properties": {
+                "frame": { "type": "number" },
+                "shape": {
+                  "type": "string",
+                  "enum": ["neutral", "closed", "small_open", "medium_open", "wide_open", "smile_talking", "surprised_open"]
+                }
+              }
+            }
+          },
+          "mouth_animation_style": {
+            "type": "string",
+            "enum": ["calm", "excited", "subtle", "energetic"]
+          },
+          "speaking_expression": { "type": "string" },
+          "dialogue": {
+            "type": "object",
+            "properties": {
+              "speakerId": { "type": "string" },
+              "activeSpeaker": { "type": "string" },
+              "startFrame": { "type": "number" },
+              "endFrame": { "type": "number" },
+              "text": { "type": "string" },
+              "mode": { "type": "string" },
+              "style": { "type": "string" },
+              "speaking": { "type": "boolean" }
+            }
+          },
+          "presenter": {
+            "type": "object",
+            "description": "Backward-compatible presenter definition",
+            "required": ["state"],
+            "properties": {
+              "state": {
+                "type": "string",
+                "enum": ["idle", "explaining", "pointing", "surprised", "curious", "celebrating", "thinking", "waving"]
+              },
+              "pointAngle": { "type": "number" },
+              "x": { "type": "number" },
+              "y": { "type": "number" },
+              "visible": { "type": "boolean" }
+            }
+          },
+          "overlay_assets": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "Papercraft badges, banners, callout cards, and overlay pills"
+          },
+          "animated_props": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "Separately animated 2D papercraft models and props"
+          },
+          "visual_evidence": {
+            "type": ["string", "object"],
+            "description": "Scientific claim or empirical observation visualized in this scene"
+          },
+          "continuity_notes": {
+            "type": "string",
+            "description": "Spatial, lighting, and narrative continuity notes"
+          }
+        }
+      }
+    }
+  }
+}

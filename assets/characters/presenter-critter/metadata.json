@@ -1,0 +1,25 @@
+{
+  "id": "presenter-critter",
+  "name": "Presenter Critter",
+  "category": "characters",
+  "description": "Boxy geometric paper mascot with blinking cutout eyes, four stubby legs, animated bob, and gesture-ready arms.",
+  "style": {
+    "type": "2D Papercraft Character",
+    "base_color": "#FF8C42",
+    "shade_color": "#D96820",
+    "expressions": ["idle", "blink", "happy", "shock", "worried", "squint"]
+  },
+  "dimensions": {
+    "default_size": 240,
+    "anchor": "ground-feet",
+    "collision_box": {
+      "width": 240,
+      "height": 220
+    }
+  },
+  "placement": {
+    "requires_floor_y": true,
+    "presenter_role": "lead_narrator"
+  },
+  "created_at": "2026-10-29T00:43:00+07:00"
+}

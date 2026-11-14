@@ -1,0 +1,21 @@
+services:
+  papercraft:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: papercraft-open:latest
+    container_name: papercraft-open
+    env_file:
+      - path: .env
+        required: false
+    environment:
+      - CHROME_PATH=/usr/bin/chromium
+      - PAPERCUT_LIB=/app/library
+      - PYTHONUNBUFFERED=1
+    volumes:
+      - ./episodes:/app/episodes
+      - ./out:/app/out
+      # Optional: mount rclone config from host for Google Drive uploads
+      - ${HOME}/.config/rclone:/root/.config/rclone:ro
+    # Remotion headless Chromium needs sufficient shared memory
+    shm_size: "2gb"

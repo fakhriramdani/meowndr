@@ -1,0 +1,72 @@
+{
+  "id": "botany-greenhouse",
+  "name": "Botany Greenhouse",
+  "description": "2D papercraft botanical conservatory with layered glass ribs, potted flora, seedling benches, and terracotta tiled floor.",
+  "category": "Biology / Botany",
+  "mood": "warm / natural",
+  "style": {
+    "type": "2D Papercraft Cutout",
+    "construction": "Layered paper collage with scissor-cut edges and subtle paper drop shadows",
+    "color_palette": [
+      "#4A607A",
+      "#6B8E7C",
+      "#D9CBB6",
+      "#F4EAD4",
+      "#E2725B",
+      "#48A9A6"
+    ],
+    "lighting": "Soft top-left ambient illumination with warm pendant paper lights"
+  },
+  "dimensions": {
+    "width": 1080,
+    "height": 1920,
+    "aspect_ratio": "9:16"
+  },
+  "layout": {
+    "floor_y": 1380,
+    "presenter_zone": {
+      "x_range": [
+        240,
+        840
+      ],
+      "y_range": [
+        900,
+        1750
+      ],
+      "status": "clear_unobstructed"
+    },
+    "header_zone": {
+      "y_range": [
+        0,
+        420
+      ],
+      "status": "clear_for_banner"
+    },
+    "caption_zone": {
+      "y_range": [
+        1300,
+        1550
+      ],
+      "status": "low_detail_for_legibility"
+    }
+  },
+  "best_for": [
+    "Science explanations",
+    "STEM educational reels",
+    "Explainer breakdowns"
+  ],
+  "rules_compliance": {
+    "consistent_papercraft_style": true,
+    "layered_cutout_construction": true,
+    "visible_paper_edges_and_shadows": true,
+    "no_characters_or_people": true,
+    "foreground_suitable_for_presenter": true,
+    "vertical_9_16_composition": true,
+    "reusable_environment": true
+  },
+  "asset_paths": {
+    "image": "assets/backgrounds/botany-greenhouse/background.png",
+    "metadata": "assets/backgrounds/botany-greenhouse/metadata.json"
+  },
+  "created_at": "2026-10-29T02:05:25+07:00"
+}

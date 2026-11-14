@@ -1,0 +1,59 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "TrendResearchArtifact",
+  "type": "object",
+  "required": ["niche", "generated_at", "trending_topics"],
+  "properties": {
+    "niche": {
+      "type": "string"
+    },
+    "generated_at": {
+      "type": "string"
+    },
+    "target_audience": {
+      "type": "string"
+    },
+    "trending_topics": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "topic_title",
+          "curiosity_angle",
+          "potential_hook",
+          "estimated_appeal_score"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "topic_title": {
+            "type": "string"
+          },
+          "scientific_field": {
+            "type": "string"
+          },
+          "curiosity_angle": {
+            "type": "string"
+          },
+          "potential_hook": {
+            "type": "string"
+          },
+          "estimated_appeal_score": {
+            "type": "number"
+          },
+          "recommended_environment": {
+            "type": "string"
+          },
+          "papercraft_visual_ideas": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    }
+  }
+}

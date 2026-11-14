@@ -1,0 +1,692 @@
+{
+  "version": "1.0.0",
+  "updatedAt": "2026-11-06T20:49:41+07:00",
+  "total": 24,
+  "backgrounds": [
+    {
+      "id": "science-lab",
+      "name": "Science Laboratory",
+      "category": "Education / STEM",
+      "description": "2D papercraft chemistry and physics laboratory with layered paper cutout shelves, glassware, beakers, test tubes, and microscope framing an open presenter floor.",
+      "assetPath": "assets/backgrounds/science-lab/background.png",
+      "thumbnailPath": "assets/previews/science-lab-scene-preview.png",
+      "aspectRatio": "9:16",
+      "dimensions": {
+        "width": 1080,
+        "height": 1920
+      },
+      "format": "PNG",
+      "hasTransparency": false,
+      "tags": [
+        "science",
+        "laboratory",
+        "chemistry",
+        "physics",
+        "stem",
+        "education",
+        "indoor"
+      ],
+      "status": "disabled",
+      "floorY": 1380,
+      "mood": "cool / studious",
+      "createdAt": "2026-10-29T00:37:34+07:00",
+      "updatedAt": "2026-11-06T20:49:41+07:00",
+      "statusReason": "Restored disabled status by user"
+    },
+    {
+      "id": "botany-greenhouse",
+      "name": "Botany Greenhouse",
+      "category": "Biology / Botany",
+      "description": "2D papercraft botanical conservatory with layered glass ribs, potted flora, seedling benches, and terracotta tiled floor.",
+      "assetPath": "assets/backgrounds/botany-greenhouse/background.png",
+      "thumbnailPath": "assets/previews/botany-greenhouse-scene-preview.png",
+      "aspectRatio": "9:16",
+      "dimensions": {
+        "width": 1080,
+        "height": 1920
+      },
+      "format": "PNG",
+      "hasTransparency": false,
+      "tags": [
+        "biology",
+        "botany",
+        "greenhouse",
+        "plants",
+        "nature",
+        "science",
+        "indoor"
+      ],
+      "status": "active",
+      "floorY": 1380,
+      "mood": "warm / natural",
+      "createdAt": "2026-10-29T02:05:25+07:00",
+      "updatedAt": "2026-10-29T02:05:25+07:00"
+    },
+    {
+      "id": "science-lab-v2",
+      "name": "Science Laboratory (Revision 2.0.0)",
+      "category": "Education / STEM",
+      "description": "2D papercraft chemistry and physics laboratory with layered paper cutout shelves, glassware, beakers, test tubes, and microscope framing an open presenter floor. [Revision: Warm ambient pendant light cones and subtle terracotta floor bounce reflection]",
+      "assetPath": "assets/backgrounds/science-lab-v2/background.png",
+      "thumbnailPath": "assets/previews/science-lab-v2-scene-preview.png",
+      "aspectRatio": "9:16",
+      "dimensions": {
+        "width": 1080,
+        "height": 1920
+      },
+      "format": "PNG",
+      "hasTransparency": false,
+      "tags": [
+        "science",
+        "laboratory",
+        "chemistry",
+        "physics",
+        "stem",
+        "education",
+        "indoor",
+        "revision"
+      ],
+      "status": "disabled",
+      "floorY": 1380,
+      "mood": "cool / studious",
+      "createdAt": "2026-10-29T02:05:58+07:00",
+      "updatedAt": "2026-10-31T22:12:21+07:00",
+      "statusReason": "Changed via Studio UI"
+    },
+    {
+      "id": "cozy-bedroom",
+      "name": "Cozy Bedroom",
+      "category": "Everyday Life / Science",
+      "description": "A familiar, comfortable bedroom with simple furniture, warm natural lighting, and a clean, welcoming atmosphere. Suitable for everyday science, sleep, human behavior, and general facts.",
+      "assetPath": "assets/backgrounds/cozy-bedroom/background.png",
+      "thumbnailPath": "assets/previews/cozy-bedroom-scene-preview.png",
+      "aspectRatio": "9:16",
+      "dimensions": {
+        "width": 1080,
+        "height": 1920
+      },
+      "format": "PNG",
+      "hasTransparency": false,
+      "tags": [
+        "everyday-life",
+        "bedroom",
+        "home",
+        "sleep",
+        "interior",
+        "indoor"
+      ],
+      "status": "active",
+      "floorY": 1380,
+      "mood": "Warm, cozy, peaceful, soft morning sunlight",
+      "createdAt": "2026-10-29T08:50:49+07:00",
+      "updatedAt": "2026-10-29T08:50:49+07:00"
+    },
+    {
+      "id": "modern-classroom",
+      "name": "Modern Classroom",
+      "category": "Education / Science",
+      "description": "A familiar school classroom with a chalkboard, windows, and neatly arranged learning materials, designed for educational explainers.",
+      "assetPath": "assets/backgrounds/modern-classroom/background.png",
+      "thumbnailPath": "assets/previews/modern-classroom-scene-preview.png",
+      "aspectRatio": "9:16",
+      "dimensions": {
+        "width": 1080,
+        "height": 1920
+      },
+      "format": "PNG",
+      "hasTransparency": false,
+      "tags": [
+        "education",
+        "science",
+        "classroom",
+        "school",
+        "learning",
+        "indoor"
+      ],
+      "status": "active",
+      "floorY": 1380,
+      "mood": "Bright, friendly, clean daylight",
+      "createdAt": "2026-10-29T08:50:53+07:00",
+      "updatedAt": "2026-10-29T08:50:53+07:00"
+    },
+    {
+      "id": "home-living-room",
+      "name": "Home Living Room",
+      "category": "Everyday Life / Society",
+      "description": "A relatable family living room with simple contemporary furniture, natural materials, and a comfortable domestic atmosphere.",
+      "assetPath": "assets/backgrounds/home-living-room/background.png",
+      "thumbnailPath": "assets/previews/home-living-room-scene-preview.png",
+      "aspectRatio": "9:16",
+      "dimensions": {
+        "width": 1080,
+        "height": 1920
+      },
+      "format": "PNG",
+      "hasTransparency": false,
+      "tags": [
+        "everyday-life",
+        "society",
+        "living-room",
+        "interior",
+        "home",
+        "indoor"
+      ],
+      "status": "active",
+      "floorY": 1380,
+      "mood": "Warm, relaxed, inviting afternoon light",
+      "createdAt": "2026-10-29T08:50:56+07:00",
+      "updatedAt": "2026-10-29T08:50:56+07:00"
+    },
+    {
+      "id": "backyard-garden",
+      "name": "Backyard Garden",
+      "category": "Nature / Everyday Life",
+      "description": "A simple home garden with leafy plants, flowers, a wooden fence, and a bright open atmosphere.",
+      "assetPath": "assets/backgrounds/backyard-garden/background.png",
+      "thumbnailPath": "assets/previews/backyard-garden-scene-preview.png",
+      "aspectRatio": "9:16",
+      "dimensions": {
+        "width": 1080,
+        "height": 1920
+      },
+      "format": "PNG",
+      "hasTransparency": false,
+      "tags": [
+        "nature",
+        "everyday-life",
+        "garden",
+        "plants",
+        "biology",
+        "outdoor"
+      ],
+      "status": "active",
+      "floorY": 1380,
+      "mood": "Fresh, cheerful, green, sunny",
+      "createdAt": "2026-10-29T08:51:00+07:00",
+      "updatedAt": "2026-10-29T08:51:00+07:00"
+    },
+    {
+      "id": "public-library",
+      "name": "Public Library",
+      "category": "Education / History",
+      "description": "A welcoming public library with tall bookshelves, a large window, and a calm learning atmosphere.",
+      "assetPath": "assets/backgrounds/public-library/background.png",
+      "thumbnailPath": "assets/previews/public-library-scene-preview.png",
+      "aspectRatio": "9:16",
+      "dimensions": {
+        "width": 1080,
+        "height": 1920
+      },
+      "format": "PNG",
+      "hasTransparency": false,
+      "tags": [
+        "education",
+        "history",
+        "library",
+        "books",
+        "knowledge",
+        "interior",
+        "indoor"
+      ],
+      "status": "active",
+      "floorY": 1380,
+      "mood": "Quiet, scholarly, warm neutral tones",
+      "createdAt": "2026-10-29T08:51:03+07:00",
+      "updatedAt": "2026-10-29T08:51:03+07:00"
+    },
+    {
+      "id": "science-laboratory",
+      "name": "Science Laboratory",
+      "category": "Science / Chemistry",
+      "description": "A believable school science laboratory with glassware and equipment neatly arranged on side benches.",
+      "assetPath": "assets/backgrounds/science-laboratory/background.png",
+      "thumbnailPath": "assets/previews/science-laboratory-scene-preview.png",
+      "aspectRatio": "9:16",
+      "dimensions": {
+        "width": 1080,
+        "height": 1920
+      },
+      "format": "PNG",
+      "hasTransparency": false,
+      "tags": [
+        "science",
+        "chemistry",
+        "laboratory",
+        "stem",
+        "research",
+        "indoor"
+      ],
+      "status": "active",
+      "floorY": 1380,
+      "mood": "Clean, bright, focused, cool blue accents",
+      "createdAt": "2026-10-29T08:51:06+07:00",
+      "updatedAt": "2026-10-29T08:51:06+07:00"
+    },
+    {
+      "id": "city-park",
+      "name": "City Park",
+      "category": "Nature / Society",
+      "description": "An ordinary urban park with trees, grass, a distant skyline, and a quiet walking path.",
+      "assetPath": "assets/backgrounds/city-park/background.png",
+      "thumbnailPath": "assets/previews/city-park-scene-preview.png",
+      "aspectRatio": "9:16",
+      "dimensions": {
+        "width": 1080,
+        "height": 1920
+      },
+      "format": "PNG",
+      "hasTransparency": false,
+      "tags": [
+        "nature",
+        "society",
+        "park",
+        "city",
+        "trees",
+        "outdoor"
+      ],
+      "status": "active",
+      "floorY": 1380,
+      "mood": "Fresh, friendly, bright daylight",
+      "createdAt": "2026-10-29T08:51:10+07:00",
+      "updatedAt": "2026-10-29T08:51:10+07:00"
+    },
+    {
+      "id": "home-kitchen",
+      "name": "Home Kitchen",
+      "category": "Everyday Life / Food Science",
+      "description": "A familiar home kitchen with cabinets, a countertop, and everyday cooking utensils. Suitable for food science and daily-life explainers.",
+      "assetPath": "assets/backgrounds/home-kitchen/background.png",
+      "thumbnailPath": "assets/previews/home-kitchen-scene-preview.png",
+      "aspectRatio": "9:16",
+      "dimensions": {
+        "width": 1080,
+        "height": 1920
+      },
+      "format": "PNG",
+      "hasTransparency": false,
+      "tags": [
+        "everyday-life",
+        "food-science",
+        "kitchen",
+        "cooking",
+        "indoor"
+      ],
+      "status": "active",
+      "floorY": 1380,
+      "mood": "Warm, clean, homely, morning sunlight",
+      "createdAt": "2026-10-29T08:51:13+07:00",
+      "updatedAt": "2026-10-29T08:51:13+07:00"
+    },
+    {
+      "id": "school-science-corner",
+      "name": "School Science Corner",
+      "category": "Education / Science",
+      "description": "A school learning corner featuring simple science models, educational displays, and organized learning materials.",
+      "assetPath": "assets/backgrounds/school-science-corner/background.png",
+      "thumbnailPath": "assets/previews/school-science-corner-scene-preview.png",
+      "aspectRatio": "9:16",
+      "dimensions": {
+        "width": 1080,
+        "height": 1920
+      },
+      "format": "PNG",
+      "hasTransparency": false,
+      "tags": [
+        "education",
+        "science",
+        "school",
+        "experiments",
+        "learning",
+        "indoor"
+      ],
+      "status": "active",
+      "floorY": 1380,
+      "mood": "Curious, playful, bright, colorful accents",
+      "createdAt": "2026-10-29T08:51:16+07:00",
+      "updatedAt": "2026-10-29T08:51:16+07:00"
+    },
+    {
+      "id": "home-study",
+      "name": "Cozy Home Study",
+      "category": "Education / Productivity",
+      "description": "A quiet study room with a rear bookshelf, a window, and a tidy desk positioned away from the presenter.",
+      "assetPath": "assets/backgrounds/home-study/background.png",
+      "thumbnailPath": "assets/previews/home-study-scene-preview.png",
+      "aspectRatio": "9:16",
+      "dimensions": {
+        "width": 1080,
+        "height": 1920
+      },
+      "format": "PNG",
+      "hasTransparency": false,
+      "tags": [
+        "education",
+        "productivity",
+        "study",
+        "books",
+        "reading",
+        "indoor"
+      ],
+      "status": "active",
+      "floorY": 1380,
+      "mood": "Focused, peaceful, warm desk-lamp lighting",
+      "createdAt": "2026-10-29T08:51:20+07:00",
+      "updatedAt": "2026-10-29T08:51:20+07:00"
+    },
+    {
+      "id": "mountain-viewpoint",
+      "name": "Mountain Viewpoint",
+      "category": "Geography / Nature",
+      "description": "An open mountain viewpoint with layered green hills, distant peaks, and a clear sky.",
+      "assetPath": "assets/backgrounds/mountain-viewpoint/background.png",
+      "thumbnailPath": "assets/previews/mountain-viewpoint-scene-preview.png",
+      "aspectRatio": "9:16",
+      "dimensions": {
+        "width": 1080,
+        "height": 1920
+      },
+      "format": "PNG",
+      "hasTransparency": false,
+      "tags": [
+        "geography",
+        "nature",
+        "mountains",
+        "viewpoint",
+        "summit",
+        "outdoor"
+      ],
+      "status": "active",
+      "floorY": 1380,
+      "mood": "Fresh, calm, crisp, cool blue and green",
+      "createdAt": "2026-10-29T08:51:24+07:00",
+      "updatedAt": "2026-10-29T08:51:24+07:00"
+    },
+    {
+      "id": "tropical-beach",
+      "name": "Tropical Beach",
+      "category": "Nature / Geography / Ocean Science",
+      "description": "A beautiful tropical beach landscape featuring layered ocean water, a distant horizon, soft coastal scenery, and warm sandy terrain. The composition should feel open and spacious. The beach must provide a large, clean central area where future educational objects, characters, and animated elements can be placed.",
+      "assetPath": "assets/backgrounds/tropical-beach/background.png",
+      "thumbnailPath": "assets/previews/tropical-beach-scene-preview.png",
+      "aspectRatio": "9:16",
+      "dimensions": {
+        "width": 1080,
+        "height": 1920
+      },
+      "format": "PNG",
+      "hasTransparency": false,
+      "tags": [
+        "nature",
+        "geography",
+        "ocean-science",
+        "beach",
+        "tropical",
+        "sea",
+        "outdoor"
+      ],
+      "status": "active",
+      "floorY": 1380,
+      "mood": "Bright, peaceful, tropical afternoon atmosphere",
+      "createdAt": "2026-10-31T12:15:36+07:00",
+      "updatedAt": "2026-10-31T12:15:36+07:00"
+    },
+    {
+      "id": "traditional-indonesian-house",
+      "name": "Traditional Indonesian House",
+      "category": "Culture / History",
+      "description": "A stylized traditional Indonesian wooden house interior with recognizable timber architecture and a calm, respectful atmosphere.",
+      "assetPath": "assets/backgrounds/traditional-indonesian-house/background.png",
+      "thumbnailPath": "assets/previews/traditional-indonesian-house-scene-preview.png",
+      "aspectRatio": "9:16",
+      "dimensions": {
+        "width": 1080,
+        "height": 1920
+      },
+      "format": "PNG",
+      "hasTransparency": false,
+      "tags": [
+        "culture",
+        "history",
+        "indonesia",
+        "traditional",
+        "architecture",
+        "heritage",
+        "indoor"
+      ],
+      "status": "active",
+      "floorY": 1380,
+      "mood": "Warm, welcoming, earthy wood and green",
+      "createdAt": "2026-10-29T08:51:30+07:00",
+      "updatedAt": "2026-10-29T08:51:30+07:00"
+    },
+    {
+      "id": "historic-town-street",
+      "name": "Historic Town Street",
+      "category": "History / Geography",
+      "description": "A quiet old-town street with traditional shopfronts, tiled roofs, and layered buildings in the distance.",
+      "assetPath": "assets/backgrounds/historic-town-street/background.png",
+      "thumbnailPath": "assets/previews/historic-town-street-scene-preview.png",
+      "aspectRatio": "9:16",
+      "dimensions": {
+        "width": 1080,
+        "height": 1920
+      },
+      "format": "PNG",
+      "hasTransparency": false,
+      "tags": [
+        "history",
+        "geography",
+        "town",
+        "street",
+        "architecture",
+        "outdoor"
+      ],
+      "status": "active",
+      "floorY": 1380,
+      "mood": "Nostalgic, charming, warm afternoon light",
+      "createdAt": "2026-10-29T08:51:34+07:00",
+      "updatedAt": "2026-10-29T08:51:34+07:00"
+    },
+    {
+      "id": "ancient-temple-ruins",
+      "name": "Ancient Temple Ruins",
+      "category": "History / Archaeology",
+      "description": "Ancient stone temple ruins partly covered in moss and vegetation, suitable for history and archaeology explainers.",
+      "assetPath": "assets/backgrounds/ancient-temple-ruins/background.png",
+      "thumbnailPath": "assets/previews/ancient-temple-ruins-scene-preview.png",
+      "aspectRatio": "9:16",
+      "dimensions": {
+        "width": 1080,
+        "height": 1920
+      },
+      "format": "PNG",
+      "hasTransparency": false,
+      "tags": [
+        "history",
+        "archaeology",
+        "ancient",
+        "ruins",
+        "stone",
+        "temple",
+        "outdoor"
+      ],
+      "status": "active",
+      "floorY": 1380,
+      "mood": "Mysterious, historic, earthy stone and green",
+      "createdAt": "2026-10-29T08:51:37+07:00",
+      "updatedAt": "2026-10-29T08:51:37+07:00"
+    },
+    {
+      "id": "rainy-city-street",
+      "name": "Rainy City Street",
+      "category": "Everyday Life / Weather",
+      "description": "A familiar city street during light rain, with layered buildings, wet pavement, and soft reflections.",
+      "assetPath": "assets/backgrounds/rainy-city-street/background.png",
+      "thumbnailPath": "assets/previews/rainy-city-street-scene-preview.png",
+      "aspectRatio": "9:16",
+      "dimensions": {
+        "width": 1080,
+        "height": 1920
+      },
+      "format": "PNG",
+      "hasTransparency": false,
+      "tags": [
+        "everyday-life",
+        "weather",
+        "rain",
+        "city",
+        "street",
+        "meteorology",
+        "outdoor"
+      ],
+      "status": "active",
+      "floorY": 1380,
+      "mood": "Rainy, reflective, cool blue, cinematic",
+      "createdAt": "2026-10-29T08:51:41+07:00",
+      "updatedAt": "2026-10-29T08:51:41+07:00"
+    },
+    {
+      "id": "underwater-world",
+      "name": "Underwater World",
+      "category": "Marine Science / Biology",
+      "description": "An underwater scene with coral reefs, layered sea plants, and distant ocean life, designed for marine biology explainers.",
+      "assetPath": "assets/backgrounds/underwater-world/background.png",
+      "thumbnailPath": "assets/previews/underwater-world-scene-preview.png",
+      "aspectRatio": "9:16",
+      "dimensions": {
+        "width": 1080,
+        "height": 1920
+      },
+      "format": "PNG",
+      "hasTransparency": false,
+      "tags": [
+        "marine-science",
+        "biology",
+        "ocean",
+        "underwater",
+        "sea-creatures",
+        "aquatic"
+      ],
+      "status": "active",
+      "floorY": 1380,
+      "mood": "Calm, curious, blue and turquoise",
+      "createdAt": "2026-10-29T08:51:44+07:00",
+      "updatedAt": "2026-10-29T08:51:44+07:00"
+    },
+    {
+      "id": "space-observatory",
+      "name": "Space Observatory",
+      "category": "Space / Physics",
+      "description": "A realistic small astronomy room with a domed roof, star charts, and a telescope positioned at the side.",
+      "assetPath": "assets/backgrounds/space-observatory/background.png",
+      "thumbnailPath": "assets/previews/space-observatory-scene-preview.png",
+      "aspectRatio": "9:16",
+      "dimensions": {
+        "width": 1080,
+        "height": 1920
+      },
+      "format": "PNG",
+      "hasTransparency": false,
+      "tags": [
+        "space",
+        "physics",
+        "astronomy",
+        "telescope",
+        "observatory",
+        "cosmos",
+        "night",
+        "indoor"
+      ],
+      "status": "active",
+      "floorY": 1380,
+      "mood": "Deep blue, peaceful, magical but scientifically grounded",
+      "createdAt": "2026-10-29T08:51:48+07:00",
+      "updatedAt": "2026-10-29T08:51:48+07:00"
+    },
+    {
+      "id": "home-workshop",
+      "name": "Home Workshop",
+      "category": "Technology / Engineering",
+      "description": "A believable home workshop with organized tools, a workbench, and simple mechanical parts.",
+      "assetPath": "assets/backgrounds/home-workshop/background.png",
+      "thumbnailPath": "assets/previews/home-workshop-scene-preview.png",
+      "aspectRatio": "9:16",
+      "dimensions": {
+        "width": 1080,
+        "height": 1920
+      },
+      "format": "PNG",
+      "hasTransparency": false,
+      "tags": [
+        "technology",
+        "engineering",
+        "workshop",
+        "tools",
+        "maker",
+        "indoor"
+      ],
+      "status": "active",
+      "floorY": 1380,
+      "mood": "Practical, creative, warm wood and muted orange",
+      "createdAt": "2026-10-29T08:51:51+07:00",
+      "updatedAt": "2026-10-29T08:51:51+07:00"
+    },
+    {
+      "id": "city-rooftop",
+      "name": "City Rooftop",
+      "category": "Society / Geography",
+      "description": "A modest urban rooftop with a distant skyline, water tank, antennas, and a warm sunset. Keep it realistic and uncluttered.",
+      "assetPath": "assets/backgrounds/city-rooftop/background.png",
+      "thumbnailPath": "assets/previews/city-rooftop-scene-preview.png",
+      "aspectRatio": "9:16",
+      "dimensions": {
+        "width": 1080,
+        "height": 1920
+      },
+      "format": "PNG",
+      "hasTransparency": false,
+      "tags": [
+        "society",
+        "geography",
+        "city",
+        "urban",
+        "skyline",
+        "night",
+        "outdoor"
+      ],
+      "status": "active",
+      "floorY": 1380,
+      "mood": "Relaxed, modern, sunset orange and blue",
+      "createdAt": "2026-10-29T08:51:54+07:00",
+      "updatedAt": "2026-10-29T08:51:54+07:00"
+    },
+    {
+      "id": "mountain-landscape",
+      "name": "Mountain Landscape",
+      "category": "Nature / Geography / Earth Science",
+      "description": "A beautiful open mountain landscape featuring multiple layers of distant mountain peaks, rolling hills, and a subtle natural atmosphere. Use layered paper-cut silhouettes to create depth. The environment should feel spacious, calm, and visually balanced, with a clear open area in the middle for future educational storytelling.",
+      "assetPath": "assets/backgrounds/mountain-landscape/background.png",
+      "thumbnailPath": "assets/previews/mountain-landscape-scene-preview.png",
+      "aspectRatio": "9:16",
+      "dimensions": {
+        "width": 1080,
+        "height": 1920
+      },
+      "format": "PNG",
+      "hasTransparency": false,
+      "tags": [
+        "nature",
+        "geography",
+        "earth-science",
+        "mountains",
+        "landscape",
+        "outdoor"
+      ],
+      "status": "active",
+      "floorY": 1380,
+      "mood": "Peaceful, adventurous, fresh morning atmosphere",
+      "createdAt": "2026-10-31T12:15:30+07:00",
+      "updatedAt": "2026-10-31T12:15:30+07:00"
+    }
+  ]
+}

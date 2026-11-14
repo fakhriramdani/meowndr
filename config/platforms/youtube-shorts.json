@@ -1,0 +1,32 @@
+{
+  "platform": "youtube_shorts",
+  "name": "YouTube Shorts",
+  "version": "2026.1",
+  "official_requirements": {
+    "title_hard_character_limit": 100,
+    "description_hard_character_limit": 5000,
+    "aspect_ratio": "9:16",
+    "resolution": "1080x1920",
+    "frame_rate": 30
+  },
+  "platform_recommendations": {
+    "recommended_title_range": [40, 80],
+    "recommended_description_range": [100, 500],
+    "recommended_hashtags_range": [2, 3],
+    "title_emoji_range": [0, 2],
+    "description_emoji_range": [0, 3],
+    "structure": [
+      "SEARCHABLE_TITLE",
+      "OPENING_QUESTION_OR_TOPIC",
+      "INFORMATIVE_OVERVIEW",
+      "SUBSCRIBE_CTA",
+      "RELEVANT_HASHTAGS_INCLUDING_SHORTS"
+    ]
+  },
+  "creator_best_practices": {
+    "search_discoverability": "Title must communicate a compelling reason to watch and prioritize the primary searchable keyword.",
+    "curiosity_principles": "Use curiosity without misleading viewers; avoid clickbait promises not fulfilled by the video.",
+    "cta_focus": ["subscribe", "share", "pinned_comment"],
+    "required_tags": ["#Shorts"]
+  }
+}

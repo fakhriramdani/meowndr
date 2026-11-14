@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>@meowndr Asset Studio — Visual Asset Management</title>
+  <link rel="stylesheet" href="/app.css">
+</head>
+<body>
+  <div class="app-layout">
+    <!-- Top Header -->
+    <header class="app-header">
+      <div class="header-left">
+        <div class="brand-badge">
+          <span class="brand-logo-m">M</span>
+          <span class="brand-mascot-icon">🐱</span>
+          <div class="brand-titles">
+            <span class="brand-title">@meowndr</span>
+            <span class="brand-subtitle">Asset Studio</span>
+          </div>
+        </div>
+        <span class="status-pill status-verified" id="headerStatusPill">
+          <span class="pulse-dot"></span> 24 Envs Verified (9:16)
+        </span>
+      </div>
+
+      <div class="header-center">
+        <div class="global-search-bar">
+          <span class="search-icon">🔍</span>
+          <input type="text" id="globalSearchInput" placeholder="Search backgrounds, characters, props, tags... (Cmd+K)" autocomplete="off">
+          <kbd class="search-shortcut">⌘K</kbd>
+        </div>
+      </div>
+
+      <div class="header-right">
+        <button class="btn btn-sm btn-outline" id="btnDownstreamSync" title="Synchronize all assets to Remotion public and kit loader">
+          <span class="sync-icon">🔄</span> Sync Downstream
+        </button>
+        <button class="btn btn-sm btn-primary" id="btnQuickAdd">
+          <span>+</span> Add Asset
+        </button>
+        <button class="theme-toggle" id="btnThemeToggle" title="Toggle Dark/Light Mode">
+          🌓
+        </button>
+      </div>
+    </header>
+
+    <!-- App Body (Sidebar + Content Area) -->
+    <div class="app-body">
+      <!-- Sidebar Navigation -->
+      <aside class="app-sidebar">
+        <nav class="sidebar-nav">
+          <div class="nav-section-title">CORE ASSETS</div>
+          <button class="nav-item active" data-tab="overview">
+            <span class="nav-icon">📊</span>
+            <span class="nav-label">Overview</span>
+            <span class="badge" id="badgeTotalAssets">64</span>
+          </button>
+          <button class="nav-item" data-tab="backgrounds">
+            <span class="nav-icon">🌄</span>
+            <span class="nav-label">Backgrounds</span>
+            <span class="badge" id="badgeBackgrounds">24</span>
+          </button>
+          <button class="nav-item" data-tab="characters">
+            <span class="nav-icon">🐱</span>
+            <span class="nav-label">Characters</span>
+            <span class="badge" id="badgeCharacters">2</span>
+          </button>
+          <button class="nav-item" data-tab="props">
+            <span class="nav-icon">🧪</span>
+            <span class="nav-label">Props & Models</span>
+            <span class="badge" id="badgeProps">16</span>
+          </button>
+          <button class="nav-item" data-tab="other">
+            <span class="nav-icon">🏷️</span>
+            <span class="nav-label">Brand & UI</span>
+            <span class="badge" id="badgeOther">22</span>
+          </button>
+
+          <div class="nav-section-title">ORGANIZATION</div>
+          <button class="nav-item" data-tab="collections">
+            <span class="nav-icon">📁</span>
+            <span class="nav-label">Collections</span>
+            <span class="badge" id="badgeCollections">6</span>
+          </button>
+          <button class="nav-item" data-tab="validation">
+            <span class="nav-icon">🛡️</span>
+            <span class="nav-label">Validation Center</span>
+            <span class="badge badge-warning" id="badgeValidationIssues">1</span>
+          </button>
+        </nav>
+
+        <div class="sidebar-footer">
+          <div class="quick-status-card">
+            <div class="qs-title">Production Target</div>
+            <div class="qs-spec">1080×1920 • 9:16 Vertical • 30fps</div>
+            <div class="qs-indicator">Remotion Papercraft DNA</div>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Main Content Stage -->
+      <main class="app-main" id="mainStage">
+        <!-- Tab Views will be dynamically rendered here -->
+      </main>
+    </div>
+  </div>
+
+  <!-- Interactive Asset Previewer Modal -->
+  <div class="modal-backdrop" id="previewModal" style="display: none;">
+    <div class="modal-dialog modal-preview">
+      <div class="preview-header">
+        <div class="ph-info">
+          <h2 id="pvTitle">Asset Preview</h2>
+          <div class="ph-meta">
+            <span class="badge badge-category" id="pvCategory">STEM</span>
+            <span class="badge badge-status" id="pvStatus">ACTIVE</span>
+            <span class="spec-label" id="pvDimensions">1080×1920</span>
+            <span class="spec-label" id="pvFormat">PNG</span>
+          </div>
+        </div>
+        <div class="ph-controls">
+          <!-- Canvas Switcher -->
+          <div class="canvas-switcher" title="Switch Canvas Background">
+            <button class="cs-btn active" data-bg="checkerboard" title="Checkerboard (Transparency)">🏁</button>
+            <button class="cs-btn" data-bg="cream" title="Paper Cream">📜</button>
+            <button class="cs-btn" data-bg="dark" title="Dark Slate">🌑</button>
+            <button class="cs-btn" data-bg="gray" title="Neutral Gray">⚪</button>
+          </div>
+          <!-- Zoom Controls -->
+          <div class="zoom-controls">
+            <button class="btn btn-icon" id="btnZoomOut" title="Zoom Out">−</button>
+            <span class="zoom-label" id="zoomLevel">100%</span>
+            <button class="btn btn-icon" id="btnZoomIn" title="Zoom In">+</button>
+            <button class="btn btn-xs btn-outline" id="btnZoomFit">Fit</button>
+            <button class="btn btn-xs btn-outline" id="btnZoom100">1:1</button>
+          </div>
+          <button class="btn-close" id="btnClosePreview">&times;</button>
+        </div>
+      </div>
+
+      <div class="preview-body">
+        <!-- Interactive Viewport Canvas -->
+        <div class="preview-canvas-container canvas-checkerboard" id="previewCanvasContainer">
+          <div class="preview-stage-wrapper" id="previewStageWrapper">
+            <img id="previewImage" src="" alt="Asset Preview" class="preview-image">
+            <!-- Floor line indicator for 9:16 environments -->
+            <div class="floor-guide" id="pvFloorGuide" style="display: none;">
+              <span class="floor-tag">Floor Level (y: 1380px)</span>
+            </div>
+            <!-- Vertical 9:16 Safe Frame Mask -->
+            <div class="vertical-safe-frame" id="pvSafeFrame" style="display: none;">
+              <div class="header-safe-zone">Header Banner Safe (0-420px)</div>
+              <div class="captions-safe-zone">Captions Safe (1420-1920px)</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Inspector Sidebar -->
+        <div class="preview-inspector">
+          <div class="inspector-section">
+            <h3>Metadata Specifications</h3>
+            <div class="inspector-props" id="pvPropertiesList">
+              <!-- Dynamically populated -->
+            </div>
+          </div>
+
+          <div class="inspector-section">
+            <h3>Tags & Categories</h3>
+            <div class="tags-container" id="pvTagsContainer">
+              <!-- Dynamically populated -->
+            </div>
+          </div>
+
+          <div class="inspector-section">
+            <h3>Active Episode References</h3>
+            <div class="references-list" id="pvReferencesList">
+              <!-- Dynamically populated -->
+            </div>
+          </div>
+
+          <div class="inspector-actions">
+            <button class="btn btn-outline btn-block" id="btnEditMetadata">✏️ Edit Metadata</button>
+            <div class="action-row">
+              <button class="btn btn-outline" id="btnToggleStatus">Disable</button>
+              <button class="btn btn-outline btn-warning" id="btnArchiveAsset">Archive</button>
+            </div>
+            <button class="btn btn-danger btn-block" id="btnDeleteAsset">🗑️ Remove Asset</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add / Register Asset Modal -->
+  <div class="modal-backdrop" id="addAssetModal" style="display: none;">
+    <div class="modal-dialog modal-form">
+      <div class="modal-header">
+        <h2 id="addAssetModalTitle">Register New Production Asset</h2>
+        <button class="btn-close" id="btnCloseAddModal">&times;</button>
+      </div>
+      <form id="addAssetForm">
+        <div class="form-group">
+          <label>Asset Category</label>
+          <select id="addAssetType" class="form-control" required>
+            <option value="background">Environment Background (1080×1920 9:16)</option>
+            <option value="character-variant">Cat Scientist Character Variant</option>
+            <option value="prop">Interactive Prop / Scientific Apparatus</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Asset Image Source</label>
+          <div class="drop-zone" id="fileDropZone">
+            <span class="drop-icon">📁</span>
+            <span class="drop-text">Drag & drop 1080×1920 PNG/SVG, or click to browse</span>
+            <input type="file" id="assetFileInput" accept=".png,.jpg,.jpeg,.svg,.webp" style="display: none;">
+          </div>
+          <div id="fileUploadFeedback" class="upload-feedback" style="display: none;"></div>
+          <input type="hidden" id="stagedImagePath">
+        </div>
+
+        <div class="form-row">
+          <div class="form-group col-6">
+            <label>Unique ID (kebab-case)</label>
+            <input type="text" id="addAssetId" class="form-control" placeholder="e.g. quantum-optics-lab" required pattern="[a-z0-9_-]+">
+          </div>
+          <div class="form-group col-6">
+            <label>Display Name</label>
+            <input type="text" id="addAssetName" class="form-control" placeholder="e.g. Quantum Optics Laboratory" required>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group col-6">
+            <label>Category / Niche</label>
+            <input type="text" id="addAssetCategory" class="form-control" placeholder="e.g. Physics / STEM" required>
+          </div>
+          <div class="form-group col-6">
+            <label>Mood / Lighting</label>
+            <input type="text" id="addAssetMood" class="form-control" placeholder="e.g. cool / studious">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Description</label>
+          <textarea id="addAssetDescription" class="form-control" rows="2" placeholder="2D papercraft cutout aesthetics and layout description..."></textarea>
+        </div>
+
+        <div class="form-group">
+          <label>Searchable Tags (comma-separated)</label>
+          <input type="text" id="addAssetTags" class="form-control" placeholder="physics, quantum, laboratory, stem, indoor">
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline" id="btnCancelAdd">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="btnSubmitAdd">Register & Sync Asset</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Edit Metadata Modal -->
+  <div class="modal-backdrop" id="editModal" style="display: none;">
+    <div class="modal-dialog modal-form">
+      <div class="modal-header">
+        <h2>Edit Asset Metadata</h2>
+        <button class="btn-close" id="btnCloseEditModal">&times;</button>
+      </div>
+      <form id="editAssetForm">
+        <input type="hidden" id="editAssetId">
+        <input type="hidden" id="editAssetType">
+
+        <div class="form-group">
+          <label>Display Name</label>
+          <input type="text" id="editAssetName" class="form-control" required>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group col-6">
+            <label>Category</label>
+            <input type="text" id="editAssetCategory" class="form-control" required>
+          </div>
+          <div class="form-group col-6">
+            <label>Floor Y Position (px)</label>
+            <input type="number" id="editAssetFloorY" class="form-control" min="900" max="1750" value="1380">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Mood / Atmosphere</label>
+          <input type="text" id="editAssetMood" class="form-control">
+        </div>
+
+        <div class="form-group">
+          <label>Description</label>
+          <textarea id="editAssetDescription" class="form-control" rows="3"></textarea>
+        </div>
+
+        <div class="form-group">
+          <label>Tags (comma-separated)</label>
+          <input type="text" id="editAssetTags" class="form-control">
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline" id="btnCancelEdit">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Changes & Sync</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Safe Deletion Confirmation Dialog -->
+  <div class="modal-backdrop" id="deleteConfirmModal" style="display: none;">
+    <div class="modal-dialog modal-dialog-sm">
+      <div class="modal-header">
+        <h2 class="text-danger">⚠️ Confirm Asset Removal</h2>
+        <button class="btn-close" id="btnCloseDeleteModal">&times;</button>
+      </div>
+      <div class="modal-content-body">
+        <p>You are about to remove asset <strong id="delAssetId"></strong> (<span id="delAssetName"></span>) from the project registry.</p>
+        
+        <div class="ref-warning-box" id="delRefWarningBox" style="display: none;">
+          <div class="rwb-icon">🛑</div>
+          <div class="rwb-text">
+            <strong>Active Episode References Detected!</strong>
+            <p id="delRefWarningText"></p>
+            <p class="rwb-tip">Recommended: Use <strong>Disable</strong> or <strong>Archive</strong> instead to preserve existing episode integrity.</p>
+          </div>
+        </div>
+
+        <div class="form-check">
+          <label class="checkbox-label">
+            <input type="checkbox" id="delForceOverride"> Force removal despite active references
+          </label>
+        </div>
+
+        <div class="form-check">
+          <label class="checkbox-label">
+            <input type="checkbox" id="delDeletePhysical"> Also permanently delete underlying image files from disk
+          </label>
+          <span class="hint-text">(Safe default: Leaves physical image on disk to protect past renders)</span>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline" id="btnCancelDelete">Cancel</button>
+        <button type="button" class="btn btn-danger" id="btnConfirmDelete">Confirm Removal</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <script src="/app.js"></script>
+</body>
+</html>

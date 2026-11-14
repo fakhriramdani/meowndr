@@ -1,0 +1,34 @@
+{
+  "platform": "instagram_reels",
+  "name": "Instagram Reels",
+  "version": "2026.1",
+  "official_requirements": {
+    "hard_character_limit": 2200,
+    "max_hashtags": 5,
+    "aspect_ratio": "9:16",
+    "resolution": "1080x1920",
+    "frame_rate": 30
+  },
+  "platform_recommendations": {
+    "recommended_character_range": [100, 500],
+    "target_character_count": 320,
+    "recommended_hashtags_range": [3, 5],
+    "recommended_emoji_range": [0, 3],
+    "structure": [
+      "HOOK",
+      "CONTEXT_INSIGHT",
+      "ENGAGEMENT_TRIGGER",
+      "CTA_SAVE_SHARE",
+      "RELEVANT_HASHTAGS"
+    ]
+  },
+  "creator_best_practices": {
+    "search_discoverability": "Place primary topic keyword in the first sentence naturally before the fold.",
+    "curiosity_principles": "Complement the video narration by adding an extra fact or context without giving away the final video surprise.",
+    "cta_focus": ["save", "share", "profile_discovery"],
+    "banned_generic_tags": [
+      "#fyp", "#foryou", "#foryoupage", "#viral", "#trend", "#trending",
+      "#explore", "#likeforlike", "#followforfollow", "#xyzbca"
+    ]
+  }
+}

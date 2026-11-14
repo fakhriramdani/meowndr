@@ -1,0 +1,73 @@
+{
+  "id": "backyard-garden",
+  "name": "Backyard Garden",
+  "description": "A simple home garden with leafy plants, flowers, a wooden fence, and a bright open atmosphere.",
+  "category": "Nature / Everyday Life",
+  "mood": "Fresh, cheerful, green, sunny",
+  "style": {
+    "type": "2D Papercraft Cutout",
+    "construction": "Layered paper collage with scissor-cut edges and subtle paper drop shadows",
+    "color_palette": [
+      "#D8EFF5",
+      "#38A169",
+      "#2F855A",
+      "#ED8936",
+      "#ECC94B",
+      "#718096"
+    ],
+    "lighting": "Bright overhead summer sunlight with paper sky clouds"
+  },
+  "dimensions": {
+    "width": 1080,
+    "height": 1920,
+    "aspect_ratio": "9:16"
+  },
+  "layout": {
+    "floor_y": 1380,
+    "presenter_zone": {
+      "x_range": [
+        180,
+        900
+      ],
+      "y_range": [
+        850,
+        1650
+      ],
+      "status": "clear_unobstructed"
+    },
+    "header_zone": {
+      "y_range": [
+        0,
+        420
+      ],
+      "status": "clear_for_banner"
+    },
+    "caption_zone": {
+      "y_range": [
+        1300,
+        1550
+      ],
+      "status": "low_detail_for_legibility"
+    }
+  },
+  "best_for": [
+    "Botany & plant biology",
+    "Ecosystems",
+    "Weather & sunlight",
+    "Outdoor lifestyle"
+  ],
+  "rules_compliance": {
+    "consistent_papercraft_style": true,
+    "layered_cutout_construction": true,
+    "visible_paper_edges_and_shadows": true,
+    "no_characters_or_people": true,
+    "foreground_suitable_for_presenter": true,
+    "vertical_9_16_composition": true,
+    "reusable_environment": true
+  },
+  "asset_paths": {
+    "image": "assets/backgrounds/backyard-garden/background.png",
+    "metadata": "assets/backgrounds/backyard-garden/metadata.json"
+  },
+  "created_at": "2026-10-29T08:51:00+07:00"
+}

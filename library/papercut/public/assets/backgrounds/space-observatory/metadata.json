@@ -1,0 +1,73 @@
+{
+  "id": "space-observatory",
+  "name": "Space Observatory",
+  "description": "A realistic small astronomy room with a domed roof, star charts, and a telescope positioned at the side.",
+  "category": "Space / Physics",
+  "mood": "Deep blue, peaceful, magical but scientifically grounded",
+  "style": {
+    "type": "2D Papercraft Cutout",
+    "construction": "Layered paper collage with scissor-cut edges and subtle paper drop shadows",
+    "color_palette": [
+      "#0F172A",
+      "#1E293B",
+      "#D97706",
+      "#FDE047",
+      "#38BDF8",
+      "#475569"
+    ],
+    "lighting": "Deep midnight starlight through open observatory dome slit with brass warm instrument accents"
+  },
+  "dimensions": {
+    "width": 1080,
+    "height": 1920,
+    "aspect_ratio": "9:16"
+  },
+  "layout": {
+    "floor_y": 1380,
+    "presenter_zone": {
+      "x_range": [
+        180,
+        900
+      ],
+      "y_range": [
+        850,
+        1650
+      ],
+      "status": "clear_unobstructed"
+    },
+    "header_zone": {
+      "y_range": [
+        0,
+        420
+      ],
+      "status": "clear_for_banner"
+    },
+    "caption_zone": {
+      "y_range": [
+        1300,
+        1550
+      ],
+      "status": "low_detail_for_legibility"
+    }
+  },
+  "best_for": [
+    "Astronomy & astrophysics",
+    "Space exploration",
+    "Planetary orbits",
+    "Cosmology"
+  ],
+  "rules_compliance": {
+    "consistent_papercraft_style": true,
+    "layered_cutout_construction": true,
+    "visible_paper_edges_and_shadows": true,
+    "no_characters_or_people": true,
+    "foreground_suitable_for_presenter": true,
+    "vertical_9_16_composition": true,
+    "reusable_environment": true
+  },
+  "asset_paths": {
+    "image": "assets/backgrounds/space-observatory/background.png",
+    "metadata": "assets/backgrounds/space-observatory/metadata.json"
+  },
+  "created_at": "2026-10-29T08:51:48+07:00"
+}

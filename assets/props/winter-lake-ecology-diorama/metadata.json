@@ -1,0 +1,12 @@
+{
+  "id": "winter-lake-ecology-diorama",
+  "name": "Winter Lake Ecology Diorama",
+  "category": "props",
+  "description": "Multi-layered papercraft diorama cross-section showing sub-zero air, 0C surface ice insulator blanket, thermal gradient (1C-4C), swimming carp, and riverbed flora.",
+  "dimensions": {
+    "width": 560,
+    "height": 540,
+    "anchor": "top-left"
+  },
+  "created_at": "2026-10-29T02:35:00+07:00"
+}

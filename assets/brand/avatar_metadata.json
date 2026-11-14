@@ -1,0 +1,50 @@
+{
+  "id": "cat-scientist-social-avatar",
+  "category": "brand",
+  "name": "Canonical Cat Scientist Social Media Profile Avatar",
+  "brand_handle": "@meowndr",
+  "dimensions": {
+    "width": 1024,
+    "height": 1024,
+    "aspect_ratio": "1:1"
+  },
+  "safe_area": {
+    "type": "centered_circular",
+    "diameter": 1024,
+    "radius": 512,
+    "center": {
+      "x": 512,
+      "y": 512
+    },
+    "safe_inner_radius": 460,
+    "contained_elements": [
+      "Cat Scientist Mascot (Ears, Face, Spectacles, Muzzle, Whiskers)",
+      "Lab Coat Lapels & Teal Pocket Pen",
+      "Radiant Warm Paper Halo",
+      "Concentric Lab Teal & Amber Papercraft Discs"
+    ]
+  },
+  "style": {
+    "type": "Handcrafted 2D Cut-Paper Collage Diorama",
+    "palette": {
+      "background_midnight_navy": "#0F172A",
+      "laboratory_teal": "#0D9488",
+      "teal_accent": "#14B8A6",
+      "mascot_orange": "#F97316",
+      "mascot_shade": "#EA580C",
+      "mascot_cream": "#FFFDF7",
+      "inner_ears_and_nose": "#FB7185",
+      "amber_spectacles": "#B45309",
+      "golden_halo": "#F59E0B",
+      "lab_coat": "#FAF8F5"
+    },
+    "construction": "Layered cardstock with paper grain texture, physical drop shadows, and deckle edges"
+  },
+  "assets": {
+    "avatar_final": "assets/brand/cat-scientist-avatar-social.png",
+    "crop_preview": "assets/brand/cat-scientist-avatar-social-preview.png",
+    "qa_comparison": "assets/brand/cat-scientist-avatar-qa-comparison.png",
+    "generator_tool": "library/tools/generate_social_avatar.js"
+  },
+  "created_at": "2026-10-29T23:25:00+07:00"
+}

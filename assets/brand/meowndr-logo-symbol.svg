@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1024" height="1024" viewBox="0 0 1024 1024" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <filter id="paperShadow" x="-25%" y="-25%" width="150%" height="150%">
+      <feDropShadow dx="0" dy="14" stdDeviation="16" flood-color="#000000" flood-opacity="0.38"/>
+      <feDropShadow dx="0" dy="3" stdDeviation="5" flood-color="#000000" flood-opacity="0.22"/>
+    </filter>
+    <linearGradient id="brandOrange" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FB923C"/>
+      <stop offset="26%" stop-color="#F97316"/>
+      <stop offset="100%" stop-color="#EA580C"/>
+    </linearGradient>
+    <linearGradient id="creamAccent" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF"/>
+      <stop offset="100%" stop-color="#FFFDF7"/>
+    </linearGradient>
+  </defs>
+
+  <g filter="url(#paperShadow)" id="meowndr-lettermark-symbol">
+    <path id="m-base-silhouette" d="M 238 740 L 230 450 C 228 390, 260 300, 345 235 L 512 515 L 679 235 C 764 300, 796 390, 794 450 L 786 740 L 678 740 L 646 480 L 512 660 L 378 480 L 346 740 Z" fill="url(#brandOrange)"/>
+    <path id="m-depth-facet" d="M 512 515 L 679 235 C 764 300, 796 390, 794 450 L 786 740 L 678 740 L 646 480 L 512 660 Z" fill="#9A3412" opacity="0.16"/>
+    <path id="m-signature-white-ear" d="M 308 300 C 322 268, 336 248, 345 235 L 372 280 L 342 292 Z" fill="url(#creamAccent)"/>
+  </g>
+</svg>

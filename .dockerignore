@@ -1,0 +1,16 @@
+.git
+.venv
+venv
+episodes/*
+out/*
+!episodes/.gitkeep
+!out/.gitkeep
+**/node_modules
+**/__pycache__
+**/.pytest_cache
+**/build
+**/.remotion
+*.mp4
+*.wav
+*.log
+.env

@@ -1,0 +1,12 @@
+{
+  "id": "density-comparison-scale",
+  "name": "Density and Volume Comparison Scale",
+  "category": "props",
+  "description": "Side-by-side graduated cylinders (1000 mL liquid water vs 1090 mL expanded ice) with balance platform and +9% volume indicator.",
+  "dimensions": {
+    "width": 500,
+    "height": 360,
+    "anchor": "top-left"
+  },
+  "created_at": "2026-10-29T02:35:00+07:00"
+}

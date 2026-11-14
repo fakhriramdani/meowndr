@@ -1,0 +1,22 @@
+{
+  "id": "clipboard",
+  "name": "Scientist Paper Clipboard",
+  "category": "props",
+  "description": "Wooden paper clipboard with metal brass clip and paper checklist sheet, designed for critter holdR.",
+  "style": {
+    "type": "2D Papercraft Prop",
+    "layers": ["board", "sheet", "clip"],
+    "shadow": "0 3px 6px rgba(0,0,0,0.3)"
+  },
+  "dimensions": {
+    "width": 140,
+    "height": 190,
+    "anchor": "hand-center"
+  },
+  "placement": {
+    "supports_floor_mount": false,
+    "supports_hand_held": true,
+    "default_scale": 1.0
+  },
+  "created_at": "2026-10-29T00:43:00+07:00"
+}

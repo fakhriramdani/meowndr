@@ -1,0 +1,297 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "TrendIntelligenceArtifact",
+  "type": "object",
+  "required": [
+    "generated_at",
+    "research_date",
+    "target_audience",
+    "platforms_monitored",
+    "raw_trends",
+    "evaluated_opportunities",
+    "rejected_topics",
+    "limitations_and_disclosures"
+  ],
+  "properties": {
+    "generated_at": { "type": "string" },
+    "research_date": { "type": "string" },
+    "target_audience": { "type": "string" },
+    "niches_covered": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "platforms_monitored": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["platform", "access_mode", "status", "limitations"],
+        "properties": {
+          "platform": { "type": "string" },
+          "access_mode": { "type": "string" },
+          "status": { "type": "string" },
+          "credentials_configured": { "type": "boolean" },
+          "limitations": { "type": "string" }
+        }
+      }
+    },
+    "raw_trends": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "platform",
+          "topic",
+          "source_url",
+          "creator_or_channel",
+          "research_timestamp",
+          "evidence_quality"
+        ],
+        "properties": {
+          "id": { "type": "string" },
+          "platform": { "type": "string" },
+          "topic": { "type": "string" },
+          "source_url": { "type": "string" },
+          "creator_or_channel": { "type": "string" },
+          "publication_date": { "type": ["string", "null"] },
+          "views": { "type": ["integer", "null"] },
+          "likes": { "type": ["integer", "null"] },
+          "comments": { "type": ["integer", "null"] },
+          "shares": { "type": ["integer", "null"] },
+          "engagement_rate": { "type": ["number", "null"] },
+          "view_velocity": { "type": ["number", "null"] },
+          "is_measured_metrics": { "type": "boolean" },
+          "research_timestamp": { "type": "string" },
+          "evidence_quality": { "type": "string", "enum": ["high", "medium", "low"] },
+          "evidence_notes": { "type": "string" },
+          "niche": { "type": "string" },
+          "region": { "type": "string" },
+          "collection_method": { "type": "string", "enum": ["official_api", "public_source", "manual_observation", "discovery_tool"] },
+          "evidence_classifications": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": ["VERIFIED_FACT", "OBSERVED_TREND", "MEASURED_METRICS", "ESTIMATED_METRICS", "INSUFFICIENT_EVIDENCE"]
+            }
+          }
+        }
+      }
+    },
+    "evaluated_opportunities": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "raw_trend_id",
+          "proposed_title",
+          "niche",
+          "status",
+          "scoring",
+          "video_concept"
+        ],
+        "properties": {
+          "id": { "type": "string" },
+          "raw_trend_id": { "type": "string" },
+          "proposed_title": { "type": "string" },
+          "niche": { "type": "string" },
+          "status": { "type": "string", "enum": ["APPROVED", "BACKLOG", "REJECTED"] },
+          "evidence_classifications": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": ["VERIFIED_FACT", "OBSERVED_TREND", "MEASURED_METRICS", "ESTIMATED_METRICS", "INSUFFICIENT_EVIDENCE"]
+            }
+          },
+          "evidence_confidence": {
+            "type": "object",
+            "properties": {
+              "confidence_score": { "type": "number", "minimum": 0, "maximum": 100 },
+              "confidence_level": { "type": "string", "enum": ["HIGH", "MEDIUM", "LOW"] },
+              "rationale": { "type": "string" }
+            }
+          },
+          "factual_complexity": {
+            "type": "object",
+            "properties": {
+              "level": { "type": "string", "enum": ["LOW", "MODERATE", "HIGH", "EXTREME"] },
+              "explanation": { "type": "string" }
+            }
+          },
+          "visual_production_feasibility": {
+            "type": "object",
+            "properties": {
+              "overall_feasibility": { "type": "string", "enum": ["HIGH", "MEDIUM", "LOW"] },
+              "can_explain_in_30_60s": { "type": "boolean" },
+              "can_represent_in_2d_papercraft": { "type": "boolean" },
+              "cat_scientist_meaningful_interaction": { "type": "boolean" },
+              "strong_visual_progression": { "type": "boolean" },
+              "required_assets_available": { "type": "boolean" },
+              "requires_substantial_custom_assets": { "type": "boolean" },
+              "notes": { "type": "string" }
+            }
+          },
+          "misleading_simplification_risk": {
+            "type": "object",
+            "properties": {
+              "risk_level": { "type": "string", "enum": ["LOW", "MEDIUM", "HIGH"] },
+              "potential_misconception": { "type": "string" },
+              "safeguard_instructions": { "type": "string" }
+            }
+          },
+          "existing_episode_originality": {
+            "type": "object",
+            "properties": {
+              "comparison_status": { "type": "string", "enum": ["DISTINCT_NEW_TOPIC", "NEW_ANGLE_ON_FAMILIAR_THEME", "POTENTIAL_OVERLAP"] },
+              "similar_episodes": { "type": "array", "items": { "type": "string" } },
+              "originality_notes": { "type": "string" }
+            }
+          },
+          "duplicate_assessment": {
+            "type": "object",
+            "properties": {
+              "is_duplicate": { "type": "boolean" },
+              "similarity_level": { "type": "string", "enum": ["NONE", "LOW", "MODERATE", "HIGH"] },
+              "matched_existing_episode": { "type": ["string", "null"] },
+              "matched_previous_research": { "type": ["string", "null"] },
+              "new_angle_justification": { "type": "string" }
+            }
+          },
+          "research_repeatability": {
+            "type": "object",
+            "properties": {
+              "first_observed_date": { "type": "string" },
+              "latest_observed_date": { "type": "string" },
+              "observation_count": { "type": "integer" },
+              "source_count": { "type": "integer" },
+              "platform_coverage": { "type": "array", "items": { "type": "string" } },
+              "metric_changes": { "type": ["object", "null"] },
+              "score_changes": { "type": ["object", "null"] },
+              "confidence_changes": { "type": ["object", "null"] },
+              "trend_growth_classification": {
+                "type": "string",
+                "enum": ["SINGLE_OBSERVATION_BASELINE", "ACCELERATING", "STEADY", "PLATEAUING", "DECELERATING"]
+              },
+              "repeatability_notes": { "type": "string" }
+            }
+          },
+          "scoring": {
+            "type": "object",
+            "required": [
+              "trend_momentum",
+              "relevance_to_meowndr",
+              "educational_value",
+              "visual_storytelling_potential",
+              "originality_differentiation",
+              "evergreen_value",
+              "total_score",
+              "reasoning"
+            ],
+            "properties": {
+              "trend_momentum": { "type": "number", "minimum": 0, "maximum": 25 },
+              "relevance_to_meowndr": { "type": "number", "minimum": 0, "maximum": 20 },
+              "educational_value": { "type": "number", "minimum": 0, "maximum": 20 },
+              "visual_storytelling_potential": { "type": "number", "minimum": 0, "maximum": 15 },
+              "originality_differentiation": { "type": "number", "minimum": 0, "maximum": 10 },
+              "evergreen_value": { "type": "number", "minimum": 0, "maximum": 10 },
+              "total_score": { "type": "number", "minimum": 0, "maximum": 100 },
+              "reasoning": { "type": "string" }
+            }
+          },
+          "video_concept": {
+            "type": "object",
+            "required": [
+              "main_question",
+              "opening_hook",
+              "educational_explanation",
+              "why_interesting_now",
+              "trend_evidence",
+              "papercraft_visualizations",
+              "cat_scientist_interactions",
+              "suggested_scene_progression",
+              "estimated_duration_seconds",
+              "recommended_platform",
+              "relevant_keywords",
+              "factual_sources_to_verify"
+            ],
+            "properties": {
+              "main_question": { "type": "string" },
+              "opening_hook": { "type": "string" },
+              "educational_explanation": { "type": "string" },
+              "why_interesting_now": { "type": "string" },
+              "trend_evidence": { "type": "string" },
+              "papercraft_visualizations": {
+                "type": "array",
+                "items": { "type": "string" }
+              },
+              "cat_scientist_interactions": {
+                "type": "array",
+                "items": { "type": "string" }
+              },
+              "suggested_scene_progression": {
+                "type": "array",
+                "items": { "type": "string" }
+              },
+              "estimated_duration_seconds": { "type": "number" },
+              "recommended_platform": { "type": "string" },
+              "relevant_keywords": {
+                "type": "array",
+                "items": { "type": "string" }
+              },
+              "factual_sources_to_verify": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": ["claim", "source_name", "url"],
+                  "properties": {
+                    "claim": { "type": "string" },
+                    "source_name": { "type": "string" },
+                    "url": { "type": "string" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "rejected_topics": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["topic", "rejection_reason", "disqualification_category"],
+        "properties": {
+          "topic": { "type": "string" },
+          "niche": { "type": "string" },
+          "rejection_reason": { "type": "string" },
+          "disqualification_category": {
+            "type": "string",
+            "enum": [
+              "weak_factual_foundation",
+              "brand_unsuitable",
+              "inaccurate_or_gross_oversimplification",
+              "misleading_sensational_pseudoscience",
+              "no_visual_storytelling_potential"
+            ]
+          },
+          "source_url": { "type": "string" }
+        }
+      }
+    },
+    "limitations_and_disclosures": {
+      "type": "object",
+      "required": [
+        "youtube_api_status",
+        "tiktok_api_status",
+        "instagram_api_status",
+        "disclaimer"
+      ],
+      "properties": {
+        "youtube_api_status": { "type": "string" },
+        "tiktok_api_status": { "type": "string" },
+        "instagram_api_status": { "type": "string" },
+        "disclaimer": { "type": "string" }
+      }
+    }
+  }
+}

@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools>=68.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "papercraft-open"
+version = "1.0.0"
+description = "Cross-platform modular workflow for 9:16 papercraft explainer reels (Remotion + Python Content Factory)."
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "jsonschema>=4.20.0",
+    "numpy>=1.24.0",
+    "pillow>=10.0.0",
+    "platformdirs>=4.0.0",
+    "python-dotenv>=1.0.0",
+    "requests>=2.31.0",
+    "soundfile>=0.12.1",
+]
+
+[project.scripts]
+papercraft = "library.cli_main:main"
+
+[tool.setuptools.packages.find]
+include = ["library*"]

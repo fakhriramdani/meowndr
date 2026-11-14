@@ -1,0 +1,12 @@
+{
+  "id": "schumann-resonance-globe",
+  "name": "Schumann Planetary Resonance Cavity Model",
+  "category": "props",
+  "description": "Cross-section of Earth, ionospheric waveguide cavity, and 7.83 Hz electromagnetic standing wave pulsation.",
+  "dimensions": {
+    "width": 520,
+    "height": 520,
+    "anchor": "center"
+  },
+  "created_at": "2026-10-31T17:25:00+07:00"
+}

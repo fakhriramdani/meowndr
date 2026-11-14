@@ -1,0 +1,58 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ScriptAndNarration",
+  "oneOf": [
+    {
+      "type": "array",
+      "minItems": 3,
+      "items": {
+        "type": "object",
+        "required": ["id", "text"],
+        "properties": {
+          "id": { "type": "string" },
+          "text": { "type": "string", "minLength": 5 },
+          "tts": { "type": "string" },
+          "raw_text": { "type": "string" },
+          "speaker": { "type": "string" },
+          "voice_id": { "type": "string" },
+          "model_id": { "type": "string" },
+          "target_seconds": { "type": "number" },
+          "claim_ref": { "type": "string" },
+          "normalization_notes": { "type": "array" },
+          "validation_status": { "type": "string" }
+        }
+      }
+    },
+    {
+      "type": "object",
+      "required": ["lines"],
+      "properties": {
+        "language": { "type": "string" },
+        "total_word_count": { "type": "integer" },
+        "estimated_duration_sec": { "type": "number" },
+        "normalization_status": { "type": "string" },
+        "lines": {
+          "type": "array",
+          "minItems": 3,
+          "items": {
+            "type": "object",
+            "required": ["id", "text"],
+            "properties": {
+              "id": { "type": "string" },
+              "text": { "type": "string", "minLength": 5 },
+              "tts": { "type": "string" },
+              "raw_text": { "type": "string" },
+              "speaker": { "type": "string" },
+              "voice_id": { "type": "string" },
+              "model_id": { "type": "string" },
+              "target_seconds": { "type": "number" },
+              "claim_ref": { "type": "string" },
+              "normalization_notes": { "type": "array" },
+              "validation_status": { "type": "string" }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

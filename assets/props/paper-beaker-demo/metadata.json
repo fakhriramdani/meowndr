@@ -1,0 +1,12 @@
+{
+  "id": "paper-beaker-demo",
+  "name": "Paper Beaker & Floating Ice Demo",
+  "category": "props",
+  "description": "Graduated papercraft glass beaker with volumetric markings, liquid meniscus ripples, and buoyant multi-faceted ice cube.",
+  "dimensions": {
+    "width": 170,
+    "height": 210,
+    "anchor": "bottom-center"
+  },
+  "created_at": "2026-10-29T02:35:00+07:00"
+}

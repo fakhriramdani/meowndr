@@ -1,0 +1,12 @@
+{
+  "id": "kardashev-civilization",
+  "name": "Kardashev Type-1 Civilization Lotus Monument",
+  "category": "props",
+  "description": "Ascension monument where cracked fossil fuel oil barrels split apart as a clean energy golden lotus blooms.",
+  "dimensions": {
+    "width": 560,
+    "height": 560,
+    "anchor": "bottom-center"
+  },
+  "created_at": "2026-10-31T17:25:00+07:00"
+}

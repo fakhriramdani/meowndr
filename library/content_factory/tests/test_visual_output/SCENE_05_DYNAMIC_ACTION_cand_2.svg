@@ -1,0 +1,160 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1920" width="1080" height="1920">
+  <defs>
+    <!-- Paper Shadow Filters -->
+    <filter id="paper-shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="-2" dy="8" stdDeviation="8" flood-color="#0F172A" flood-opacity="0.28"/>
+    </filter>
+    <filter id="deep-paper-shadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="-4" dy="16" stdDeviation="16" flood-color="#0F172A" flood-opacity="0.38"/>
+    </filter>
+    <filter id="soft-glow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="12" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+
+    <!-- Linear Gradients for Paper Cardstock -->
+    <linearGradient id="bg-grad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0F172A" />
+      <stop offset="60%" stop-color="#0F172A" />
+      <stop offset="100%" stop-color="#020617" />
+    </linearGradient>
+    <linearGradient id="apparatus-grad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0F172A" />
+      <stop offset="100%" stop-color="#06B6D4" />
+    </linearGradient>
+    <linearGradient id="accent-grad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0284C7" />
+      <stop offset="100%" stop-color="#EA580C" />
+    </linearGradient>
+    <linearGradient id="mercury-grad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#EF4444" />
+      <stop offset="100%" stop-color="#991B1B" />
+    </linearGradient>
+    <linearGradient id="coat-grad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#FFFFFF" />
+      <stop offset="100%" stop-color="#F8FAFC" />
+    </linearGradient>
+  </defs>
+
+  <!-- 1. BASE BACKGROUND CARDSTOCK (Depth Plane 1 - z=0) -->
+  <rect width="1080" height="1920" fill="url(#bg-grad)"/>
+
+  <!-- Background Environment Wall Cutouts & Atmospheric Panels -->
+  <g id="env-background" filter="url(#paper-shadow)">
+    <!-- Architectural Back Panels -->
+    <rect x="60" y="440" width="960" height="920" rx="24" fill="#0F172A" fill-opacity="0.6" stroke="#FDFBF7" stroke-opacity="0.08" stroke-width="2"/>
+    <rect x="100" y="480" width="420" height="340" rx="16" fill="#1E293B" stroke="#FDFBF7" stroke-opacity="0.06" stroke-width="1"/>
+    <rect x="560" y="480" width="420" height="340" rx="16" fill="#1E293B" stroke="#FDFBF7" stroke-opacity="0.06" stroke-width="1"/>
+
+    <!-- Subtle Technical Grid Lines / Celestial Coordinates -->
+    <line x1="120" y1="560" x2="500" y2="560" stroke="#06B6D4" stroke-opacity="0.18" stroke-width="2" stroke-dasharray="6 6"/>
+    <line x1="120" y1="640" x2="500" y2="640" stroke="#06B6D4" stroke-opacity="0.18" stroke-width="2" stroke-dasharray="6 6"/>
+    <line x1="310" y1="500" x2="310" y2="800" stroke="#06B6D4" stroke-opacity="0.18" stroke-width="2" stroke-dasharray="6 6"/>
+
+    <!-- Ambient Laboratory Shelving cutouts -->
+    <rect x="580" y="520" width="380" height="18" rx="4" fill="#FDFBF7" fill-opacity="0.12"/>
+    <rect x="600" y="490" width="30" height="30" rx="4" fill="#0F172A" fill-opacity="0.3"/>
+    <rect x="640" y="475" width="24" height="45" rx="4" fill="#0284C7" fill-opacity="0.4"/>
+    <rect x="674" y="485" width="40" height="35" rx="4" fill="#06B6D4" fill-opacity="0.35"/>
+    <rect x="580" y="620" width="380" height="18" rx="4" fill="#FDFBF7" fill-opacity="0.12"/>
+
+    <!-- Workbench Paper Surface at floor line -->
+    <rect x="40" y="1320" width="1000" height="80" rx="12" fill="#1E293B" stroke="#FDFBF7" stroke-opacity="0.15" stroke-width="2"/>
+    <rect x="20" y="1380" width="1040" height="20" fill="#0F172A" fill-opacity="0.25"/>
+  </g>
+
+  <!-- 2. PHYSICAL APPARATUS / DEMONSTRATION ZONE (Depth Plane 2 - z=0.5) -->
+  <g id="physical-apparatus" filter="url(#deep-paper-shadow)">
+    
+    <!-- Industrial Calibrated Dial Gauge Apparatus -->
+    <circle cx="540" cy="880" r="220" fill="#1E293B" stroke="#FDFBF7" stroke-width="8" filter="url(#paper-shadow)"/>
+    <circle cx="540" cy="880" r="200" fill="#0F172A" stroke="#06B6D4" stroke-width="3" stroke-opacity="0.5"/>
+    <!-- Warning Arc -->
+    <path d="M 610 760 A 160 160 0 0 1 680 940" fill="none" stroke="#0284C7" stroke-width="14" stroke-linecap="round"/>
+    <!-- Gauge Tick Marks -->
+    <g stroke="#FDFBF7" stroke-width="3" stroke-opacity="0.7">
+      <line x1="540" y1="690" x2="540" y2="715"/>
+      <line x1="670" y1="750" x2="655" y2="765"/>
+      <line x1="730" y1="880" x2="705" y2="880"/>
+      <line x1="410" y1="750" x2="425" y2="765"/>
+      <line x1="350" y1="880" x2="375" y2="880"/>
+    </g>
+    <!-- Oscillating Brass Needle Pointer -->
+    <g transform="rotate(65 540 880)">
+      <polygon points="530,880 550,880 540,710" fill="#0284C7" stroke="#FFFFFF" stroke-width="1.5"/>
+      <circle cx="540" cy="880" r="26" fill="#0F172A" stroke="#FDFBF7" stroke-width="4"/>
+    </g>
+
+    <!-- Support Gantry Struts & Steel Drill Column -->
+    <rect x="515" y="1100" width="50" height="280" fill="#334155" stroke="#FDFBF7" stroke-width="3"/>
+    <line x1="520" y1="1140" x2="560" y2="1180" stroke="#0284C7" stroke-width="4"/>
+    <line x1="520" y1="1220" x2="560" y2="1260" stroke="#0284C7" stroke-width="4"/>
+            
+  </g>
+
+  <!-- 3. PRESENTER MASCOT CAT SCIENTIST (Depth Plane 2 - z=0.5) -->
+  <g id="presenter-mascot" filter="url(#paper-shadow)">
+    
+    <!-- Cat Scientist Mascot Layer (State: surprised, Shot: DA) -->
+    <g transform="translate(760 1180) scale(1.05)">
+      <!-- White Folded Paper Lab Coat Torso & Lapels -->
+      <path d="M -75 40 L 75 40 L 95 180 L -95 180 Z" fill="url(#coat-grad)" stroke="#FDFBF7" stroke-width="3" filter="url(#paper-shadow)"/>
+      <!-- Lab coat collar V-fold -->
+      <polygon points="0,70 -45,40 -20,110 0,110" fill="#E2E8F0" stroke="#FDFBF7" stroke-width="1.5"/>
+      <polygon points="0,70 45,40 20,110 0,110" fill="#E2E8F0" stroke="#FDFBF7" stroke-width="1.5"/>
+      <!-- Chest Pocket with Paper Pen cutout -->
+      <rect x="35" y="90" width="30" height="35" rx="4" fill="#E2E8F0" stroke="#FDFBF7" stroke-width="1"/>
+      <line x1="50" y1="80" x2="50" y2="98" stroke="#0284C7" stroke-width="3" stroke-linecap="round"/>
+
+      <!-- Orange Cardstock Head -->
+      <ellipse cx="0" cy="-30" rx="72" ry="62" fill="#EA580C" stroke="#FDFBF7" stroke-width="3"/>
+      <!-- Tabby Forehead Stripes -->
+      <path d="M -16 -82 L 0 -58 L 16 -82" stroke="#9A3412" stroke-width="4" fill="none" stroke-linecap="round"/>
+      <line x1="0" y1="-86" x2="0" y2="-64" stroke="#9A3412" stroke-width="4" stroke-linecap="round"/>
+
+      <!-- Pointed Cat Ears with Pink Cardstock Inner Folds -->
+      <polygon points="-58,-65 -78,-135 -18,-85" fill="#EA580C" stroke="#FDFBF7" stroke-width="2.5"/>
+      <polygon points="-54,-72 -70,-120 -26,-86" fill="#FDA4AF"/>
+      <polygon points="58,-65 78,-135 18,-85" fill="#EA580C" stroke="#FDFBF7" stroke-width="2.5"/>
+      <polygon points="54,-72 70,-120 26,-86" fill="#FDA4AF"/>
+
+      <!-- Wire-Rim Round Spectacles with 1px rim highlight -->
+      <g transform="rotate(4)">
+        <circle cx="-30" cy="-28" r="28" fill="#FDFBF7" fill-opacity="0.15" stroke="#FDFBF7" stroke-width="3.5"/>
+        <circle cx="30" cy="-28" r="28" fill="#FDFBF7" fill-opacity="0.15" stroke="#FDFBF7" stroke-width="3.5"/>
+        <line x1="-2" y1="-28" x2="2" y2="-28" stroke="#FDFBF7" stroke-width="3.5"/>
+        <!-- Eyes Behind Spectacles -->
+        <ellipse cx="-30" cy="-28" rx="12" ry="14" fill="#0F172A"/>
+        <circle cx="-26" cy="-32" r="4" fill="#FFFFFF"/>
+        <ellipse cx="30" cy="-28" rx="12" ry="14" fill="#0F172A"/>
+        <circle cx="34" cy="-32" r="4" fill="#FFFFFF"/>
+      </g>
+
+      <!-- Whiskers & Nose -->
+      <polygon points="0,-10 -6,-16 6,-16" fill="#FDA4AF"/>
+      <line x1="-15" y1="-8" x2="-65" y2="-12" stroke="#FDFBF7" stroke-width="2" stroke-linecap="round"/>
+      <line x1="-15" y1="-4" x2="-65" y2="4" stroke="#FDFBF7" stroke-width="2" stroke-linecap="round"/>
+      <line x1="15" y1="-8" x2="65" y2="-12" stroke="#FDFBF7" stroke-width="2" stroke-linecap="round"/>
+      <line x1="15" y1="-4" x2="65" y2="4" stroke="#FDFBF7" stroke-width="2" stroke-linecap="round"/>
+
+      <!-- Gesturing Paws -->
+      <g transform="rotate(10 70 80)">
+        <ellipse cx="70" cy="80" rx="18" ry="14" fill="#EA580C" stroke="#FDFBF7" stroke-width="2"/>
+        <line x1="64" y1="74" x2="76" y2="74" stroke="#9A3412" stroke-width="2"/>
+      </g>
+    </g>
+        
+  </g>
+
+  <!-- 4. FOREGROUND FRAMING LAYER (Depth Plane 3 - z=1.0) -->
+  <g id="foreground-framing" filter="url(#deep-paper-shadow)">
+    <!-- Top-left framing deckle-edge paper flourish -->
+    <path d="M 0 0 L 260 0 C 220 60, 180 120, 120 160 C 60 200, 20 220, 0 240 Z" fill="#0B132B" fill-opacity="0.85" stroke="#FDFBF7" stroke-opacity="0.1" stroke-width="1.5"/>
+    <!-- Top-right framing deckle-edge paper flourish -->
+    <path d="M 1080 0 L 820 0 C 860 60, 900 120, 960 160 C 1020 200, 1060 220, 1080 240 Z" fill="#0B132B" fill-opacity="0.85" stroke="#FDFBF7" stroke-opacity="0.1" stroke-width="1.5"/>
+
+    <!-- Bottom foreground vignettes framing stage zone -->
+    <path d="M 0 1920 L 0 1780 C 80 1760, 180 1820, 240 1920 Z" fill="#0B132B" fill-opacity="0.9" stroke="#FDFBF7" stroke-opacity="0.1" stroke-width="1"/>
+    <path d="M 1080 1920 L 1080 1780 C 1000 1760, 900 1820, 840 1920 Z" fill="#0B132B" fill-opacity="0.9" stroke="#FDFBF7" stroke-opacity="0.1" stroke-width="1"/>
+  </g>
+</svg>

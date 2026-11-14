@@ -1,0 +1,12 @@
+{
+  "id": "space-beamed-power",
+  "name": "Deep Space Beamed Power Array",
+  "category": "props",
+  "description": "Planetary beamed power array transmitting wireless electrical energy to orbital space stations and extraterrestrial settlements.",
+  "dimensions": {
+    "width": 540,
+    "height": 540,
+    "anchor": "center"
+  },
+  "created_at": "2026-10-31T17:25:00+07:00"
+}

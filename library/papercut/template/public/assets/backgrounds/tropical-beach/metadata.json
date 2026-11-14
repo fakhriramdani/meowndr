@@ -1,0 +1,75 @@
+{
+  "id": "tropical-beach",
+  "name": "Tropical Beach",
+  "description": "A beautiful tropical beach landscape featuring layered ocean water, a distant horizon, soft coastal scenery, and warm sandy terrain. The composition should feel open and spacious. The beach must provide a large, clean central area where future educational objects, characters, and animated elements can be placed.",
+  "category": "Nature / Geography / Ocean Science",
+  "mood": "Bright, peaceful, tropical afternoon atmosphere",
+  "style": {
+    "type": "2D Papercraft Cutout",
+    "construction": "Layered paper collage with scissor-cut edges and subtle paper drop shadows",
+    "color_palette": [
+      "#14B8A6",
+      "#0284C7",
+      "#0F766E",
+      "#E7D3B6",
+      "#FFFDF7",
+      "#22C55E",
+      "#166534",
+      "#FEF08A"
+    ],
+    "lighting": "Bright tropical afternoon sunlight with gleaming gentle paper waves"
+  },
+  "dimensions": {
+    "width": 1080,
+    "height": 1920,
+    "aspect_ratio": "9:16"
+  },
+  "layout": {
+    "floor_y": 1380,
+    "presenter_zone": {
+      "x_range": [
+        240,
+        840
+      ],
+      "y_range": [
+        850,
+        1650
+      ],
+      "status": "clear_unobstructed"
+    },
+    "header_zone": {
+      "y_range": [
+        0,
+        420
+      ],
+      "status": "clear_for_banner"
+    },
+    "caption_zone": {
+      "y_range": [
+        1300,
+        1550
+      ],
+      "status": "low_detail_for_legibility"
+    }
+  },
+  "best_for": [
+    "Marine ecosystems",
+    "Ocean tides & currents",
+    "Coastal geography",
+    "Tropical biodiversity"
+  ],
+  "rules_compliance": {
+    "consistent_papercraft_style": true,
+    "layered_cutout_construction": true,
+    "visible_paper_edges_and_shadows": true,
+    "no_characters_or_people": true,
+    "foreground_suitable_for_presenter": true,
+    "vertical_9_16_composition": true,
+    "reusable_environment": true
+  },
+  "asset_paths": {
+    "image": "assets/backgrounds/tropical-beach/background.png",
+    "metadata": "assets/backgrounds/tropical-beach/metadata.json"
+  },
+  "created_at": "2026-10-31T12:15:36+07:00"
+}

@@ -1,0 +1,74 @@
+{
+  "id": "mountain-landscape",
+  "name": "Mountain Landscape",
+  "description": "A beautiful open mountain landscape featuring multiple layers of distant mountain peaks, rolling hills, and a subtle natural atmosphere. Use layered paper-cut silhouettes to create depth. The environment should feel spacious, calm, and visually balanced, with a clear open area in the middle for future educational storytelling.",
+  "category": "Nature / Geography / Earth Science",
+  "mood": "Peaceful, adventurous, fresh morning atmosphere",
+  "style": {
+    "type": "2D Papercraft Cutout",
+    "construction": "Layered paper collage with scissor-cut edges and subtle paper drop shadows",
+    "color_palette": [
+      "#1E3A2B",
+      "#2D5A40",
+      "#769A82",
+      "#5C6B46",
+      "#5D4037",
+      "#B9DCED",
+      "#FFFDF7"
+    ],
+    "lighting": "Fresh morning alpine daylight with soft atmospheric paper clouds"
+  },
+  "dimensions": {
+    "width": 1080,
+    "height": 1920,
+    "aspect_ratio": "9:16"
+  },
+  "layout": {
+    "floor_y": 1380,
+    "presenter_zone": {
+      "x_range": [
+        240,
+        840
+      ],
+      "y_range": [
+        850,
+        1650
+      ],
+      "status": "clear_unobstructed"
+    },
+    "header_zone": {
+      "y_range": [
+        0,
+        420
+      ],
+      "status": "clear_for_banner"
+    },
+    "caption_zone": {
+      "y_range": [
+        1300,
+        1550
+      ],
+      "status": "low_detail_for_legibility"
+    }
+  },
+  "best_for": [
+    "Geology & landforms",
+    "Atmospheric science",
+    "Mountain ecosystems & biodiversity",
+    "Earth geography"
+  ],
+  "rules_compliance": {
+    "consistent_papercraft_style": true,
+    "layered_cutout_construction": true,
+    "visible_paper_edges_and_shadows": true,
+    "no_characters_or_people": true,
+    "foreground_suitable_for_presenter": true,
+    "vertical_9_16_composition": true,
+    "reusable_environment": true
+  },
+  "asset_paths": {
+    "image": "assets/backgrounds/mountain-landscape/background.png",
+    "metadata": "assets/backgrounds/mountain-landscape/metadata.json"
+  },
+  "created_at": "2026-10-31T12:15:30+07:00"
+}

@@ -1,0 +1,12 @@
+{
+  "id": "hydrogen-lattice-model",
+  "name": "Hydrogen Bonding Hexagonal Lattice Model",
+  "category": "props",
+  "description": "Six-molecule hexagonal ice crystal cage with authentic H2O dipoles, animated electrostatic hydrogen-bond bridges, and spacious central void.",
+  "dimensions": {
+    "width": 560,
+    "height": 580,
+    "anchor": "top-left"
+  },
+  "created_at": "2026-10-29T02:35:00+07:00"
+}

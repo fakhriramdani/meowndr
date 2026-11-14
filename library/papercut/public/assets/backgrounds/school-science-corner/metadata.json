@@ -1,0 +1,73 @@
+{
+  "id": "school-science-corner",
+  "name": "School Science Corner",
+  "description": "A school learning corner featuring simple science models, educational displays, and organized learning materials.",
+  "category": "Education / Science",
+  "mood": "Curious, playful, bright, colorful accents",
+  "style": {
+    "type": "2D Papercraft Cutout",
+    "construction": "Layered paper collage with scissor-cut edges and subtle paper drop shadows",
+    "color_palette": [
+      "#F8FAFC",
+      "#3B82F6",
+      "#F59E0B",
+      "#10B981",
+      "#8B5CF6",
+      "#EC4899"
+    ],
+    "lighting": "Playful bright classroom daylight with hanging paper planets"
+  },
+  "dimensions": {
+    "width": 1080,
+    "height": 1920,
+    "aspect_ratio": "9:16"
+  },
+  "layout": {
+    "floor_y": 1380,
+    "presenter_zone": {
+      "x_range": [
+        180,
+        900
+      ],
+      "y_range": [
+        850,
+        1650
+      ],
+      "status": "clear_unobstructed"
+    },
+    "header_zone": {
+      "y_range": [
+        0,
+        420
+      ],
+      "status": "clear_for_banner"
+    },
+    "caption_zone": {
+      "y_range": [
+        1300,
+        1550
+      ],
+      "status": "low_detail_for_legibility"
+    }
+  },
+  "best_for": [
+    "STEM learning",
+    "Planetary science",
+    "Biology fundamentals",
+    "Primary education"
+  ],
+  "rules_compliance": {
+    "consistent_papercraft_style": true,
+    "layered_cutout_construction": true,
+    "visible_paper_edges_and_shadows": true,
+    "no_characters_or_people": true,
+    "foreground_suitable_for_presenter": true,
+    "vertical_9_16_composition": true,
+    "reusable_environment": true
+  },
+  "asset_paths": {
+    "image": "assets/backgrounds/school-science-corner/background.png",
+    "metadata": "assets/backgrounds/school-science-corner/metadata.json"
+  },
+  "created_at": "2026-10-29T08:51:16+07:00"
+}

@@ -1,0 +1,87 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "EpisodeThumbnailConfig",
+  "description": "Mandatory thumbnail and opening frame branding configuration for Papercraft Content Factory episodes.",
+  "type": "object",
+  "required": [
+    "channelName",
+    "mascotAsset",
+    "episodeTitle",
+    "mainSubject",
+    "mascotExpression",
+    "layoutPreset"
+  ],
+  "additionalProperties": true,
+  "properties": {
+    "channelName": {
+      "type": "string",
+      "enum": ["@meowndr"],
+      "description": "Mandatory brand channel name. Must be exactly '@meowndr'."
+    },
+    "mascotAsset": {
+      "type": "string",
+      "description": "Relative path to the canonical orange-and-cream Cat Scientist reference asset."
+    },
+    "episodeTitle": {
+      "type": "string",
+      "minLength": 3,
+      "description": "Actual episode video title in Indonesian (or episode language). Must be non-empty and faithful."
+    },
+    "thumbnailHook": {
+      "type": "string",
+      "description": "Optional concise supporting curiosity hook phrase."
+    },
+    "mainSubject": {
+      "type": "string",
+      "minLength": 3,
+      "description": "Topic-specific visual focus (object or phenomenon) depicted in the papercraft scene."
+    },
+    "mascotExpression": {
+      "type": "string",
+      "enum": [
+        "idle",
+        "talking",
+        "explaining",
+        "pointing",
+        "curious",
+        "excited",
+        "celebrating",
+        "surprised",
+        "thinking",
+        "waving"
+      ],
+      "default": "curious",
+      "description": "Topic-appropriate facial pose and expression for the Cat Scientist mascot."
+    },
+    "layoutPreset": {
+      "type": "string",
+      "enum": ["split-scientist-right", "split-scientist-left", "center-focus"],
+      "default": "split-scientist-right",
+      "description": "Reusable branded composition preset for YouTube 16:9 layout."
+    },
+    "width": {
+      "type": "integer",
+      "default": 1280,
+      "description": "Width of the standalone YouTube thumbnail in pixels."
+    },
+    "height": {
+      "type": "integer",
+      "default": 720,
+      "description": "Height of the standalone YouTube thumbnail in pixels."
+    },
+    "openingFrameDurationSeconds": {
+      "type": "number",
+      "minimum": 0.8,
+      "maximum": 1.2,
+      "default": 1.0,
+      "description": "Duration of the opening thumbnail frame in seconds."
+    },
+    "openingFrameDurationFrames": {
+      "type": "integer",
+      "minimum": 24,
+      "maximum": 36,
+      "default": 30,
+      "description": "Duration of the opening thumbnail frame in frames (30 fps)."
+    }
+  }
+}

@@ -1,0 +1,73 @@
+{
+  "id": "city-rooftop",
+  "name": "City Rooftop",
+  "description": "A modest urban rooftop with a distant skyline, water tank, antennas, and a warm sunset. Keep it realistic and uncluttered.",
+  "category": "Society / Geography",
+  "mood": "Relaxed, modern, sunset orange and blue",
+  "style": {
+    "type": "2D Papercraft Cutout",
+    "construction": "Layered paper collage with scissor-cut edges and subtle paper drop shadows",
+    "color_palette": [
+      "#312E81",
+      "#F97316",
+      "#FDE047",
+      "#64748B",
+      "#475569",
+      "#CBD5E1"
+    ],
+    "lighting": "Vibrant sunset sky transitioning from deep indigo to blazing gold"
+  },
+  "dimensions": {
+    "width": 1080,
+    "height": 1920,
+    "aspect_ratio": "9:16"
+  },
+  "layout": {
+    "floor_y": 1380,
+    "presenter_zone": {
+      "x_range": [
+        180,
+        900
+      ],
+      "y_range": [
+        850,
+        1650
+      ],
+      "status": "clear_unobstructed"
+    },
+    "header_zone": {
+      "y_range": [
+        0,
+        420
+      ],
+      "status": "clear_for_banner"
+    },
+    "caption_zone": {
+      "y_range": [
+        1300,
+        1550
+      ],
+      "status": "low_detail_for_legibility"
+    }
+  },
+  "best_for": [
+    "Urban geography",
+    "Sunsets & optics",
+    "City planning",
+    "Atmospheric environment"
+  ],
+  "rules_compliance": {
+    "consistent_papercraft_style": true,
+    "layered_cutout_construction": true,
+    "visible_paper_edges_and_shadows": true,
+    "no_characters_or_people": true,
+    "foreground_suitable_for_presenter": true,
+    "vertical_9_16_composition": true,
+    "reusable_environment": true
+  },
+  "asset_paths": {
+    "image": "assets/backgrounds/city-rooftop/background.png",
+    "metadata": "assets/backgrounds/city-rooftop/metadata.json"
+  },
+  "created_at": "2026-10-29T08:51:54+07:00"
+}

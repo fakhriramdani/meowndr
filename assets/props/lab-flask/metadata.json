@@ -1,0 +1,22 @@
+{
+  "id": "lab-flask",
+  "name": "Erlenmeyer Lab Flask",
+  "category": "props",
+  "description": "Layered papercraft conical lab flask with amber bubbling liquid and glass reflection rim.",
+  "style": {
+    "type": "2D Papercraft Prop",
+    "layers": ["flask_body", "liquid_amber", "paper_highlight"],
+    "shadow": "0 4px 8px rgba(0,0,0,0.25)"
+  },
+  "dimensions": {
+    "width": 120,
+    "height": 180,
+    "anchor": "bottom-center"
+  },
+  "placement": {
+    "supports_floor_mount": true,
+    "supports_hand_held": true,
+    "default_scale": 1.0
+  },
+  "created_at": "2026-10-29T00:43:00+07:00"
+}

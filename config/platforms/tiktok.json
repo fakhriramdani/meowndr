@@ -1,0 +1,34 @@
+{
+  "platform": "tiktok",
+  "name": "TikTok",
+  "version": "2026.1",
+  "official_requirements": {
+    "hard_character_limit": 2200,
+    "max_hashtags": 10,
+    "aspect_ratio": "9:16",
+    "resolution": "1080x1920",
+    "frame_rate": 30
+  },
+  "platform_recommendations": {
+    "recommended_character_range": [50, 300],
+    "target_body_length_before_truncation": 160,
+    "max_body_length_before_warning": 220,
+    "recommended_hashtags_range": [2, 3],
+    "recommended_emoji_range": [0, 3],
+    "structure": [
+      "CURIOSITY_HOOK",
+      "SHORT_CONTEXT",
+      "NATURAL_CTA",
+      "RELEVANT_HASHTAGS"
+    ]
+  },
+  "creator_best_practices": {
+    "search_intent_seo": "Include spoken and searchable keywords naturally so TikTok's search bar index matches the video.",
+    "curiosity_principles": "Do not repeat the video voiceover hook verbatim; introduce a fresh angle or curiosity gap.",
+    "cta_focus": ["comment", "discussion", "share"],
+    "banned_generic_tags": [
+      "#fyp", "#foryou", "#foryoupage", "#viral", "#trend", "#trending",
+      "#explore", "#likeforlike", "#followforfollow", "#xyzbca"
+    ]
+  }
+}

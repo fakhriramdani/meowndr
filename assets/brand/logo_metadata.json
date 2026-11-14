@@ -1,0 +1,74 @@
+{
+  "brand_name": "@meowndr",
+  "asset_type": "minimalist_lettermark_logo",
+  "concept": "Custom geometric uppercase letter M with integrated cat-ear upper peaks and signature single-ear cream white tip",
+  "no_character_mascot": true,
+  "geometry": {
+    "canvas": "1024x1024",
+    "silhouette_type": "uppercase_letter_M",
+    "ear_peaks": [
+      {
+        "ear": "left",
+        "x": 345,
+        "y": 235
+      },
+      {
+        "ear": "right",
+        "x": 679,
+        "y": 235
+      }
+    ],
+    "center_notch": {
+      "x": 512,
+      "y": 515
+    },
+    "inner_arch_apex": {
+      "x": 512,
+      "y": 660
+    },
+    "feet": [
+      {
+        "side": "left",
+        "x_start": 238,
+        "x_end": 346,
+        "y": 740
+      },
+      {
+        "side": "right",
+        "x_start": 678,
+        "x_end": 786,
+        "y": 740
+      }
+    ],
+    "circular_crop_safe_radius": 440,
+    "bounding_box": {
+      "min_x": 230,
+      "max_x": 794,
+      "min_y": 235,
+      "max_y": 740,
+      "width": 564,
+      "height": 505
+    }
+  },
+  "color_palette": {
+    "primary_orange": "#F97316",
+    "secondary_burnt_orange": "#EA580C",
+    "cream_white_accent": "#FFFDF7",
+    "background_midnight": "#0F172A",
+    "radial_glow_inner": "#1E3256",
+    "guide_ring_stroke": "#1E2E4E"
+  },
+  "files": {
+    "primary_logo": "assets/brand/meowndr-logo-primary.png",
+    "transparent_logo": "assets/brand/meowndr-logo-transparent.png",
+    "qa_preview": "assets/brand/meowndr-logo-circle-preview.png",
+    "vector_svg": "assets/brand/meowndr-logo.svg"
+  },
+  "usage_guidelines": {
+    "social_profile_picture": "Use meowndr-logo-primary.png directly as square or circular PFP on YouTube, TikTok, X, Instagram.",
+    "overlays_and_merchandise": "Use meowndr-logo-transparent.png or meowndr-logo.svg for transparent overlays, stamps, video watermarks, or apparel.",
+    "single_ear_accent_rule": "The cream-white tip must remain on the left ear only. The right ear must remain solid orange.",
+    "integrity_rule": "Do not add eyes, noses, whiskers, mouths, or character features into the lettermark."
+  },
+  "generated_at": "2026-10-29T17:07:05.172Z"
+}

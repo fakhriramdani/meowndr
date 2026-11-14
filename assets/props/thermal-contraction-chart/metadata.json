@@ -1,0 +1,12 @@
+{
+  "id": "thermal-contraction-chart",
+  "name": "Thermal Contraction Slate Chart",
+  "category": "props",
+  "description": "Chalkboard coordinate slate with thermal molecular kinetic motion, cooling contraction vectors, and solid densification sinking trajectory.",
+  "dimensions": {
+    "width": 500,
+    "height": 560,
+    "anchor": "top-left"
+  },
+  "created_at": "2026-10-29T02:35:00+07:00"
+}

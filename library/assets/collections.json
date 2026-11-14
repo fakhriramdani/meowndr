@@ -1,0 +1,97 @@
+{
+  "version": "1.0.0",
+  "updatedAt": "2026-11-06T20:49:41+07:00",
+  "collections": [
+    {
+      "id": "science-labs",
+      "name": "Science & Laboratory",
+      "description": "Chemistry, physics, and laboratory environments, glassware props, and experiment apparatus.",
+      "category": "Curated",
+      "assetIds": [
+        "science-lab",
+        "science-lab-v2",
+        "science-laboratory",
+        "school-science-corner",
+        "lab-flask",
+        "paper-beaker-demo",
+        "water-anomaly-gauge",
+        "hydrogen-lattice-model",
+        "thermal-contraction-chart"
+      ]
+    },
+    {
+      "id": "nature-ecology",
+      "name": "Nature & Ecology",
+      "description": "Greenhouses, botanical gardens, ocean environments, and ecological dioramas.",
+      "category": "Curated",
+      "assetIds": [
+        "botany-greenhouse",
+        "backyard-garden",
+        "city-park",
+        "tropical-beach",
+        "underwater-world",
+        "mountain-landscape",
+        "winter-lake-ecology-diorama"
+      ]
+    },
+    {
+      "id": "physics-energy",
+      "name": "Physics & Clean Energy",
+      "description": "Electromagnetism, astrophysics, wireless power transmission, and planetary physics props.",
+      "category": "Curated",
+      "assetIds": [
+        "space-observatory",
+        "density-comparison-scale",
+        "wardenclyffe-tower",
+        "niagara-clean-energy",
+        "space-beamed-power",
+        "wireless-transport-grid",
+        "schumann-resonance-globe"
+      ]
+    },
+    {
+      "id": "history-culture",
+      "name": "History & Heritage",
+      "description": "Ancient archaeological ruins, vernacular architecture, and historic urban sets.",
+      "category": "Curated",
+      "assetIds": [
+        "ancient-temple-ruins",
+        "traditional-indonesian-house",
+        "historic-town-street",
+        "public-library"
+      ]
+    },
+    {
+      "id": "everyday-life",
+      "name": "Everyday Spaces",
+      "description": "Domestic interiors, classrooms, workshops, and urban everyday viewpoints.",
+      "category": "Curated",
+      "assetIds": [
+        "cozy-bedroom",
+        "home-kitchen",
+        "home-living-room",
+        "home-study",
+        "home-workshop",
+        "modern-classroom",
+        "rainy-city-street",
+        "city-rooftop",
+        "mountain-viewpoint"
+      ]
+    },
+    {
+      "id": "mascot-brand",
+      "name": "Cat Scientist & Branding",
+      "description": "Official mascot character assets, expression states, typography banners, and channel assets.",
+      "category": "Brand",
+      "assetIds": [
+        "cat-scientist",
+        "presenter-critter",
+        "caption-pill",
+        "paper-banner",
+        "cat-scientist-social-avatar",
+        "meowndr-lettermark-logo",
+        "youtube-channel-banner"
+      ]
+    }
+  ]
+}

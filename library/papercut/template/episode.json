@@ -1,0 +1,51 @@
+{
+  "comp": "Episode",
+  "out": "episode-papercraft",
+  "meta": {
+    "id": "episode-template",
+    "title": "Judul Episode Sains",
+    "topic": "Topik Sains",
+    "language": "id",
+    "targetDurationSeconds": 60,
+    "fps": 30,
+    "width": 1080,
+    "height": 1920
+  },
+  "environment": {
+    "id": "science-lab",
+    "floorY": 1380
+  },
+  "bed": "marimba-Am-120",
+  "narration": "../narration",
+  "timing": "timing_narrator.js",
+  "fps": 30,
+  "start": 0.15,
+  "gap": 0.1,
+  "hold": 0.8,
+  "hook": {
+    "lines": [
+      ["JUDUL", "UTAMA"],
+      ["TOPIK", "SAINS?"]
+    ],
+    "hot": ["TOPIK", "SAINS?"],
+    "hold": 1.8
+  },
+  "cta": {
+    "heading": "SUKA & BAGIKAN!",
+    "handle": "@meowndr"
+  },
+  "scenes": [
+    ["S01Hook", "l1_hook", 0],
+    ["S02Concept", "l2_concept", 0],
+    ["S03Outro", "l3_outro", 0]
+  ],
+  "banners": {
+    "S01Hook": "PERKENALAN TOPIK SAINS",
+    "S02Concept": "PENJELASAN KONSEP UTAMA",
+    "S03Outro": "IKUTI KONTEN SAINS BERIKUTNYA"
+  },
+  "cuts": {
+    "S02Concept": { "kind": "pageTurn" },
+    "S03Outro": { "kind": "popUpBook" }
+  }
+}

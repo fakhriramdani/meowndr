@@ -1,0 +1,85 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "WorkflowState",
+  "type": "object",
+  "required": [
+    "episode_id",
+    "niche",
+    "current_stage",
+    "status",
+    "completed_stages",
+    "approval_gates",
+    "artifacts"
+  ],
+  "properties": {
+    "episode_id": { "type": "string" },
+    "niche": {
+      "type": "string",
+      "enum": ["science", "history", "geography", "technology", "mystery", "psychology"]
+    },
+    "current_stage": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 12
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "INITIALIZED",
+        "IN_PROGRESS",
+        "PENDING_USER_APPROVAL",
+        "COMPLETED",
+        "FAILED",
+        "HALTED",
+        "REMEDIATION_REQUIRED"
+      ]
+    },
+    "completed_stages": {
+      "type": "array",
+      "items": { "type": "integer" }
+    },
+    "approval_gates": {
+      "type": "object",
+      "required": ["gate_1_topic_hook", "gate_2_script", "gate_3_final_video"],
+      "properties": {
+        "gate_1_topic_hook": {
+          "type": "object",
+          "required": ["status"],
+          "properties": {
+            "status": { "type": "string", "enum": ["PENDING", "APPROVED", "REJECTED"] },
+            "approved_at": { "type": ["string", "null"] },
+            "approved_by": { "type": ["string", "null"] },
+            "selected_hook_id": { "type": ["string", "null"] },
+            "notes": { "type": ["string", "null"] }
+          }
+        },
+        "gate_2_script": {
+          "type": "object",
+          "required": ["status"],
+          "properties": {
+            "status": { "type": "string", "enum": ["PENDING", "APPROVED", "REJECTED"] },
+            "approved_at": { "type": ["string", "null"] },
+            "approved_by": { "type": ["string", "null"] },
+            "word_count": { "type": ["integer", "null"] },
+            "notes": { "type": ["string", "null"] }
+          }
+        },
+        "gate_3_final_video": {
+          "type": "object",
+          "required": ["status"],
+          "properties": {
+            "status": { "type": "string", "enum": ["PENDING", "APPROVED", "REJECTED"] },
+            "approved_at": { "type": ["string", "null"] },
+            "approved_by": { "type": ["string", "null"] },
+            "render_path": { "type": ["string", "null"] },
+            "notes": { "type": ["string", "null"] }
+          }
+        }
+      }
+    },
+    "artifacts": {
+      "type": "object"
+    },
+    "last_updated": { "type": "string" }
+  }
+}

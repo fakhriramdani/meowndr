@@ -1,0 +1,73 @@
+{
+  "id": "city-park",
+  "name": "City Park",
+  "description": "An ordinary urban park with trees, grass, a distant skyline, and a quiet walking path.",
+  "category": "Nature / Society",
+  "mood": "Fresh, friendly, bright daylight",
+  "style": {
+    "type": "2D Papercraft Cutout",
+    "construction": "Layered paper collage with scissor-cut edges and subtle paper drop shadows",
+    "color_palette": [
+      "#E0F2FE",
+      "#38A169",
+      "#276749",
+      "#CBD5E0",
+      "#A0AEC0",
+      "#E2D4C3"
+    ],
+    "lighting": "Fresh morning daylight with soft paper sunbeams"
+  },
+  "dimensions": {
+    "width": 1080,
+    "height": 1920,
+    "aspect_ratio": "9:16"
+  },
+  "layout": {
+    "floor_y": 1380,
+    "presenter_zone": {
+      "x_range": [
+        180,
+        900
+      ],
+      "y_range": [
+        850,
+        1650
+      ],
+      "status": "clear_unobstructed"
+    },
+    "header_zone": {
+      "y_range": [
+        0,
+        420
+      ],
+      "status": "clear_for_banner"
+    },
+    "caption_zone": {
+      "y_range": [
+        1300,
+        1550
+      ],
+      "status": "low_detail_for_legibility"
+    }
+  },
+  "best_for": [
+    "Urban ecology",
+    "Environmental science",
+    "Outdoor physics",
+    "Community life"
+  ],
+  "rules_compliance": {
+    "consistent_papercraft_style": true,
+    "layered_cutout_construction": true,
+    "visible_paper_edges_and_shadows": true,
+    "no_characters_or_people": true,
+    "foreground_suitable_for_presenter": true,
+    "vertical_9_16_composition": true,
+    "reusable_environment": true
+  },
+  "asset_paths": {
+    "image": "assets/backgrounds/city-park/background.png",
+    "metadata": "assets/backgrounds/city-park/metadata.json"
+  },
+  "created_at": "2026-10-29T08:51:10+07:00"
+}

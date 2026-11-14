@@ -1,0 +1,73 @@
+{
+  "id": "public-library",
+  "name": "Public Library",
+  "description": "A welcoming public library with tall bookshelves, a large window, and a calm learning atmosphere.",
+  "category": "Education / History",
+  "mood": "Quiet, scholarly, warm neutral tones",
+  "style": {
+    "type": "2D Papercraft Cutout",
+    "construction": "Layered paper collage with scissor-cut edges and subtle paper drop shadows",
+    "color_palette": [
+      "#FDF8EE",
+      "#744210",
+      "#975A16",
+      "#B7791F",
+      "#2B6CB0",
+      "#2D3748"
+    ],
+    "lighting": "Warm ambient pendant lamps with soft window daylight"
+  },
+  "dimensions": {
+    "width": 1080,
+    "height": 1920,
+    "aspect_ratio": "9:16"
+  },
+  "layout": {
+    "floor_y": 1380,
+    "presenter_zone": {
+      "x_range": [
+        180,
+        900
+      ],
+      "y_range": [
+        850,
+        1650
+      ],
+      "status": "clear_unobstructed"
+    },
+    "header_zone": {
+      "y_range": [
+        0,
+        420
+      ],
+      "status": "clear_for_banner"
+    },
+    "caption_zone": {
+      "y_range": [
+        1300,
+        1550
+      ],
+      "status": "low_detail_for_legibility"
+    }
+  },
+  "best_for": [
+    "Historical archives",
+    "Literature & research",
+    "Philosophy",
+    "Deep knowledge"
+  ],
+  "rules_compliance": {
+    "consistent_papercraft_style": true,
+    "layered_cutout_construction": true,
+    "visible_paper_edges_and_shadows": true,
+    "no_characters_or_people": true,
+    "foreground_suitable_for_presenter": true,
+    "vertical_9_16_composition": true,
+    "reusable_environment": true
+  },
+  "asset_paths": {
+    "image": "assets/backgrounds/public-library/background.png",
+    "metadata": "assets/backgrounds/public-library/metadata.json"
+  },
+  "created_at": "2026-10-29T08:51:03+07:00"
+}

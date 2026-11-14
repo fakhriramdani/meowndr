@@ -1,0 +1,43 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "AudiencePlan",
+  "type": "object",
+  "required": [
+    "target_audience",
+    "retention_spine",
+    "cta_strategy"
+  ],
+  "properties": {
+    "target_audience": {
+      "type": "object",
+      "required": ["demographic", "sharing_driver"],
+      "properties": {
+        "demographic": { "type": "string" },
+        "sharing_driver": { "type": "string" }
+      }
+    },
+    "retention_spine": {
+      "type": "array",
+      "minItems": 3,
+      "items": {
+        "type": "object",
+        "required": ["beat", "timeframe", "target_emotion"],
+        "properties": {
+          "beat": { "type": "string" },
+          "timeframe": { "type": "string" },
+          "target_emotion": { "type": "string" },
+          "rules": { "type": "string" }
+        }
+      }
+    },
+    "cta_strategy": {
+      "type": "object",
+      "required": ["heading", "comment_question"],
+      "properties": {
+        "heading": { "type": "string" },
+        "comment_question": { "type": "string" },
+        "handle": { "type": "string" }
+      }
+    }
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "id": "youtube-channel-banner",
+  "category": "brand",
+  "name": "Cat Scientist Papercraft Universe YouTube Banner",
+  "dimensions": {
+    "width": 2560,
+    "height": 1440,
+    "aspect_ratio": "16:9"
+  },
+  "safe_area": {
+    "type": "centered_responsive",
+    "width": 1546,
+    "height": 423,
+    "bounds": {
+      "x_min": 507,
+      "x_max": 2053,
+      "y_min": 508.5,
+      "y_max": 931.5
+    },
+    "contained_elements": [
+      "Cat Scientist Mascot (Face, Spectacles, Lab Coat, Paws)",
+      "Channel Name Placeholder: [CHANNEL NAME]",
+      "Tagline: 'Curiosity turns the ordinary into extraordinary.'",
+      "Interactive Prop: Magnifying Glass & Floating Molecule Model",
+      "Laboratory Workbench & Glassware Ledge"
+    ]
+  },
+  "style": {
+    "type": "2D Papercraft Cutout Diorama",
+    "palette": {
+      "background": "#FAF6ED",
+      "mascot_orange": "#F97316",
+      "mascot_shade": "#EA580C",
+      "mascot_cream": "#FFFDF8",
+      "lab_coat": "#FAF8F5",
+      "spectacles": "#B45309",
+      "teal_accent": "#0D9488",
+      "sky_blue": "#38BDF8",
+      "mountain_slate": "#607B96",
+      "mountain_teal": "#41938E",
+      "gold_accent": "#FBBF24"
+    },
+    "construction": "Layered cardstock with paper grain texture, physical drop shadows, and deckle edges"
+  },
+  "assets": {
+    "banner_final": "assets/brand/youtube_banner.png",
+    "banner_clean": "assets/brand/youtube_banner_clean.png",
+    "crop_safety_preview": "assets/brand/youtube_banner_crop_safety.png"
+  },
+  "created_at": "2026-10-29T22:20:00+07:00"
+}

@@ -1,0 +1,15 @@
+{
+  "id": "caption-pill",
+  "name": "Torn Caption Word Tag",
+  "category": "foregrounds",
+  "description": "Torn coral construction paper word pill with cream serif text and dynamic tilt for spoken voiceover word sync.",
+  "style": {
+    "type": "2D Papercraft Caption",
+    "default_bg": "#E2725B",
+    "text_color": "#FFF8F0"
+  },
+  "dimensions": {
+    "safe_y_range": [1300, 1550]
+  },
+  "created_at": "2026-10-29T00:43:00+07:00"
+}

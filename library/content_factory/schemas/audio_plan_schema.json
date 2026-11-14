@@ -1,0 +1,54 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "AudioPlan",
+  "type": "object",
+  "required": [
+    "voiceover",
+    "music_bed",
+    "ducking"
+  ],
+  "properties": {
+    "voiceover": {
+      "type": "object",
+      "required": ["path", "status"],
+      "properties": {
+        "path": { "type": "string" },
+        "status": {
+          "type": "string",
+          "enum": ["PRODUCED", "STANDIN_PLACEHOLDER"]
+        },
+        "sample_rate": { "type": "integer" },
+        "word_count": { "type": "integer" }
+      }
+    },
+    "music_bed": {
+      "type": "object",
+      "required": ["name", "tempo_bpm"],
+      "properties": {
+        "name": { "type": "string" },
+        "tempo_bpm": { "type": "integer" },
+        "path": { "type": "string" }
+      }
+    },
+    "ducking": {
+      "type": "object",
+      "required": ["speech_volume", "silence_volume", "ease_ms"],
+      "properties": {
+        "speech_volume": { "type": "number", "minimum": 0, "maximum": 1 },
+        "silence_volume": { "type": "number", "minimum": 0, "maximum": 1 },
+        "ease_ms": { "type": "number", "minimum": 50 }
+      }
+    },
+    "sfx_cues": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["frame", "cue_type"],
+        "properties": {
+          "frame": { "type": "integer", "minimum": 0 },
+          "cue_type": { "type": "string" }
+        }
+      }
+    }
+  }
+}

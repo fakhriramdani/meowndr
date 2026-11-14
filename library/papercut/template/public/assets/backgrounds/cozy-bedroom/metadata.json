@@ -1,0 +1,73 @@
+{
+  "id": "cozy-bedroom",
+  "name": "Cozy Bedroom",
+  "description": "A familiar, comfortable bedroom with simple furniture, warm natural lighting, and a clean, welcoming atmosphere. Suitable for everyday science, sleep, human behavior, and general facts.",
+  "category": "Everyday Life / Science",
+  "mood": "Warm, cozy, peaceful, soft morning sunlight",
+  "style": {
+    "type": "2D Papercraft Cutout",
+    "construction": "Layered paper collage with scissor-cut edges and subtle paper drop shadows",
+    "color_palette": [
+      "#FBF6EE",
+      "#E8D5B5",
+      "#A08365",
+      "#4E6E5D",
+      "#B8C5D6",
+      "#D97706"
+    ],
+    "lighting": "Soft morning sunlight through left sheer curtain with warm floor lamp glow"
+  },
+  "dimensions": {
+    "width": 1080,
+    "height": 1920,
+    "aspect_ratio": "9:16"
+  },
+  "layout": {
+    "floor_y": 1380,
+    "presenter_zone": {
+      "x_range": [
+        180,
+        900
+      ],
+      "y_range": [
+        850,
+        1650
+      ],
+      "status": "clear_unobstructed"
+    },
+    "header_zone": {
+      "y_range": [
+        0,
+        420
+      ],
+      "status": "clear_for_banner"
+    },
+    "caption_zone": {
+      "y_range": [
+        1300,
+        1550
+      ],
+      "status": "low_detail_for_legibility"
+    }
+  },
+  "best_for": [
+    "Sleep science",
+    "Circadian rhythm",
+    "Daily life habits",
+    "Human psychology"
+  ],
+  "rules_compliance": {
+    "consistent_papercraft_style": true,
+    "layered_cutout_construction": true,
+    "visible_paper_edges_and_shadows": true,
+    "no_characters_or_people": true,
+    "foreground_suitable_for_presenter": true,
+    "vertical_9_16_composition": true,
+    "reusable_environment": true
+  },
+  "asset_paths": {
+    "image": "assets/backgrounds/cozy-bedroom/background.png",
+    "metadata": "assets/backgrounds/cozy-bedroom/metadata.json"
+  },
+  "created_at": "2026-10-29T08:50:49+07:00"
+}

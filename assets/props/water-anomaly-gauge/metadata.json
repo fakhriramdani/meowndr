@@ -1,0 +1,12 @@
+{
+  "id": "water-anomaly-gauge",
+  "name": "Water Anomaly 4C Density Gauge Console",
+  "category": "props",
+  "description": "Laboratory instrumentation console with digital countdown CRT (20C down to 4C) and calibrated density meter arc locking at 1.000 g/cm3.",
+  "dimensions": {
+    "width": 440,
+    "height": 480,
+    "anchor": "top-left"
+  },
+  "created_at": "2026-10-29T02:35:00+07:00"
+}

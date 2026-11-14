@@ -1,0 +1,64 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "HookMatrix",
+  "type": "object",
+  "required": [
+    "topic",
+    "niche",
+    "variants",
+    "primary_recommendation",
+    "visual_hook_concept"
+  ],
+  "properties": {
+    "topic": { "type": "string" },
+    "niche": { "type": "string" },
+    "primary_recommendation": { "type": "string" },
+    "visual_hook_concept": { "type": "string" },
+    "variants": {
+      "type": "array",
+      "minItems": 3,
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "archetype",
+          "hook_text",
+          "cover_lines",
+          "hot_words",
+          "composite_score"
+        ],
+        "properties": {
+          "id": { "type": "string" },
+          "archetype": {
+            "type": "string",
+            "enum": [
+              "paradox",
+              "counter_intuitive",
+              "sensory_mystery",
+              "high_stakes",
+              "direct_challenge"
+            ]
+          },
+          "hook_text": { "type": "string", "minLength": 5 },
+          "cover_lines": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 3,
+            "items": {
+              "type": "array",
+              "items": { "type": "string" }
+            }
+          },
+          "hot_words": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "curiosity_score": { "type": "number", "minimum": 1, "maximum": 10 },
+          "clarity_score": { "type": "number", "minimum": 1, "maximum": 10 },
+          "visual_score": { "type": "number", "minimum": 1, "maximum": 10 },
+          "composite_score": { "type": "number", "minimum": 1, "maximum": 10 }
+        }
+      }
+    }
+  }
+}

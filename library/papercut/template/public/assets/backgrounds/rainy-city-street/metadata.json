@@ -1,0 +1,73 @@
+{
+  "id": "rainy-city-street",
+  "name": "Rainy City Street",
+  "description": "A familiar city street during light rain, with layered buildings, wet pavement, and soft reflections.",
+  "category": "Everyday Life / Weather",
+  "mood": "Rainy, reflective, cool blue, cinematic",
+  "style": {
+    "type": "2D Papercraft Cutout",
+    "construction": "Layered paper collage with scissor-cut edges and subtle paper drop shadows",
+    "color_palette": [
+      "#334155",
+      "#1E293B",
+      "#0F172A",
+      "#64748B",
+      "#FDE047",
+      "#93C5FD"
+    ],
+    "lighting": "Misty overcast rainy twilight with glowing yellow paper street lamps and wet reflections"
+  },
+  "dimensions": {
+    "width": 1080,
+    "height": 1920,
+    "aspect_ratio": "9:16"
+  },
+  "layout": {
+    "floor_y": 1380,
+    "presenter_zone": {
+      "x_range": [
+        180,
+        900
+      ],
+      "y_range": [
+        850,
+        1650
+      ],
+      "status": "clear_unobstructed"
+    },
+    "header_zone": {
+      "y_range": [
+        0,
+        420
+      ],
+      "status": "clear_for_banner"
+    },
+    "caption_zone": {
+      "y_range": [
+        1300,
+        1550
+      ],
+      "status": "low_detail_for_legibility"
+    }
+  },
+  "best_for": [
+    "Meteorology & rain",
+    "Urban hydrology",
+    "Atmospheric science",
+    "Everyday weather phenomena"
+  ],
+  "rules_compliance": {
+    "consistent_papercraft_style": true,
+    "layered_cutout_construction": true,
+    "visible_paper_edges_and_shadows": true,
+    "no_characters_or_people": true,
+    "foreground_suitable_for_presenter": true,
+    "vertical_9_16_composition": true,
+    "reusable_environment": true
+  },
+  "asset_paths": {
+    "image": "assets/backgrounds/rainy-city-street/background.png",
+    "metadata": "assets/backgrounds/rainy-city-street/metadata.json"
+  },
+  "created_at": "2026-10-29T08:51:41+07:00"
+}

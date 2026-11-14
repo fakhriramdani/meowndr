@@ -1,0 +1,73 @@
+{
+  "id": "underwater-world",
+  "name": "Underwater World",
+  "description": "An underwater scene with coral reefs, layered sea plants, and distant ocean life, designed for marine biology explainers.",
+  "category": "Marine Science / Biology",
+  "mood": "Calm, curious, blue and turquoise",
+  "style": {
+    "type": "2D Papercraft Cutout",
+    "construction": "Layered paper collage with scissor-cut edges and subtle paper drop shadows",
+    "color_palette": [
+      "#0F172A",
+      "#0369A1",
+      "#0284C7",
+      "#38BDF8",
+      "#F97316",
+      "#10B981"
+    ],
+    "lighting": "Atmospheric sun caustics filtering down from surface into deep blue ocean"
+  },
+  "dimensions": {
+    "width": 1080,
+    "height": 1920,
+    "aspect_ratio": "9:16"
+  },
+  "layout": {
+    "floor_y": 1380,
+    "presenter_zone": {
+      "x_range": [
+        180,
+        900
+      ],
+      "y_range": [
+        850,
+        1650
+      ],
+      "status": "clear_unobstructed"
+    },
+    "header_zone": {
+      "y_range": [
+        0,
+        420
+      ],
+      "status": "clear_for_banner"
+    },
+    "caption_zone": {
+      "y_range": [
+        1300,
+        1550
+      ],
+      "status": "low_detail_for_legibility"
+    }
+  },
+  "best_for": [
+    "Marine biology",
+    "Coral reef ecology",
+    "Oceanography",
+    "Aquatic biodiversity"
+  ],
+  "rules_compliance": {
+    "consistent_papercraft_style": true,
+    "layered_cutout_construction": true,
+    "visible_paper_edges_and_shadows": true,
+    "no_characters_or_people": true,
+    "foreground_suitable_for_presenter": true,
+    "vertical_9_16_composition": true,
+    "reusable_environment": true
+  },
+  "asset_paths": {
+    "image": "assets/backgrounds/underwater-world/background.png",
+    "metadata": "assets/backgrounds/underwater-world/metadata.json"
+  },
+  "created_at": "2026-10-29T08:51:44+07:00"
+}

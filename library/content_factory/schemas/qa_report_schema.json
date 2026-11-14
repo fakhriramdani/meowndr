@@ -1,0 +1,83 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "QAReport",
+  "type": "object",
+  "required": [
+    "episode_id",
+    "verdict",
+    "dimensions",
+    "metrics",
+    "legacy_leakage_clean",
+    "audited_at"
+  ],
+  "properties": {
+    "episode_id": { "type": "string" },
+    "verdict": {
+      "type": "string",
+      "enum": ["APPROVED_FOR_RELEASE", "REVISION_REQUIRED", "FAILED"]
+    },
+    "audited_at": { "type": "string" },
+    "legacy_leakage_clean": { "type": "boolean" },
+    "dimensions": {
+      "type": "object",
+      "required": ["visual", "audio", "technical", "factual"],
+      "properties": {
+        "visual": {
+          "type": "object",
+          "required": ["status"],
+          "properties": {
+            "status": { "type": "string", "enum": ["PASS", "FAIL"] },
+            "safe_zones_respected": { "type": "boolean" },
+            "papercraft_style_verified": { "type": "boolean" },
+            "notes": { "type": "string" }
+          }
+        },
+        "audio": {
+          "type": "object",
+          "required": ["status"],
+          "properties": {
+            "status": { "type": "string", "enum": ["PASS", "FAIL"] },
+            "ducking_balanced": { "type": "boolean" },
+            "caption_sync_verified": { "type": "boolean" },
+            "notes": { "type": "string" }
+          }
+        },
+        "technical": {
+          "type": "object",
+          "required": ["status"],
+          "properties": {
+            "status": { "type": "string", "enum": ["PASS", "FAIL"] },
+            "resolution": { "type": "string" },
+            "fps": { "type": "number" },
+            "duration_sec": { "type": "number" },
+            "codec": { "type": "string" }
+          }
+        },
+        "factual": {
+          "type": "object",
+          "required": ["status"],
+          "properties": {
+            "status": { "type": "string", "enum": ["PASS", "FAIL"] },
+            "claims_verified_count": { "type": "integer" },
+            "notes": { "type": "string" }
+          }
+        }
+      }
+    },
+    "metrics": {
+      "type": "object",
+      "required": ["width", "height", "fps", "duration_sec"],
+      "properties": {
+        "width": { "type": "integer" },
+        "height": { "type": "integer" },
+        "fps": { "type": "number" },
+        "duration_sec": { "type": "number" },
+        "file_size_bytes": { "type": "integer" }
+      }
+    },
+    "inspection_frames": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  }
+}

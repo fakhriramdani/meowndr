@@ -1,0 +1,74 @@
+{
+  "id": "science-lab",
+  "name": "Science Laboratory",
+  "description": "2D papercraft chemistry and physics laboratory with layered paper cutout shelves, glassware, beakers, test tubes, and microscope framing an open presenter floor.",
+  "style": {
+    "type": "2D Papercraft Cutout",
+    "construction": "Layered paper collage with scissor-cut edges and subtle paper drop shadows",
+    "color_palette": [
+      "#6B8E7C",
+      "#4A607A",
+      "#D9CBB6",
+      "#F4EAD4",
+      "#E2725B",
+      "#48A9A6"
+    ],
+    "lighting": "Soft top-left ambient illumination with warm pendant paper lights"
+  },
+  "dimensions": {
+    "width": 1080,
+    "height": 1920,
+    "aspect_ratio": "9:16"
+  },
+  "layout": {
+    "floor_y": 1380,
+    "presenter_zone": {
+      "x_range": [
+        240,
+        840
+      ],
+      "y_range": [
+        900,
+        1750
+      ],
+      "status": "clear_unobstructed"
+    },
+    "header_zone": {
+      "y_range": [
+        0,
+        420
+      ],
+      "status": "clear_for_banner"
+    },
+    "caption_zone": {
+      "y_range": [
+        1300,
+        1550
+      ],
+      "status": "low_detail_for_legibility"
+    }
+  },
+  "best_for": [
+    "Science explanations",
+    "Chemistry & biology experiments",
+    "Research breakdown & discoveries",
+    "STEM educational reels",
+    "Tech & laboratory deep-dives"
+  ],
+  "rules_compliance": {
+    "consistent_papercraft_style": true,
+    "layered_cutout_construction": true,
+    "visible_paper_edges_and_shadows": true,
+    "no_characters_or_people": true,
+    "foreground_suitable_for_presenter": true,
+    "vertical_9_16_composition": true,
+    "reusable_environment": true
+  },
+  "asset_paths": {
+    "image": "assets/backgrounds/science-lab/background.png",
+    "metadata": "assets/backgrounds/science-lab/metadata.json"
+  },
+  "created_at": "2026-10-29T00:37:34+07:00",
+  "category": "Education / STEM",
+  "mood": "cool / studious"
+}

@@ -1,0 +1,12 @@
+{
+  "id": "wireless-transport-grid",
+  "name": "Wireless Resonance Transport Grid",
+  "category": "props",
+  "description": "Ground-resonated electric vehicle and electric aviation cruising indefinitely without heavy toxic lithium batteries.",
+  "dimensions": {
+    "width": 560,
+    "height": 480,
+    "anchor": "bottom-center"
+  },
+  "created_at": "2026-10-31T17:25:00+07:00"
+}

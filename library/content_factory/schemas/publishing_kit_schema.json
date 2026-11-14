@@ -1,0 +1,175 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "PublishingKitSchema",
+  "description": "Schema for Papercraft Content Factory automated social media publishing kits across YouTube Shorts, TikTok, and Instagram Reels.",
+  "type": "object",
+  "required": [
+    "episode_id",
+    "episode_title",
+    "topic",
+    "channel_name",
+    "language",
+    "video_metadata",
+    "assets",
+    "seo",
+    "youtube_shorts",
+    "tiktok",
+    "instagram_reels",
+    "research",
+    "qa_status",
+    "generated_at"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "episode_id": {
+      "type": "string",
+      "minLength": 2,
+      "description": "Episode slug identifier."
+    },
+    "episode_title": {
+      "type": "string",
+      "minLength": 3,
+      "description": "Actual title of the episode."
+    },
+    "topic": {
+      "type": "string",
+      "minLength": 2,
+      "description": "Scientific or educational topic."
+    },
+    "channel_name": {
+      "type": "string",
+      "enum": ["@meowndr"],
+      "description": "Mandatory channel handle. Must be exactly '@meowndr'."
+    },
+    "language": {
+      "type": "string",
+      "default": "id",
+      "description": "Primary content language (default 'id')."
+    },
+    "video_metadata": {
+      "type": "object",
+      "required": ["path", "duration_seconds", "resolution", "fps", "file_size_mb"],
+      "properties": {
+        "path": { "type": "string" },
+        "duration_seconds": { "type": "number", "minimum": 1.0 },
+        "resolution": { "type": "string" },
+        "fps": { "type": "string" },
+        "file_size_mb": { "type": "number", "minimum": 0.1 }
+      }
+    },
+    "assets": {
+      "type": "object",
+      "required": ["thumbnail_16x9", "opening_frame_9x16", "cover_timestamp"],
+      "properties": {
+        "thumbnail_16x9": { "type": ["string", "null"] },
+        "opening_frame_9x16": { "type": ["string", "null"] },
+        "cover_timestamp": { "type": "string" }
+      }
+    },
+    "seo": {
+      "type": "object",
+      "required": ["primary_keyword", "supporting_keywords"],
+      "properties": {
+        "primary_keyword": { "type": "string" },
+        "supporting_keywords": {
+          "type": "array",
+          "items": { "type": "string" },
+          "minItems": 2
+        }
+      }
+    },
+    "youtube_shorts": {
+      "type": "object",
+      "required": ["title_options", "recommended_title", "description", "tags", "pinned_comment", "category"],
+      "properties": {
+        "title_options": {
+          "type": "array",
+          "items": { "type": "string", "maxLength": 100 },
+          "minItems": 3,
+          "maxItems": 5
+        },
+        "recommended_title": { "type": "string", "maxLength": 100 },
+        "description": { "type": "string", "minLength": 50 },
+        "tags": {
+          "type": "array",
+          "items": { "type": "string" },
+          "minItems": 5
+        },
+        "pinned_comment": { "type": "string", "minLength": 10 },
+        "category": { "type": "string" }
+      }
+    },
+    "tiktok": {
+      "type": "object",
+      "required": ["caption_options", "recommended_caption", "hashtags", "cover_title", "cover_timestamp"],
+      "properties": {
+        "caption_options": {
+          "type": "array",
+          "items": { "type": "string" },
+          "minItems": 3,
+          "maxItems": 5
+        },
+        "recommended_caption": { "type": "string" },
+        "hashtags": {
+          "type": "array",
+          "items": { "type": "string" },
+          "minItems": 2,
+          "maxItems": 10
+        },
+        "cover_title": { "type": "string" },
+        "cover_timestamp": { "type": "string" }
+      }
+    },
+    "instagram_reels": {
+      "type": "object",
+      "required": ["caption_options", "recommended_caption", "hashtags", "pinned_comment", "cover_title", "alt_text"],
+      "properties": {
+        "caption_options": {
+          "type": "array",
+          "items": { "type": "string" },
+          "minItems": 3,
+          "maxItems": 5
+        },
+        "recommended_caption": { "type": "string" },
+        "hashtags": {
+          "type": "array",
+          "items": { "type": "string" },
+          "minItems": 3,
+          "maxItems": 10
+        },
+        "pinned_comment": { "type": "string" },
+        "cover_title": { "type": "string" },
+        "alt_text": { "type": "string", "minLength": 20 }
+      }
+    },
+    "research": {
+      "type": "object",
+      "required": ["verified_claims", "hypotheses_or_uncertainties", "sources", "fact_check_status"],
+      "properties": {
+        "verified_claims": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "hypotheses_or_uncertainties": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "sources": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "fact_check_status": {
+          "type": "string",
+          "enum": ["VERIFIED", "PARTIALLY_VERIFIED", "UNVERIFIED"]
+        }
+      }
+    },
+    "qa_status": {
+      "type": "string",
+      "enum": ["PASSED", "WARNING", "FAILED"]
+    },
+    "generated_at": {
+      "type": "string"
+    }
+  }
+}

@@ -1,0 +1,73 @@
+{
+  "id": "home-kitchen",
+  "name": "Home Kitchen",
+  "description": "A familiar home kitchen with cabinets, a countertop, and everyday cooking utensils. Suitable for food science and daily-life explainers.",
+  "category": "Everyday Life / Food Science",
+  "mood": "Warm, clean, homely, morning sunlight",
+  "style": {
+    "type": "2D Papercraft Cutout",
+    "construction": "Layered paper collage with scissor-cut edges and subtle paper drop shadows",
+    "color_palette": [
+      "#FDFBF7",
+      "#C49F73",
+      "#744210",
+      "#E2E8F0",
+      "#D9885C",
+      "#48BB78"
+    ],
+    "lighting": "Warm morning sunlight from window with soft overhead cabinet task lighting"
+  },
+  "dimensions": {
+    "width": 1080,
+    "height": 1920,
+    "aspect_ratio": "9:16"
+  },
+  "layout": {
+    "floor_y": 1380,
+    "presenter_zone": {
+      "x_range": [
+        180,
+        900
+      ],
+      "y_range": [
+        850,
+        1650
+      ],
+      "status": "clear_unobstructed"
+    },
+    "header_zone": {
+      "y_range": [
+        0,
+        420
+      ],
+      "status": "clear_for_banner"
+    },
+    "caption_zone": {
+      "y_range": [
+        1300,
+        1550
+      ],
+      "status": "low_detail_for_legibility"
+    }
+  },
+  "best_for": [
+    "Food chemistry",
+    "Nutrition & cooking",
+    "Heat transfer",
+    "Household safety"
+  ],
+  "rules_compliance": {
+    "consistent_papercraft_style": true,
+    "layered_cutout_construction": true,
+    "visible_paper_edges_and_shadows": true,
+    "no_characters_or_people": true,
+    "foreground_suitable_for_presenter": true,
+    "vertical_9_16_composition": true,
+    "reusable_environment": true
+  },
+  "asset_paths": {
+    "image": "assets/backgrounds/home-kitchen/background.png",
+    "metadata": "assets/backgrounds/home-kitchen/metadata.json"
+  },
+  "created_at": "2026-10-29T08:51:13+07:00"
+}
