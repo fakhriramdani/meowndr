@@ -40,6 +40,7 @@ export const App: React.FC = () => {
   const [episode, setEpisode] = useState<EpisodeDetail | null>(null);
   const [activeJobId, setActiveJobId] = useState<string | null>(null);
   const [historyOpen, setHistoryOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   const client = useMemo(
     () =>
@@ -154,16 +155,49 @@ export const App: React.FC = () => {
             </span>
           </div>
 
-          <div className="topbar-actions">
+          <button
+            type="button"
+            className="btn btn-secondary topbar-menu-toggle"
+            aria-expanded={menuOpen}
+            aria-label="Toggle menu"
+            onClick={() => setMenuOpen((prev) => !prev)}
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" aria-hidden="true">
+              {menuOpen ? (
+                <>
+                  <line x1="18" y1="6" x2="6" y2="18" />
+                  <line x1="6" y1="6" x2="18" y2="18" />
+                </>
+              ) : (
+                <>
+                  <line x1="4" y1="7" x2="20" y2="7" />
+                  <line x1="4" y1="12" x2="20" y2="12" />
+                  <line x1="4" y1="17" x2="20" y2="17" />
+                </>
+              )}
+            </svg>
+          </button>
+
+          <div className={`topbar-actions ${menuOpen ? "open" : ""}`}>
             <ThemeSwitch theme={theme} onToggle={toggleTheme} />
             <button
               type="button"
               className="btn btn-secondary"
-              onClick={() => setHistoryOpen(true)}
+              onClick={() => {
+                setHistoryOpen(true);
+                setMenuOpen(false);
+              }}
             >
               Episode History
             </button>
-            <button type="button" className="btn btn-secondary" onClick={handleLogout}>
+            <button
+              type="button"
+              className="btn btn-secondary"
+              onClick={() => {
+                setMenuOpen(false);
+                handleLogout();
+              }}
+            >
               Logout
             </button>
           </div>

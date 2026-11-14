@@ -196,6 +196,13 @@ h3 {
   flex-wrap: wrap;
 }
 
+.topbar-menu-toggle {
+  display: none;
+  min-width: 42px;
+  min-height: 40px;
+  padding: 6px 10px;
+}
+
 .studio-shell {
   max-width: 1400px;
   margin: 0 auto;
@@ -696,6 +703,20 @@ textarea:focus-visible {
 }
 
 @media (max-width: 768px) {
+  .topbar-menu-toggle {
+    display: inline-flex;
+  }
+  .topbar-actions {
+    display: none;
+    width: 100%;
+    padding-top: 10px;
+    border-top: 1px solid var(--border);
+    justify-content: flex-start;
+    gap: 8px;
+  }
+  .topbar-actions.open {
+    display: flex;
+  }
   .studio-shell {
     grid-template-columns: minmax(0, 1fr);
     padding: 16px 16px 48px;
